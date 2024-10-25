@@ -94,6 +94,7 @@ const SchedulaModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Start Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -102,6 +103,7 @@ const SchedulaModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="End Date"
                 placeholder=""
                 className="custom-placeholder"
@@ -110,6 +112,7 @@ const SchedulaModal = (_props) => {
             <div className="mb-3">
               <CFormSelect
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Test Plan"
                 className="custom-placeholder"
                 onChange={handleTestPlanSelect}
@@ -189,6 +192,7 @@ const SchedulaModal = (_props) => {
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Processing System"
                 placeholder=""
                 className="custom-placeholder"

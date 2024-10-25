@@ -224,6 +224,7 @@ const InstrumentMasterModal = ({
           </CFormSelect>
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Calibration Due On"
             placeholder=" "
             value={instrumentData.calibrationDate}
@@ -233,6 +234,7 @@ const InstrumentMasterModal = ({
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Calibration Due On"
             placeholder=" "
             value={instrumentData.calibrationDueOn}
@@ -354,6 +356,7 @@ const InstrumentMasterModal = ({
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Installed On"
             placeholder=" "
             value={instrumentData.installedOn}
@@ -362,6 +365,7 @@ const InstrumentMasterModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Warranty Expires On"
             placeholder=" "
             value={instrumentData.warrantyExpiresOn}

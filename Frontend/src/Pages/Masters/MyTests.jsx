@@ -33,9 +33,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../../config.json";
 
-
-
-
 const fields = [
   { label: "A.R No.", key: "ARNo" },
   { label: "Product Name", key: "productName" },
@@ -56,16 +53,13 @@ function Mytests() {
   const [data, setData] = useState([]);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-
   useEffect(() => {
     fetchProductData();
   }, []);
 
   const fetchProductData = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/get-all-lims/mMyTest`
-      );
+      const response = await axios.get(`${BASE_URL}/get-all-lims/mMyTest`);
       if (response.data && Array.isArray(response.data)) {
         const formattedData = response.data.flatMap(
           (item) =>
@@ -113,19 +107,19 @@ function Mytests() {
         );
       })
     : [];
-const onAdd = (newRow) => {
-  const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
-  setData(updatedData);
-};
-const onViewDetails = (rowData) => {
-  if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-    setIsViewModalOpen(false);
-    setViewModalData(null);
-  } else {
-    setViewModalData(rowData);
-    setIsViewModalOpen(true);
-  }
-};
+  const onAdd = (newRow) => {
+    const updatedData = [...data, { ...newRow, sno: data.length + 1 }];
+    setData(updatedData);
+  };
+  const onViewDetails = (rowData) => {
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
+  };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -235,17 +229,14 @@ const onViewDetails = (rowData) => {
 
   const handleAdd = async (newProduct) => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/mMyTest`,
-        {
-          ...newProduct,
-          addDate: new Date().toISOString().split("T")[0],
-          status: newProduct.status || "Active",
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/mMyTest`, {
+        ...newProduct,
+        addDate: new Date().toISOString().split("T")[0],
+        status: newProduct.status || "Active",
+      });
       if (response.status === 200) {
         toast.success("Product added successfully.");
-        fetchProductData(); 
+        fetchProductData();
         setIsModalOpen(false);
       } else {
         toast.error("Failed to add Product.");
@@ -258,11 +249,11 @@ const onViewDetails = (rowData) => {
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
-  const[ARNo, setARNo]=useState("")
-  const[productName, setProductName]=useState("")
-  const[sampleIncharge, setSampleIncharge]=useState("")
-  const[assignedOn, setAssignedOn]=useState("")
-  const[sampleType, setSampleType]=useState("")
+    const [ARNo, setARNo] = useState("");
+    const [productName, setProductName] = useState("");
+    const [sampleIncharge, setSampleIncharge] = useState("");
+    const [assignedOn, setAssignedOn] = useState("");
+    const [sampleType, setSampleType] = useState("");
 
     const handleProduct = () => {
       const currentDate = new Date().toISOString().split("T")[0];
@@ -276,12 +267,12 @@ const onViewDetails = (rowData) => {
       };
       onAdd(newCondition);
     };
-  
+
     const handleInputChange = (field, value) => {
       const updatedData = { ...myTestData, [field]: value };
       setMyTestData(updatedData);
     };
-  
+
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
@@ -318,6 +309,7 @@ const onViewDetails = (rowData) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Assigned On"
             name="assignedOn"
             value={assignedOn}
@@ -330,7 +322,7 @@ const onViewDetails = (rowData) => {
             placeholder="Sample Type"
             name="sampleType"
             value={sampleType}
-            onChange={(e) => setSampleType( e.target.value)}
+            onChange={(e) => setSampleType(e.target.value)}
           />
         </CModalBody>
         <CModalFooter>
@@ -384,22 +376,22 @@ const onViewDetails = (rowData) => {
       assignedOn: "",
       sampleType: "",
     });
-  
+
     useEffect(() => {
       if (data) {
         setFormData(data);
       }
     }, [data]);
-  
+
     const handleChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
     };
-  
+
     const handleSave = () => {
       onSave(formData);
     };
-  
+
     return (
       <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
@@ -436,6 +428,7 @@ const onViewDetails = (rowData) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Assigned On"
             name="assignedOn"
             value={formData.assignedOn}
@@ -462,7 +455,6 @@ const onViewDetails = (rowData) => {
       </CModal>
     );
   };
-  
 
   return (
     <>
@@ -527,10 +519,10 @@ const onViewDetails = (rowData) => {
       )}
       {editModalData && (
         <EditModal
-        visible={Boolean(editModalData)}
-        closeModal={closeEditModal}
-        data={editModalData}
-        onSave={handleEditSave}
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
         />
       )}
       {isModalsOpen && (

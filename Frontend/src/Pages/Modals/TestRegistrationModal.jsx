@@ -1047,6 +1047,7 @@ const TestRegistrationModal = (_props) => {
         <CFormInput
           className="mb-3"
           type="date"
+          onFocus={(e) => e.target.showPicker()}
           id="methodNo"
           name="methodNo"
           value={formData.methodNo}

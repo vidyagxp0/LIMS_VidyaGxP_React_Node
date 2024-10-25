@@ -131,6 +131,7 @@ const InvRegistrationModal = (_props) => {
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Delivery Receipt Date"
             placeholder=""
           />
@@ -144,8 +145,18 @@ const InvRegistrationModal = (_props) => {
               { value: "Admin", label: "Admin" },
             ]}
           />
-          <CFormInput type="date" label="Recieved On" placeholder="" />
-          <CFormInput type="date" label="Valid Upto" placeholder="" />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Recieved On"
+            placeholder=""
+          />
+          <CFormInput
+            type="date"
+            onFocus={(e) => e.target.showPicker()}
+            label="Valid Upto"
+            placeholder=""
+          />
           <CFormInput type="text" label="Storage Location" placeholder="" />
 
           <CFormInput type="text" label="Potency" placeholder="" />

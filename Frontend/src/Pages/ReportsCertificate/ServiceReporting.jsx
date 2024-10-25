@@ -2,8 +2,22 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CForm, CFormInput, CFormSelect } from "@coreui/react";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  CButton,
+  CModal,
+  CModalBody,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+  CForm,
+  CFormInput,
+  CFormSelect,
+} from "@coreui/react";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
@@ -23,16 +37,17 @@ const ServiceReporting = () => {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
 
-  
   useEffect(() => {
     fetchServiceReportingData();
   }, []);
   const fetchServiceReportingData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/get-all-lims/rCServiceReporting`);
-      console.log(response,"Response");
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/rCServiceReporting`
+      );
+      console.log(response, "Response");
       const formattedData = response?.data[0]?.rCServiceReporting || [];
-      console.log(formattedData,"formattedData");
+      console.log(formattedData, "formattedData");
       const updatedData = formattedData.map((item, index) => ({
         ...item,
         sno: index + 1,
@@ -40,7 +55,6 @@ const ServiceReporting = () => {
       }));
       setData(updatedData);
       console.log(updatedData);
-      
     } catch (error) {
       console.error("Error fetching Service Reporting data:", error);
       toast.error("Failed to fetch Service Reporting data");
@@ -49,20 +63,28 @@ const ServiceReporting = () => {
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
-    setData((prevData) => prevData.map((row) => ({ ...row, checkbox: checked })));
+    setData((prevData) =>
+      prevData.map((row) => ({ ...row, checkbox: checked }))
+    );
   };
 
   const handleCheckboxChange = useCallback((index) => {
     setData((prevData) =>
-      prevData.map((item, i) => (i === index ? { ...item, checkbox: !item.checkbox } : item))
+      prevData.map((item, i) =>
+        i === index ? { ...item, checkbox: !item.checkbox } : item
+      )
     );
   }, []);
 
   const handleDelete = async (item) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/delete-lims/rCServiceReporting/${item.uniqueId}`);
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/rCServiceReporting/${item.uniqueId}`
+      );
       if (response?.status === 200) {
-        setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
+        setData((prevData) =>
+          prevData.filter((d) => d.uniqueId !== item.uniqueId)
+        );
         toast.success("Service Reporting data deleted successfully");
         fetchServiceReportingData();
       } else {
@@ -81,14 +103,19 @@ const ServiceReporting = () => {
     }
     try {
       const { sno, ...dataToSend } = viewModalData;
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/rCServiceReporting/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/rCServiceReporting/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Service Reporting status updated successfully");
@@ -104,7 +131,10 @@ const ServiceReporting = () => {
 
   const addNewServiceReporting = async (newServiceReporting) => {
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/add/rCServiceReporting`, newServiceReporting);
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/rCServiceReporting`,
+        newServiceReporting
+      );
       if (response.status === 200) {
         const addedServiceReporting = response.data;
         setData((prevData) => [
@@ -117,7 +147,7 @@ const ServiceReporting = () => {
         toast.success("Service Reporting added successfully");
         setIsModalOpen(false);
         fetchServiceReportingData();
-      }else {
+      } else {
         toast.error("Failed to add Service Reporting");
       }
     } catch (error) {
@@ -130,10 +160,17 @@ const ServiceReporting = () => {
   const handleEditSave = async (updatedData) => {
     try {
       const { sno, ...dataToSend } = updatedData;
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/rCServiceReporting/${updatedData.uniqueId}`, dataToSend);
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/rCServiceReporting/${updatedData.uniqueId}`,
+        dataToSend
+      );
       if (response.status === 200) {
         setData((prevData) =>
-          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+          prevData.map((item) =>
+            item.uniqueId === updatedData.uniqueId
+              ? { ...updatedData, sno: item.sno }
+              : item
+          )
         );
         toast.success("Service Reporting updated successfully");
       } else {
@@ -213,7 +250,8 @@ const ServiceReporting = () => {
   ];
 
   const filteredData = data.filter((row) => {
-    const problemIdMatch = row.ProblemId?.toLowerCase().includes(searchQuery.toLowerCase()) ?? true;
+    const problemIdMatch =
+      row.ProblemId?.toLowerCase().includes(searchQuery.toLowerCase()) ?? true;
     const statusMatch = statusFilter === "All" || row.status === statusFilter;
     return problemIdMatch && statusMatch;
   });
@@ -313,6 +351,7 @@ const ServiceReporting = () => {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Expected Closure Date"
               name="ExpectedClosureDate"
               value={serviceReporting.ExpectedClosureDate}
@@ -410,6 +449,7 @@ const ServiceReporting = () => {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Expected Closure Date"
               name="ExpectedClosureDate"
               value={formData?.ExpectedClosureDate || ""}
@@ -462,8 +502,16 @@ const ServiceReporting = () => {
               title="Service Reporting"
               fileName="ServiceReporting.pdf"
             />
-            <ATMButton text="Import" color="pink" onClick={() => setIsModalsOpen(true)} />
-            <ATMButton text="Add Service" color="blue" onClick={() => setIsModalOpen(true)} />
+            <ATMButton
+              text="Import"
+              color="pink"
+              onClick={() => setIsModalsOpen(true)}
+            />
+            <ATMButton
+              text="Add Service"
+              color="blue"
+              onClick={() => setIsModalOpen(true)}
+            />
           </div>
         </div>
         <Table
@@ -483,7 +531,9 @@ const ServiceReporting = () => {
           data={viewModalData}
           fields={columns
             .map((col) => ({ key: col.accessor, label: col.header }))
-            .filter((field) => field.key !== "action" && field.key !== "checkbox")}
+            .filter(
+              (field) => field.key !== "action" && field.key !== "checkbox"
+            )}
           title="Service Reporting Details"
           updateStatus={handleStatusUpdate}
         />

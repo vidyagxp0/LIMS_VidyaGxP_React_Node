@@ -2239,14 +2239,14 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </CNavItem>
           </Link>
           <CNavGroup
-            toggler={
-              <>
-                <MdSettingsApplications />
-                <span style={{ marginLeft: "18px" }}>Settings</span>
-              </>
-            }
+            // toggler={
+            //   <>
+            //     <MdSettingsApplications />
+            //     <span style={{ marginLeft: "18px" }}>Settings</span>
+            //   </>
+            // }
           >
-            <Link to="/settings/businessAssociate">
+            {/* <Link to="/settings/businessAssociate">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/businessAssociate")}
@@ -2365,7 +2365,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Handling Symbol
               </CNavItem>
-            </Link>
+            </Link> */}
             {/* <Link to="/settings/accessRight">
               <CNavItem
                 href="#"
