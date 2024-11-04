@@ -29,11 +29,31 @@ import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
+// import BarcodeExportButton from "./BarcodeExportButton";
+import Barcode from "react-barcode";
+
 import BarcodeExportButton from "./BarcodeExportButton";
 import toast from "react-hot-toast";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
+  const [barcodeID, setBarcodeID] = useState([]);
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 10);
+    }
+    return randomNumbers;
+  };
+
+  useEffect(() => {
+    const idsWithRandomNumbers = data.map((item) => {
+      const randomSuffix = generateRandomNumbers(15);
+      return item.id + randomSuffix;
+    });
+    setBarcodeID(idsWithRandomNumbers);
+  }, [data]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -46,13 +66,6 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const [loading, setLoading] = useState({});
   const [selectedSampleId, setSelectedSamppleId] = useState(null);
   const [samples, setSamples] = useState([]);
-  const generateRandomNumbers = (length) => {
-    let randomNumbers = "";
-    for (let i = 0; i < length; i++) {
-      randomNumbers += Math.floor(Math.random() * 20);
-    }
-    return randomNumbers;
-  };
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -112,7 +125,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     console.log("Generating PDF for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
-      const response = await fetch(`${BASE_URL}/generate-report/${sampleId}`);
+      const response = await fetch(`https://limsapi.vidyagxp.com/generate-report/${sampleId}`);
       console.log("Response", response);
 
       if (!response.ok) {
@@ -863,7 +876,11 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
               <td className="border px-4 py-2 ml-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
-                <BarcodeExportButton />
+                {barcodeID[index] ? (
+                  <Barcode value={barcodeID[index]} />
+                ) : (
+                  "No Barcode"
+                )}
               </td>
               <td className="border px-4 py-2">
                 {data.generatePDF}

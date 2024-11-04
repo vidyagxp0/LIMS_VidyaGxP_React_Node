@@ -510,7 +510,7 @@ const EditModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    await props.handleUpdateUser(formData); // Assuming you have a different handler for updating users
+    await props.handleAddUser(formData, props.fetchUsers); // Pass fetchUsers to handleAddUser
     props.closeModal(); // Close modal after updating user
   };
 
@@ -650,7 +650,6 @@ const StatusModal = (props) => {
       props.closeModal();
     }
   };
-  
 
   // Mapping roles for react-select
   const roleOptions = [

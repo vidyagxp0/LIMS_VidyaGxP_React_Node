@@ -54,7 +54,7 @@ const AnalystQualification = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/analyst/get-analyst`);
+      const response = await axios.get(`https://limsapi.vidyagxp.com/analyst/get-analyst`);
       // console.log("API Response:", response.data);
 
       const formattedData = response?.data.data || [];
@@ -299,7 +299,7 @@ const AnalystQualification = () => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`${BASE_URL}/analyst/delete-analyst/${item.id}`);
+      await axios.delete(`https://limsapi.vidyagxp.com/analyst/delete-analyst/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
