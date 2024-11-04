@@ -274,11 +274,12 @@ const SampleWorkflowModal = ({ onClose }) => {
     fetchData();
   }, [id]);
 
-  const handleEdit = async () => {
+  const handleEdit = async (formDataToSend) => {
     try {
       const response = await axios.put(
         `http://localhost:9000/edit-sample/${id}/sample`,
-        formData
+        formDataToSend,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       if (response.status === 200) {
         toast.success("Sample Workflow updated successfully.");
@@ -314,19 +315,24 @@ const SampleWorkflowModal = ({ onClose }) => {
     }
 
     try {
+      let updatedData;
+
       if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+        updatedData = await handleEdit(formDataToSend); // Pass FormData to handleEdit and get updated data
       } else {
         const response = await axios.post(
           `http://localhost:9000/create-sample`,
           formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
-        // Handle success response
+        updatedData = response.data; // Store response data for newly created item
         toast.success("Sample Workflow added successfully.");
-        setIsModalOpen(false);
-        navigate("/sampleWorkflow");
       }
+
+      // Update formData with the latest data from the server response
+      setFormData(updatedData);
+      setIsModalOpen(false);
+      navigate("/sampleWorkflow");
     } catch (error) {
       console.error("Error uploading file:", error); // Log the error
       toast.error(

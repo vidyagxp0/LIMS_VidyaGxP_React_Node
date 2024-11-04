@@ -285,24 +285,29 @@ const StabilityWorkflowModal = ({ onClose }) => {
     fetchData();
   }, [id]);
 
-  const handleEdit = async () => {
+  const handleEdit = async (formDataToSend) => {
     try {
       const response = await axios.put(
         `http://localhost:9000/edit-sample/${id}/stability`,
-        formData
+        formDataToSend,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
+
       if (response.status === 200) {
         toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
         navigate("/stabilityWorkflow");
+        return response.data; // Return updated data
       } else {
         toast.error("Failed to update Sample Workflow.");
+        return null;
       }
     } catch (error) {
       toast.error(
         "Error updating Sample Workflow: " +
           (error.response?.data || error.message)
       );
+      return null;
     }
   };
 
@@ -320,24 +325,29 @@ const StabilityWorkflowModal = ({ onClose }) => {
 
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
-      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Convert testParameters to JSON
       console.log("Test Parameters being sent:", testParameters);
     }
 
     try {
+      let updatedData;
+
       if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+        updatedData = await handleEdit(formDataToSend); // Pass FormData to handleEdit and get updated data
       } else {
         const response = await axios.post(
           `http://localhost:9000/create-sample`,
           formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
-        // Handle success response
-        toast.success("Sample Workflow added successfully.");
-        setIsModalOpen(false);
-        navigate("/stabilityWorkflow");
+        updatedData = response.data; // Store response data for newly created item
+        toast.success("Stability Workflow added successfully.");
       }
+
+      // Update formData with the latest data from the server response
+      setFormData(updatedData);
+      setIsModalOpen(false);
+      navigate("/stabilityWorkflow");
     } catch (error) {
       console.error("Error uploading file:", error); // Log the error
       toast.error(
