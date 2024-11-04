@@ -68,8 +68,12 @@ const StabilityWorkflowModal = ({ onClose }) => {
     sampleId: "",
     sampleName: "",
     sampleType: "",
+<<<<<<< Updated upstream
     srSupportiveAttachment: null,
     qaSupportiveAttachment: null,
+=======
+    qaSupportiveAttachment: "",
+>>>>>>> Stashed changes
     productMaterialName: "",
     batchLotNumber: "",
     samplePriority: "",
@@ -94,7 +98,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     plannerName: "",
     sampleSource: "",
     plannedDate: "",
-    labTechnician: "",
     sampleCostEstimation: "",
     resourceUtilization: "",
     sampleMovementHistory: "",
@@ -114,7 +117,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     testPlanId: "",
     turnAroundTime: "",
     sampleRetestingDate: "",
-    reviewDate: "",
     sampleStorageLocation: "",
     transportationMethod: "",
     samplePreparationMethod: "",
@@ -161,7 +163,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     qaReviewDate: "",
     qaReview: "",
     supervisionDate: "",
-    supervisor: "",
     labTechnicianDate: "",
     labTechnician: "",
     initiationDate: "",
