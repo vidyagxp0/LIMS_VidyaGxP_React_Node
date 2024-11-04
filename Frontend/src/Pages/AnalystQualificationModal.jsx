@@ -105,15 +105,15 @@ const AnalystQualificationModal = ({ onClose }) => {
   //   fetchAnalystData();
   // }, [id]);
 
-  const user=JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
 
   const [roles, setRoles] = useState([]);
-  console.log(roles,"ROLLLLLL");
-  
+  console.log(roles, "ROLLLLLL");
+
   useEffect(() => {
     fetchRoles();
-  },[])
+  }, []);
   const fetchRoles = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -127,8 +127,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     } catch (error) {
       console.error("Error fetching roles:", error);
     }
-  }
-  
+  };
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -173,7 +172,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
+        `http://localhost:9000/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -199,7 +198,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       await toast.promise(
         Promise.all([
           axios.put(
-            `https://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
+            `http://localhost:9000/analyst/edit-analyst/${id}`,
             formData
           ),
           delay(1300),
@@ -233,7 +232,7 @@ const AnalystQualificationModal = ({ onClose }) => {
         await toast.promise(
           Promise.all([
             axios.post(
-              `https://limsapi.vidyagxp.com/analyst/create-analyst`,
+              `http://localhost:9000/analyst/create-analyst`,
               updatedFormData
             ),
             delay(1300), // Optional delay for smoother loading effect
@@ -250,8 +249,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       } catch (error) {
         // Handle error
         toast.error(
-          "Error adding Data: " +
-            (error.response?.data || error.message)
+          "Error adding Data: " + (error.response?.data || error.message)
         );
       }
     }

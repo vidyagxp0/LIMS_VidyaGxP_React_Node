@@ -248,7 +248,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
+        `http://localhost:9000/get-Sample/${id}/sample`
       );
       console.log(response.data);
 
@@ -277,7 +277,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
+        `http://localhost:9000/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -318,7 +318,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit
       } else {
         const response = await axios.post(
-          `https://limsapi.vidyagxp.com/create-sample`,
+          `http://localhost:9000/create-sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
         );
@@ -1684,16 +1684,16 @@ const SampleWorkflowModal = ({ onClose }) => {
           </div>
 
           <div className="flex flex-col gap-3 justify-end mt-6 fixed bottom-24 left-[95%]">
-          <CButton
-        type="submit"
-        className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center"
-        onClick={handleClick}
-      >
-        {id ? "Update" : "Save"}
-        {loading && (
-          <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-3"></div>
-        )}
-      </CButton>
+            <CButton
+              type="submit"
+              className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center"
+              onClick={handleClick}
+            >
+              {id ? "Update" : "Save"}
+              {loading && (
+                <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-3"></div>
+              )}
+            </CButton>
             <CButton
               onClick={() => {
                 navigate(-1);

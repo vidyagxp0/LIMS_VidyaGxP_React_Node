@@ -106,7 +106,7 @@ const ControlSampleModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/controlSample/get-control-sample/${id}`
+        `http://localhost:9000/controlSample/get-control-sample/${id}`
       );
       // console.log(response.data);
 
@@ -128,7 +128,7 @@ const ControlSampleModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/controlSample/edit-control-sample/${id}`,
+        `http://localhost:9000/controlSample/edit-control-sample/${id}`,
         formData
       );
       if (response.status === 200) {
@@ -156,7 +156,7 @@ const ControlSampleModal = ({ onClose }) => {
         };
 
         const response = await axios.post(
-          `https://limsapi.vidyagxp.com/controlSample/create-control-sample`,
+          `http://localhost:9000/controlSample/create-control-sample`,
           updatedFormData
         );
         // console.log(response, "iddddddddddddddddddddddd");
@@ -167,17 +167,16 @@ const ControlSampleModal = ({ onClose }) => {
         } else {
           toast.error("Failed to add Sample Workflow.");
         }
-toast.success("Data added successfully.");
-      setIsModalOpen(false);
-      navigate("/control-Sample");
-    } catch (error) {
-      toast.error(
-        "Error adding Data: " + (error.response?.data || error.message)
-      );
+        toast.success("Data added successfully.");
+        setIsModalOpen(false);
+        navigate("/control-Sample");
+      } catch (error) {
+        toast.error(
+          "Error adding Data: " + (error.response?.data || error.message)
+        );
+      }
     }
-  }
-};
-
+  };
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -652,7 +651,9 @@ toast.success("Data added successfully.");
   };
   return (
     <>
-    <div><ToastContainer/></div>
+      <div>
+        <ToastContainer />
+      </div>
       {id ? (
         <ProgressBar3
           stage={Number(formData.stage)}
