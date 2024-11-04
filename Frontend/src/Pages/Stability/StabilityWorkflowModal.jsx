@@ -56,6 +56,8 @@ const StabilityWorkflowModal = ({ onClose }) => {
         idx === index ? { ...row, [name]: value } : row
       );
       setTestParameters(updatedRows);
+      console.log(updatedRows,"Updadadadada");
+      
     } else {
       console.error("testParameters is not an array:", testParameters);
     }
@@ -259,7 +261,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/stability`
+        `http://localhost:9000/get-Sample/${id}/stability`
       );
       console.log(response.data);
 
@@ -288,7 +290,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/edit-sample/${id}/stability`,
+        `http://localhost:9000/edit-sample/${id}/stability`,
         formData
       );
       if (response.status === 200) {
@@ -332,11 +334,9 @@ const StabilityWorkflowModal = ({ onClose }) => {
       } else {
         await toast.promise(
           Promise.all([
-            axios.post(
-              `https://limsapi.vidyagxp.com/create-sample`,
-              formDataToSend,
-              { headers: { "Content-Type": "multipart/form-data" } }
-            ),
+            axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
+              headers: { "Content-Type": "multipart/form-data" },
+            }),
             delay(1300),
           ]).then(([response]) => response),
           {

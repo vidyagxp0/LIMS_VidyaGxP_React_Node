@@ -46,6 +46,8 @@ const SampleWorkflowModal = ({ onClose }) => {
         idx === index ? { ...row, [name]: value } : row
       );
       setTestParameters(updatedRows);
+      console.log(updatedRows,"UPUPUPUP");
+      
     } else {
       console.error("testParameters is not an array:", testParameters);
     }
@@ -158,6 +160,9 @@ const SampleWorkflowModal = ({ onClose }) => {
     initiator: "",
     testParameters: [],
   });
+  console.log(testParameters,"TTTTRRREE");
+  
+  
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -249,7 +254,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
+        `http://localhost:9000/get-Sample/${id}/sample`
       );
       // console.log(response.data);
 
@@ -276,9 +281,10 @@ const SampleWorkflowModal = ({ onClose }) => {
   }, [id]);
 
   const handleEdit = async () => {
+    
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
+        `http://localhost:9000/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -322,7 +328,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         await toast.promise(
           Promise.all([
             axios.post(
-              `https://limsapi.vidyagxp.com/create-sample`,
+              `http://localhost:9000/create-sample`,
               formDataToSend,
               { headers: { "Content-Type": "multipart/form-data" } } // Set content type for multipart data
             ),
