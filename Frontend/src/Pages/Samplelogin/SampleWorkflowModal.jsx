@@ -280,12 +280,12 @@ const SampleWorkflowModal = ({ onClose }) => {
     fetchData();
   }, [id]);
 
-  const handleEdit = async () => {
-    
+  const handleEdit = async (formDataToSend) => {
     try {
       const response = await axios.put(
         `http://localhost:9000/edit-sample/${id}/sample`,
-        formData
+        formDataToSend,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       if (response.status === 200) {
         toast.success("Sample Workflow updated successfully.");
@@ -320,30 +320,24 @@ const SampleWorkflowModal = ({ onClose }) => {
     }
 
     try {
+      let updatedData;
+
       if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit function
+        updatedData = await handleEdit(formDataToSend); // Pass FormData to handleEdit and get updated data
       } else {
-        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-        await toast.promise(
-          Promise.all([
-            axios.post(
-              `http://localhost:9000/create-sample`,
-              formDataToSend,
-              { headers: { "Content-Type": "multipart/form-data" } } // Set content type for multipart data
-            ),
-            delay(1300),
-          ]).then(([response]) => response),
-          {
-            loading: "Saving data...",
-            success: <b>Data added successfully.</b>,
-            error: <b>Failed to add Data.</b>,
-          }
+        const response = await axios.post(
+          `http://localhost:9000/create-sample`,
+          formDataToSend,
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
-
-        setIsModalOpen(false);
-        navigate("/sampleWorkflow");
+        updatedData = response.data; // Store response data for newly created item
+        toast.success("Sample Workflow added successfully.");
       }
+
+      // Update formData with the latest data from the server response
+      setFormData(updatedData);
+      setIsModalOpen(false);
+      navigate("/sampleWorkflow");
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error(
