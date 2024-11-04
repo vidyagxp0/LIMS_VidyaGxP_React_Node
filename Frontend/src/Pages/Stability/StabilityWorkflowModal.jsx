@@ -68,12 +68,8 @@ const StabilityWorkflowModal = ({ onClose }) => {
     sampleId: "",
     sampleName: "",
     sampleType: "",
-<<<<<<< Updated upstream
     srSupportiveAttachment: null,
     qaSupportiveAttachment: null,
-=======
-    qaSupportiveAttachment: "",
->>>>>>> Stashed changes
     productMaterialName: "",
     batchLotNumber: "",
     samplePriority: "",

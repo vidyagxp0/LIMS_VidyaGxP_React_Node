@@ -140,7 +140,6 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
             placeholder="Effective Date"
             value={usageData.effectiveDate}
             onChange={(e) => handleInputChange("effectiveDate", e.target.value)}
-            onFocus={(e) => e.target.showPicker()}
           />
           <CFormInput
             className="mb-3"
@@ -150,7 +149,6 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
             placeholder="Creation Date"
             value={usageData.creationDate}
             onChange={(e) => handleInputChange("creationDate", e.target.value)}
-            onFocus={(e) => e.target.showPicker()}
           />
           <CFormInput
             className="mb-3"
@@ -304,7 +302,6 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
             placeholder="Test Frequency"
             value={usageData.testFrequency}
             onChange={(e) => handleInputChange("testFrequency", e.target.value)}
-            onFocus={(e) => e.target.showPicker()}
           />
           <CFormInput
             className="mb-3"
@@ -463,7 +460,6 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
             label="Expiry Date"
             placeholder="Expiry Date"
             value={usageData.expiryDate}
-            onFocus={(e) => e.target.showPicker()}
             onChange={(e) => handleInputChange("expiryDate", e.target.value)}
           />
         </CModalBody>
