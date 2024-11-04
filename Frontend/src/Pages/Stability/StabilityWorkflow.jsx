@@ -25,7 +25,7 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
 import Barcode from "react-barcode"; // Import Barcode component
@@ -105,7 +105,7 @@ const StabilityWorkFlow = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/stability-generate-report/${sampleId}`
+        `https://limsapi.vidyagxp.com/stability-generate-report/${sampleId}`
       );
       // console.log("Response", response);
 
@@ -263,7 +263,9 @@ const StabilityWorkFlow = () => {
   const handleDelete = (item) => {
     // console.log(item);
     axios
-      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.uniqueId}`)
+      .delete(
+        `https://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`
+      )
       .then((response) => {
         // console.log(response.data.message);
         toast.success("Record deleted successfully");
@@ -487,7 +489,7 @@ const StabilityWorkFlow = () => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -508,7 +510,7 @@ const StabilityWorkFlow = () => {
   return (
     <div className="m-5 mt-3">
       <LaunchQMS />
-<ToastContainer/>
+      <ToastContainer />
       <div className="">
         <div className="main-head">
           <h2 className="fw-bold">Stability WorkFlow</h2>

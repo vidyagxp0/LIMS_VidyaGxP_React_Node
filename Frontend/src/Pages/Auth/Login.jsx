@@ -15,7 +15,7 @@ import axios from "axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { BASE_URL } from "../../config.json";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -41,7 +41,7 @@ function Login(props) {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/admin/user-login",
+        "https://limsapi.vidyagxp.com/admin/user-login",
         {
           email,
           password: passwd,
@@ -83,7 +83,7 @@ function Login(props) {
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-blue-500">
         <div
           className="flex flex-col md:flex-row m-4 max-w-5xl w-full shadow-2xl rounded-lg overflow-hidden h-auto md:h-[700px]"

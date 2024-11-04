@@ -15,7 +15,7 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
@@ -249,7 +249,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
       );
       // console.log(response.data);
 
@@ -278,7 +278,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/sample`,
+        `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -298,7 +298,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleSave = async () => {
     const formDataToSend = new FormData();
-  
+
     // Append all form data to FormData object
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
@@ -307,22 +307,22 @@ const SampleWorkflowModal = ({ onClose }) => {
         formDataToSend.append(key, formData[key]);
       }
     }
-  
+
     // Manually append the test parameters as an array of objects, if applicable
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters));
     }
-  
+
     try {
       if (id) {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit function
       } else {
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
         await toast.promise(
           Promise.all([
             axios.post(
-              `http://localhost:9000/create-sample`,
+              `https://limsapi.vidyagxp.com/create-sample`,
               formDataToSend,
               { headers: { "Content-Type": "multipart/form-data" } } // Set content type for multipart data
             ),
@@ -334,7 +334,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             error: <b>Failed to add Data.</b>,
           }
         );
-  
+
         setIsModalOpen(false);
         navigate("/sampleWorkflow");
       }
@@ -345,7 +345,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       );
     }
   };
-  
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -1591,7 +1590,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       {id ? (
         <ProgressBar
           stage={Number(formData.stage)}

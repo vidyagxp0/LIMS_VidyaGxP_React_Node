@@ -103,7 +103,7 @@ const AnalystQualification = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:9000/analyst/generate-report/${analystId}`
+        `https://limsapi.vidyagxp.com/analyst/generate-report/${analystId}`
       );
       console.log("Response:", response);
 

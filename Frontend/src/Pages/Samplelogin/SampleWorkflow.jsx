@@ -268,7 +268,9 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
+      await axios.delete(
+        `https://limsapi.vidyagxp.com/delete-Sample/${item.id}`
+      );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -509,7 +511,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -530,7 +532,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   return (
     <div className="m-5 mt-3">
       <LaunchQMS />
-      <ToastContainer/>
+      <ToastContainer />
       {/* <div>
       <h3>Instrument Details</h3>
       <p><strong>Instrument ID:</strong> {instrumentData?.InstrumentId}</p>
@@ -714,10 +716,15 @@ const SampleWorkFlow = ({ instrumentData }) => {
           {data?.map((data, index) => (
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
-              <td className="border px-4 py-2">{index + 1}</td>              
-                <td onClick={()=>{navigate(`/sampleWorkflowEdit/${data.id}`)}} className="hover:bg-gray-200 border px-4 py-2">
-                  {data.samplePlanId}
-                </td>
+              <td className="border px-4 py-2">{index + 1}</td>
+              <td
+                onClick={() => {
+                  navigate(`/sampleWorkflowEdit/${data.id}`);
+                }}
+                className="hover:bg-gray-200 border px-4 py-2"
+              >
+                {data.samplePlanId}
+              </td>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
               <td className="border px-4 py-2">{data.sampleType}</td>

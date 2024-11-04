@@ -106,7 +106,7 @@ const ControlSampleModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/controlSample/get-control-sample/${id}`
+        `https://limsapi.vidyagxp.com/controlSample/get-control-sample/${id}`
       );
       // console.log(response.data);
 
@@ -128,11 +128,11 @@ const ControlSampleModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
       await toast.promise(
         Promise.all([
           axios.put(
-            `http://localhost:9000/controlSample/edit-control-sample/${id}`,
+            `https://limsapi.vidyagxp.com/controlSample/edit-control-sample/${id}`,
             formData
           ),
           delay(1300),
@@ -143,7 +143,7 @@ const ControlSampleModal = ({ onClose }) => {
           error: <b>Failed to update data.</b>,
         }
       );
-      
+
       setIsModalOpen(false);
       navigate("/control-sample");
     } catch (error) {
@@ -152,7 +152,6 @@ const ControlSampleModal = ({ onClose }) => {
       );
     }
   };
-  
 
   const handleSave = async () => {
     if (id) {
@@ -164,11 +163,11 @@ const ControlSampleModal = ({ onClose }) => {
           status: "Under Initiation",
         };
         const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
         await toast.promise(
           Promise.all([
             axios.post(
-              `http://localhost:9000/controlSample/create-control-sample`,
+              `https://limsapi.vidyagxp.com/controlSample/create-control-sample`,
               updatedFormData
             ),
             delay(1300),
@@ -179,7 +178,7 @@ const ControlSampleModal = ({ onClose }) => {
             error: <b>Failed to add Data.</b>,
           }
         );
-  
+
         setIsModalOpen(false);
         navigate("/control-Sample");
       } catch (error) {
@@ -189,7 +188,6 @@ const ControlSampleModal = ({ onClose }) => {
       }
     }
   };
-  
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -664,7 +662,7 @@ const ControlSampleModal = ({ onClose }) => {
   };
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       {id ? (
         <ProgressBar3
           stage={Number(formData.stage)}
