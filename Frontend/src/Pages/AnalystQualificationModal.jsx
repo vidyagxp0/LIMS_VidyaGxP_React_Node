@@ -105,15 +105,15 @@ const AnalystQualificationModal = ({ onClose }) => {
   //   fetchAnalystData();
   // }, [id]);
 
-  const user=JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
 
   const [roles, setRoles] = useState([]);
-  console.log(roles,"ROLLLLLL");
-  
+  console.log(roles, "ROLLLLLL");
+
   useEffect(() => {
     fetchRoles();
-  },[])
+  }, []);
   const fetchRoles = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -127,8 +127,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     } catch (error) {
       console.error("Error fetching roles:", error);
     }
-  }
-  
+  };
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -250,8 +249,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       } catch (error) {
         // Handle error
         toast.error(
-          "Error adding Data: " +
-            (error.response?.data || error.message)
+          "Error adding Data: " + (error.response?.data || error.message)
         );
       }
     }

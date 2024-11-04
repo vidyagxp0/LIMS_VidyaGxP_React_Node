@@ -127,23 +127,32 @@ const ControlSampleModal = ({ onClose }) => {
 
   const handleEdit = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:9000/controlSample/edit-control-sample/${id}`,
-        formData
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
+      await toast.promise(
+        Promise.all([
+          axios.put(
+            `http://localhost:9000/controlSample/edit-control-sample/${id}`,
+            formData
+          ),
+          delay(1300),
+        ]).then(([response]) => response),
+        {
+          loading: "Updating data...",
+          success: <b>Data updated successfully.</b>,
+          error: <b>Failed to update data.</b>,
+        }
       );
-      if (response.status === 200) {
-        toast.success("Data updated successfully.");
-        setIsModalOpen(false);
-        navigate("/control-sample");
-      } else {
-        toast.error("Failed to update Data.");
-      }
+      
+      setIsModalOpen(false);
+      navigate("/control-sample");
     } catch (error) {
       toast.error(
         "Error updating Data: " + (error.response?.data || error.message)
       );
     }
   };
+  
 
   const handleSave = async () => {
     if (id) {
@@ -152,32 +161,35 @@ const ControlSampleModal = ({ onClose }) => {
       try {
         const updatedFormData = {
           ...formData,
-          status: "Under Initiation", // Static status
+          status: "Under Initiation",
         };
-
-        const response = await axios.post(
-          `http://localhost:9000/controlSample/create-control-sample`,
-          updatedFormData
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
+        await toast.promise(
+          Promise.all([
+            axios.post(
+              `http://localhost:9000/controlSample/create-control-sample`,
+              updatedFormData
+            ),
+            delay(1300),
+          ]).then(([response]) => response),
+          {
+            loading: "Saving data...",
+            success: <b>Data added successfully.</b>,
+            error: <b>Failed to add Data.</b>,
+          }
         );
-        // console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Sample Workflow added successfully.");
-          setIsModalOpen(false);
-          navigate("/control-Sample");
-        } else {
-          toast.error("Failed to add Sample Workflow.");
-        }
-toast.success("Data added successfully.");
-      setIsModalOpen(false);
-      navigate("/control-Sample");
-    } catch (error) {
-      toast.error(
-        "Error adding Data: " + (error.response?.data || error.message)
-      );
+  
+        setIsModalOpen(false);
+        navigate("/control-Sample");
+      } catch (error) {
+        toast.error(
+          "Error adding Data: " + (error.response?.data || error.message)
+        );
+      }
     }
-  }
-};
-
+  };
+  
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -652,7 +664,7 @@ toast.success("Data added successfully.");
   };
   return (
     <>
-    <div><ToastContainer/></div>
+    <ToastContainer />
       {id ? (
         <ProgressBar3
           stage={Number(formData.stage)}

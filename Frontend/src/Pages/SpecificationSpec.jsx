@@ -447,11 +447,11 @@ const SpecificationSpec = () => {
   return (
     <div>
       <LaunchQMS />
-      <div className="m-5 mt-3">
+      <div className="m-5 mt-3 fixed top-20 w-[82%]">
         <div className="main-head mb-6">
           <h4 className="font-bold text-xl">Specification</h4>
         </div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 ">
           <div className="flex flex-grow space-x-10">
             <SearchBar
               value={""}
@@ -469,7 +469,6 @@ const SpecificationSpec = () => {
               className="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
-
           <div className="flex justify-end space-x-4 text-nowrap">
             <PDFDownload
               columns={"'columns'"}
@@ -494,7 +493,7 @@ const SpecificationSpec = () => {
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative top-24">
         <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-10">
           <thead className="sticky top-[86px]">
             <tr className="text-white text-left">
@@ -568,7 +567,7 @@ const SpecificationSpec = () => {
         </table>
 
         {/* Pagination */}
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-end fixed right-2">
           <nav
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
             aria-label="Pagination"

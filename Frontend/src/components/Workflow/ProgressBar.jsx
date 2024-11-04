@@ -95,7 +95,9 @@ const ProgressBar = (props) => {
   };
   return (
     <>
-        <div><ToastContainer/></div>
+      <div>
+        <ToastContainer />
+      </div>
 
       <ESignatureModal
         open={isModalOpen}

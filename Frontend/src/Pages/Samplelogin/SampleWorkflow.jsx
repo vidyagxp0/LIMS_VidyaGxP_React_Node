@@ -31,6 +31,7 @@ import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
 import BarcodeExportButton from "./BarcodeExportButton";
 import toast from "react-hot-toast";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,7 +66,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      console.log(response, "5656565656565656");
+      // console.log(response, "5656565656565656");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -111,9 +112,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     console.log("Generating PDF for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
-      const response = await fetch(
-        `${BASE_URL}/generate-report/${sampleId}`
-      );
+      const response = await fetch(`${BASE_URL}/generate-report/${sampleId}`);
       console.log("Response", response);
 
       if (!response.ok) {
@@ -275,10 +274,10 @@ const SampleWorkFlow = ({ instrumentData }) => {
       );
       closeModal();
       fetchData();
-      toast.success("Analyst deleted successfully");
+      toast.success("Data deleted successfully");
     } catch (error) {
       console.error("Error deleting analyst:", error);
-      // toast.error("Error deleting analyst");
+      toast.error("Error deleting analyst");
     }
   };
 
@@ -531,6 +530,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   return (
     <div className="m-5 mt-3">
       <LaunchQMS />
+      <ToastContainer/>
       {/* <div>
       <h3>Instrument Details</h3>
       <p><strong>Instrument ID:</strong> {instrumentData?.InstrumentId}</p>
@@ -714,15 +714,10 @@ const SampleWorkFlow = ({ instrumentData }) => {
           {data?.map((data, index) => (
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
-              <td className="border px-4 py-2">{index + 1}</td>
-              <Link
-                to={`/sampleWorkflowEdit/${data.id}`}
-                className="contents mt-3"
-              >
-                <td className="hover:bg-gray-200 border px-4 py-2">
+              <td className="border px-4 py-2">{index + 1}</td>              
+                <td onClick={()=>{navigate(`/sampleWorkflowEdit/${data.id}`)}} className="hover:bg-gray-200 border px-4 py-2">
                   {data.samplePlanId}
                 </td>
-              </Link>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
               <td className="border px-4 py-2">{data.sampleType}</td>

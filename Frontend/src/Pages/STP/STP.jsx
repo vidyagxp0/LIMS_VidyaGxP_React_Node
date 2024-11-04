@@ -660,7 +660,7 @@ const STP = () => {
   return (
     <div>
       <LaunchQMS />
-      <div className="m-5 mt-3">
+      <div className="m-5 mt-3 fixed top-20 w-[82%]">
         <div className="main-head mb-6">
           <h4 className="font-bold text-xl">STP</h4>
         </div>
@@ -707,7 +707,7 @@ const STP = () => {
         </div>
       </div>
 
-      <div className="relative">
+      <div className="relative top-24">
         <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-10">
           <thead className="sticky top-[86px]">
             <tr className=" text-white text-left">
@@ -773,7 +773,7 @@ const STP = () => {
           </tbody>
         </table>
 
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-end fixed right-2">
           <nav
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
             aria-label="Pagination"

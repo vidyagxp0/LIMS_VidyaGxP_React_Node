@@ -25,7 +25,8 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../Modals/ResusableModal";
 
@@ -187,7 +188,7 @@ const ControlSample = () => {
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
-      accessor: "action",
+      accessor: "actionControl",
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon
@@ -232,11 +233,11 @@ const ControlSample = () => {
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
-      toast.success("Control Sample deleted successfully!");
+      toast.success("Data deleted successfully!");
       fetchData();
     } catch (error) {
-      console.error("Error deleting Control Sample:", error);
-      toast.error("Error deleting Control Sample.");
+      console.error("Error deleting Data:", error);
+      toast.error("Error deleting Data.");
     }
   };
 
@@ -328,6 +329,7 @@ const ControlSample = () => {
 
   return (
     <>
+    <ToastContainer/>
       <LaunchQMS />
 
       <div className="m-5 mt-3">

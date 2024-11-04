@@ -35,7 +35,6 @@ const AnalystQualification = () => {
   const [selectedAnalyst, setSelectedAnalyst] = useState(null);
   const [loading, setLoading] = useState({});
 
-
   const navigate = useNavigate();
 
   const openWorkflowModal = () => {
@@ -97,8 +96,6 @@ const AnalystQualification = () => {
       data.map((d) => (d === item ? { ...d, checkbox: e.target.checked } : d))
     );
   };
-
- 
 
   const handlePdfGenerate = async (analystId) => {
     console.log("Generating PDF for analyst ID:", analystId);
@@ -215,7 +212,7 @@ const AnalystQualification = () => {
 
     {
       header: "Actions",
-      accessor: "action",
+      accessor: "actionAnalyst",
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon

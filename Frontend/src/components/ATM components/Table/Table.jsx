@@ -18,7 +18,7 @@ const Table = ({
   openEditModal,
   onPdfGenerate,
 }) => {
-  const pageSize = 7;
+  const pageSize = 6;
   const [currentPage, setCurrentPage] = useState(1);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -148,17 +148,30 @@ const Table = ({
                         >
                           {row.status}
                         </span>
-                      ) : column.accessor === "action" ? (
+                      ) : column.accessor === "action" || column.accessor === "actionAnalyst" || column.accessor === "actionControl" ? (
                         <div className="flex space-x-2">
                           <FontAwesomeIcon
                             icon={faEye}
                             className="mr-2 cursor-pointer"
-                            onClick={() => onViewDetails(row)}
+                            onClick={
+                              column.accessor === "actionAnalyst"
+                                ? () => navigate(`/analyst-qualification-edit/${row.id}`)
+                                : column.accessor === "actionControl"
+                                ? () => navigate(`/control-Sample-edit/${row.id}`)
+                                : () =>  onViewDetails(row)
+                            }
                           />
                           <FontAwesomeIcon
                             icon={faPenToSquare}
                             className="mr-2 cursor-pointer"
-                            onClick={() => openEditModal(row)}
+                            onClick={
+                              column.accessor === "actionAnalyst"
+                                ? () => navigate(`/analyst-qualification-edit/${row.id}`)
+                                : column.accessor === "actionControl"
+                                ? () => navigate(`/control-Sample-edit/${row.id}`)
+                                : () => openEditModal(row)
+                            }
+                            
                           />
                           <FontAwesomeIcon
                             icon={faTrashCan}
@@ -204,58 +217,124 @@ const Table = ({
             </tbody>
           )}
         </table>
-        {currentData.length > 0 ? (
-          <div className="mt-4 flex justify-end">
-            <nav
-              className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-              aria-label="Pagination"
+        {currentData.length > 0 && totalPageCount > 1 && ( // Check if there's more than one page
+  <div className="mt-2 flex justify-end fixed right-10">
+    <nav
+      className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+      aria-label="Pagination"
+    >
+      {/* Previous Button */}
+      {totalPageCount > 1 && (
+        <button
+          onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+          className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+            currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+          }`}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+      )}
+
+      {/* Render Pages Based on totalPageCount */}
+      {totalPageCount > 3 && (
+        <>
+          {/* First Two Pages */}
+          {[1, 2].map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+                currentPage === page
+                  ? "bg-blue-50 border-blue-500 text-blue-600"
+                  : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+              }`}
             >
-              <button
-                onClick={() =>
-                  handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
-                }
-                className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-                  currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"
-                }`}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              {Array.from({ length: totalPageCount }, (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => handlePageChange(index + 1)}
-                  className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
-                    currentPage === index + 1
-                      ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                      : "hover:text-blue-500"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
-              <button
-                onClick={() =>
-                  handlePageChange(
-                    currentPage < totalPageCount
-                      ? currentPage + 1
-                      : totalPageCount
-                  )
-                }
-                className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-                  currentPage === totalPageCount
-                    ? "cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
-                disabled={currentPage === totalPageCount}
-              >
-                Next
-              </button>
-            </nav>
-          </div>
-        ) : (
-          ""
-        )}
+              {page}
+            </button>
+          ))}
+
+          {/* Ellipsis Before Current Range */}
+          {currentPage > 3 && <span className="px-2 py-2 text-gray-500">...</span>}
+
+          {/* Current Page and Surrounding Pages */}
+          {Array.from(
+            { length: Math.min(3, totalPageCount - 2) },
+            (_, index) => currentPage - 1 + index
+          ).filter(
+            (page) => page > 2 && page < totalPageCount - 1
+          ).map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+                currentPage === page
+                  ? "bg-blue-50 border-blue-500 text-blue-600"
+                  : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+
+          {/* Ellipsis After Current Range */}
+          {currentPage < totalPageCount - 2 && (
+            <span className="px-2 py-2 text-gray-500">...</span>
+          )}
+
+          {/* Last Two Pages */}
+          {[totalPageCount - 1, totalPageCount].map((page) => (
+            <button
+              key={page}
+              onClick={() => handlePageChange(page)}
+              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+                currentPage === page
+                  ? "bg-blue-50 border-blue-500 text-blue-600"
+                  : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </>
+      )}
+
+      {/* Show Pages if totalPageCount is 3 or less */}
+      {totalPageCount <= 3 && (
+        Array.from({ length: totalPageCount }).map((_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageChange(index + 1)}
+            className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+              currentPage === index + 1
+                ? "bg-blue-50 border-blue-500 text-blue-600"
+                : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))
+      )}
+
+      {/* Next Button */}
+      {totalPageCount > 1 && (
+        <button
+          onClick={() =>
+            handlePageChange(Math.min(currentPage + 1, totalPageCount))
+          }
+          className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+            currentPage === totalPageCount
+              ? "cursor-not-allowed opacity-50"
+              : "cursor-pointer"
+          }`}
+          disabled={currentPage === totalPageCount}
+        >
+          Next
+        </button>
+      )}
+    </nav>
+  </div>
+)}
       </div>
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}

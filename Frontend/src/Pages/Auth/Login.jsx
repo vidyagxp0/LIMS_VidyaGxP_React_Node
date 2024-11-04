@@ -7,7 +7,6 @@ import {
   CFormSelect,
 } from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { BASE_URL } from "../../config.json";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from 'react-hot-toast';
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -30,11 +31,11 @@ function Login(props) {
 
   const handleLogin = async () => {
     if (!email.trim()) {
-      toast.warning("Email is required");
+      toast.error("Email is required");
       return;
     }
     if (!passwd.trim()) {
-      toast.warning("Password is required");
+      toast.error("Password is required");
       return;
     }
 
@@ -63,7 +64,7 @@ function Login(props) {
       }, 1000);
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        toast.error("Invalid credentials. Please try again.");
+        toast.error("Invalid credentials.");
       } else if (error.response && error.response.status === 500) {
         toast.error("Server error. Please try again later.");
       } else {
@@ -82,6 +83,7 @@ function Login(props) {
 
   return (
     <>
+    <ToastContainer />
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-500 to-blue-500">
         <div
           className="flex flex-col md:flex-row m-4 max-w-5xl w-full shadow-2xl rounded-lg overflow-hidden h-auto md:h-[700px]"

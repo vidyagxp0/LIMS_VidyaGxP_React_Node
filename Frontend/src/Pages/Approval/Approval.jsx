@@ -74,12 +74,16 @@ function Approval() {
   };
 
   const handleStatusUpdate = async (newStatus) => {
+        toast.success("Data deleted successfully"); // Notify the user of success
+        fetchApprovalData(); // Refresh the data
     if (!newStatus) {
       console.error("New status is undefined");
       toast.error("Invalid Status update");
+        toast.error("Failed to delete Data"); // Notify the user of failure
       return;
     }
     if (!viewModalData) {
+      // Log the error and notify the user of the error
       console.error("No data selected for update");
       toast.error("No data selected for update");
       return;

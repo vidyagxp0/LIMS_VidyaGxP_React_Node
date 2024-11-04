@@ -174,7 +174,7 @@ const UserMgnt = () => {
         hour12: true,
         timeZone: "Asia/Kolkata",
       })
-      .replace(",", ""); // Remove comma between date and time
+      .replace(",", "");
   };
 
   return (
@@ -403,12 +403,12 @@ const ViewPermissionModal = (props) => {
           View Permissions for {props.data?.name || "User"}
         </CModalTitle>
       </CModalHeader>
-      <CModalBody className="p-3 mt-2">
+      <CModalBody className="p-3 mt-2 h-[200px] overflow-y-auto">
         {props.data?.UserRoles && props.data.UserRoles.length > 0 ? (
           <ul className="space-y-3">
             {props.data.UserRoles.map((role, index) => (
               <li
-                className="bg-gray-100 p-3 rounded-lg text-lg font-medium shadow-sm"
+                className="bg-gray-100 p-1 pl-4 text-lg font-medium shadow-sm"
                 key={index}
               >
                 {role.role}
@@ -604,7 +604,8 @@ const StatusModal = (props) => {
     user_type: "User",
     rolesArray: [],
   });
-  // console.log(formData, "0000000000000000");
+
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -612,6 +613,16 @@ const StatusModal = (props) => {
       ...prevData,
       [name]: value,
     }));
+  };
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
+    if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters long";
+    if (formData.rolesArray.length === 0) newErrors.rolesArray = "At least one role must be selected";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
   // Handle roles selection with react-select
@@ -634,8 +645,10 @@ const StatusModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    await props.handleAddUser(formData); // This line should now work if handleAddUser is passed correctly
-    props.closeModal();
+    if (validateForm()) { // Validate before submitting
+      await props.handleAddUser(formData);
+      props.closeModal();
+    }
   };
   
 
@@ -658,8 +671,9 @@ const StatusModal = (props) => {
         <CModalTitle>Add User</CModalTitle>
       </CModalHeader>
       <CModalBody>
+        <div className="mb-3">
         <CFormInput
-          className="mb-3"
+          className="mb-1"
           type="text"
           label={
             <>
@@ -669,9 +683,13 @@ const StatusModal = (props) => {
           name="name"
           value={formData.name}
           onChange={handleChange}
+          invalid={!!errors.name} // Show invalid state
         />
+        {errors.name && <div className="text-danger mb-2">{errors.name}</div>} {/* Error message */}</div>
+
+<div className="mb-3">
         <CFormInput
-          className="mb-3"
+          className="mb-1"
           type="email"
           label={
             <>
@@ -681,9 +699,13 @@ const StatusModal = (props) => {
           name="email"
           value={formData.email}
           onChange={handleChange}
+          invalid={!!errors.email} // Show invalid state
         />
+        {errors.email && <div className="text-danger mb-2">{errors.email}</div>} {/* Error message */}
+        </div>
+        <div className="mb-4">
         <CFormInput
-          className="mb-4"
+          className="mb-1"
           type="password"
           required
           label={
@@ -694,7 +716,11 @@ const StatusModal = (props) => {
           name="password"
           value={formData.password}
           onChange={handleChange}
+          invalid={!!errors.password}
         />
+        {errors.password && <div className="text-danger mb-3">{errors.password}</div>}
+        </div>
+        <div>
         <Select
           className="mb-1"
           isMulti
@@ -706,6 +732,8 @@ const StatusModal = (props) => {
           onChange={handleRolesChange}
           placeholder="Select Roles"
         />
+        {errors.rolesArray && <div className="text-danger">{errors.rolesArray}</div>}
+        </div>
       </CModalBody>
       <CModalFooter>
         <CButton color="light" onClick={props.closeModal}>

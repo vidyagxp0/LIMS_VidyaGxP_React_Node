@@ -15,13 +15,14 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import {toast} from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -250,7 +251,7 @@ const SampleWorkflowModal = ({ onClose }) => {
       const response = await axios.get(
         `http://localhost:9000/get-Sample/${id}/sample`
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -310,7 +311,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
-      console.log("Test Parameters being sent:", testParameters);
+      // console.log("Test Parameters being sent:", testParameters);
     }
 
     try {
@@ -868,7 +869,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-            {console.log(testParameters, "TESTPARAMETER")}
+            {/* {console.log(testParameters, "TESTPARAMETER")} */}
             {/* Use the TestParametersTable component */}
             <TestParametersTable
               testParameters={testParameters}
@@ -1579,6 +1580,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   return (
     <>
+    <ToastContainer/>
       {id ? (
         <ProgressBar
           stage={Number(formData.stage)}
@@ -1684,16 +1686,16 @@ const SampleWorkflowModal = ({ onClose }) => {
           </div>
 
           <div className="flex flex-col gap-3 justify-end mt-6 fixed bottom-24 left-[95%]">
-          <CButton
-        type="submit"
-        className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center"
-        onClick={handleClick}
-      >
-        {id ? "Update" : "Save"}
-        {loading && (
-          <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-3"></div>
-        )}
-      </CButton>
+            <CButton
+              type="submit"
+              className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center"
+              onClick={handleClick}
+            >
+              {id ? "Update" : "Save"}
+              {loading && (
+                <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-3"></div>
+              )}
+            </CButton>
             <CButton
               onClick={() => {
                 navigate(-1);
