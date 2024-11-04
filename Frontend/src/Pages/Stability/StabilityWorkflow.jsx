@@ -25,13 +25,13 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
-import { toast } from "react-toastify";
-
+import {toast} from "react-hot-toast";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
 import Barcode from "react-barcode"; // Import Barcode component
 import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
 import SampleWorkflowModal from "../Samplelogin/SampleWorkflowModal";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 
 const StabilityWorkFlow = () => {
   const [data, setData] = useState([]);
@@ -508,7 +508,7 @@ const StabilityWorkFlow = () => {
   return (
     <div className="m-5 mt-3">
       <LaunchQMS />
-
+<ToastContainer/>
       <div className="">
         <div className="main-head">
           <h2 className="fw-bold">Stability WorkFlow</h2>

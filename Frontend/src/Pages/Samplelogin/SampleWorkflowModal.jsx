@@ -297,9 +297,9 @@ const SampleWorkflowModal = ({ onClose }) => {
   };
 
   const handleSave = async () => {
-    const formDataToSend = new FormData(); // Create a new FormData object
-
-    // Append all form data to the FormData object
+    const formDataToSend = new FormData();
+  
+    // Append all form data to FormData object
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
         formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
@@ -307,34 +307,45 @@ const SampleWorkflowModal = ({ onClose }) => {
         formDataToSend.append(key, formData[key]);
       }
     }
-
-    // Manually append the test parameters as an array of objects
+  
+    // Manually append the test parameters as an array of objects, if applicable
     if (testParameters && testParameters.length > 0) {
-      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
-      // console.log("Test Parameters being sent:", testParameters);
+      formDataToSend.append("testParameters", JSON.stringify(testParameters));
     }
-
+  
     try {
       if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+        await handleEdit(formDataToSend); // Pass FormData to handleEdit function
       } else {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
+        await toast.promise(
+          Promise.all([
+            axios.post(
+              `http://localhost:9000/create-sample`,
+              formDataToSend,
+              { headers: { "Content-Type": "multipart/form-data" } } // Set content type for multipart data
+            ),
+            delay(1300),
+          ]).then(([response]) => response),
+          {
+            loading: "Saving data...",
+            success: <b>Data added successfully.</b>,
+            error: <b>Failed to add Data.</b>,
+          }
         );
-        // Handle success response
-        toast.success("Sample Workflow added successfully.");
+  
         setIsModalOpen(false);
         navigate("/sampleWorkflow");
       }
     } catch (error) {
-      console.error("Error uploading file:", error); // Log the error
+      console.error("Error uploading file:", error);
       toast.error(
         "Failed to upload file: " + (error.response?.data || error.message)
       );
     }
   };
+  
 
   const renderFields = (tab) => {
     switch (tab) {

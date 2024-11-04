@@ -18,8 +18,7 @@ import {
 
 import axios from "axios";
 
-import { toast } from "react-toastify";
-
+import {toast} from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Barcode from "react-barcode";
@@ -33,6 +32,7 @@ import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
 
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 
 const StabilityWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -308,8 +308,8 @@ const StabilityWorkflowModal = ({ onClose }) => {
 
   const handleSave = async () => {
     const formDataToSend = new FormData(); // Create a new FormData object
-
-    // Append all form data to the FormData object
+  
+    // Append all form data to FormData object
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
         formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
@@ -317,34 +317,46 @@ const StabilityWorkflowModal = ({ onClose }) => {
         formDataToSend.append(key, formData[key]);
       }
     }
-
+  
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
-      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+      formDataToSend.append("testParameters", JSON.stringify(testParameters));
       console.log("Test Parameters being sent:", testParameters);
     }
-
+  
     try {
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
       if (id) {
         await handleEdit(formDataToSend); // Pass FormData to handleEdit
       } else {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+        await toast.promise(
+          Promise.all([
+            axios.post(
+              `http://localhost:9000/create-sample`,
+              formDataToSend,
+              { headers: { "Content-Type": "multipart/form-data" } }
+            ),
+            delay(1300),
+          ]).then(([response]) => response),
+          {
+            loading: "Saving Data...",
+            success: <b>Data added successfully.</b>,
+            error: <b>Failed to add Sample Workflow.</b>,
+          }
         );
-        // Handle success response
-        toast.success("Sample Workflow added successfully.");
+  
         setIsModalOpen(false);
         navigate("/stabilityWorkflow");
       }
     } catch (error) {
-      console.error("Error uploading file:", error); // Log the error
+      console.error("Error uploading file:", error);
       toast.error(
         "Failed to upload file: " + (error.response?.data || error.message)
       );
     }
   };
+  
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -1582,6 +1594,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
   };
   return (
     <>
+    <ToastContainer/>
       {id ? (
         <ProgressBar
           stage={Number(formData.stage)}
