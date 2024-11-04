@@ -281,9 +281,13 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
+<<<<<<< Updated upstream
       await axios.delete(
         `https://limsapi.vidyagxp.com/delete-Sample/${item.id}`
       );
+=======
+      await axios.delete(`https://limsapi.vidyagxp.com/delete-Sample/${item.id}`);
+>>>>>>> Stashed changes
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
