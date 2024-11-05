@@ -126,7 +126,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `https://limsapi.vidyagxp.com/generate-report/${sampleId}`
+        `http://localhost:9000/generate-report/${sampleId}`
       );
       console.log("Response", response);
 
@@ -283,9 +283,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-Sample/${item.id}`
-      );
+      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -526,7 +524,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `http://localhost:9000/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -545,7 +543,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   // };
 
   return (
-    <div className="m-5 mt-3">
+    <div>
       <LaunchQMS />
       <ToastContainer />
       {/* <div>
@@ -556,7 +554,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
       <p><strong>Model:</strong> {instrumentData?.Model}</p>
     </div> */}
 
-      <div className="">
+      <div className="m-5 mt-3 fixed top-20 w-[82%]">
         <div className="main-head">
           <h2 className="fw-bold">Sample WorkFlow</h2>
         </div>
@@ -601,7 +599,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
           </div>
         </div>
       </div>
-
+      <div className="relative top-24">
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
@@ -939,6 +937,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
           ))}
         </tbody>
       </table>
+      </div>
       {isModalsOpen && (
         <ImportModal
           initialData={filteredData}
