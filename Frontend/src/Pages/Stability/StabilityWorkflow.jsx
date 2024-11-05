@@ -702,14 +702,14 @@ const StabilityWorkFlow = () => {
             <tr key={index} className="border ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
               <td className="border cursor-pointer  px-4 py-2">{index + 1}</td>
-              <Link
-                to={`/stabilityWorkflowEdit/${data.id}`}
-                className="contents"
+              <td
+                onClick={() => {
+                  navigate(`/stabilityWorkflowEdit/${data.id}`);
+                }}
+                className="hover:bg-gray-200 border px-4 py-2 cursor-pointer"
               >
-                <td className="hover:bg-gray-200 border px-4 py-2">
-                  {data.samplePlanId}
-                </td>
-              </Link>
+                {data.samplePlanId}
+              </td>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
               <td className="border px-4 py-2">{data.sampleType}</td>

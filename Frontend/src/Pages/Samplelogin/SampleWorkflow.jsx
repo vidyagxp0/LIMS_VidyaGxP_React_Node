@@ -125,7 +125,9 @@ const SampleWorkFlow = ({ instrumentData }) => {
     console.log("Generating PDF for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
-      const response = await fetch(`https://limsapi.vidyagxp.com/generate-report/${sampleId}`);
+      const response = await fetch(
+        `https://limsapi.vidyagxp.com/generate-report/${sampleId}`
+      );
       console.log("Response", response);
 
       if (!response.ok) {
@@ -734,7 +736,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
                 onClick={() => {
                   navigate(`/sampleWorkflowEdit/${data.id}`);
                 }}
-                className="hover:bg-gray-200 border px-4 py-2"
+                className="hover:bg-gray-200 border px-4 py-2 cursor-pointer"
               >
                 {data.samplePlanId}
               </td>
