@@ -26,6 +26,7 @@ const ControlSampleModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Control Sample");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [user, setUserRoles] = useState();
 
   const { id } = useParams();
   // console.log(id, "ididididididididiidioidiidid");
@@ -63,6 +64,95 @@ const ControlSampleModal = ({ onClose }) => {
   });
 
   // console.log(formData, "L<>?L<>?L<>?L<>?L<>?L<>?L<>?L");
+
+  const FetchUserrole = async () => {
+    if (id) {
+      const userId = localStorage.getItem("user_id");
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:9000/admin/get-user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response, "dsaadesz");
+
+        // Set user roles
+        const roles = response.data.response.UserRoles;
+        setUserRoles(roles);
+
+        // Extract the username
+        const username = response.data.response.name;
+
+        // Check if the user has the Fullpermission role
+        const hasFullPermission = roles.some(
+          (role) => role.role === "Fullpermission"
+        );
+
+        // Set form data based on roles
+        roles.forEach((role) => {
+          switch (role.role) {
+            case "Initiator":
+              setFormData((prevData) => ({
+                ...prevData,
+                initiator: username,
+              }));
+              break;
+            case "Lab Technician":
+              setFormData((prevData) => ({
+                ...prevData,
+                labTechnician: username,
+              }));
+              break;
+            case "Supervisor":
+              setFormData((prevData) => ({
+                ...prevData,
+                supervisor: username,
+              }));
+              break;
+            case "Reviewer":
+              setFormData((prevData) => ({
+                ...prevData,
+                qaReview: username,
+              }));
+              break;
+            case "Approver":
+              setFormData((prevData) => ({
+                ...prevData,
+                approver: username, // Assuming you have a field for approver
+              }));
+              break;
+            case "Viewonly":
+              // Handle view-only role, if needed (perhaps a message or log)
+              break;
+            case "Fullpermission":
+              // If user has full permission, set all fields to the username
+              setFormData((prevData) => ({
+                ...prevData,
+                initiator: username,
+                labTechnician: username,
+                supervisor: username,
+                qaReview: username,
+                approver: username,
+              }));
+              break;
+            default:
+              break;
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    FetchUserrole();
+  }, []);
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -587,7 +677,7 @@ const ControlSampleModal = ({ onClose }) => {
                   type="date"
                   onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
-                  label=" Date of Initiation"
+                  label="Date of Initiation"
                   value={formData?.initiationDate || ""}
                   onChange={handleInputChange}
                 />
@@ -610,7 +700,7 @@ const ControlSampleModal = ({ onClose }) => {
                   value={formData?.labTechnicianDate || ""}
                   onChange={handleInputChange}
                 />
-              </CCol>{" "}
+              </CCol>
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="text"
@@ -619,13 +709,13 @@ const ControlSampleModal = ({ onClose }) => {
                   value={formData?.supervisor || ""}
                   onChange={handleInputChange}
                 />
-              </CCol>{" "}
+              </CCol>
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
                   onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
-                  label="Date of Supervision Review "
+                  label="Date of Supervision Review"
                   value={formData?.supervisionDate || ""}
                   onChange={handleInputChange}
                 />
@@ -649,6 +739,16 @@ const ControlSampleModal = ({ onClose }) => {
                   onChange={handleInputChange}
                 />
               </CCol>
+              <CCol md={6} className="mb-3">
+                <CFormInput
+                  type="text"
+                  name="approver"
+                  label="Approver Name"
+                  value={formData?.approver || ""}
+                  onChange={handleInputChange}
+                />
+              </CCol>
+              {/* Add additional fields if necessary for other roles */}
             </CRow>
           </CForm>
         );
@@ -659,6 +759,7 @@ const ControlSampleModal = ({ onClose }) => {
 
   const handleStageChange = () => {
     fetchData();
+    FetchUserrole();
   };
   return (
     <>

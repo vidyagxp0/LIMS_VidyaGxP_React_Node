@@ -47,6 +47,7 @@ function Login(props) {
           password: passwd,
         }
       );
+      console.log("dataaaa ", response);
 
       const { token, data } = response.data;
 
@@ -55,6 +56,10 @@ function Login(props) {
       }
       if (data && data.name) {
         localStorage.setItem("user", JSON.stringify(data.name));
+      }
+
+      if (data.user_id) {
+        localStorage.setItem("user_id", data.user_id);
       }
 
       toast.success("Login successful");
