@@ -73,7 +73,7 @@ function SampleAcceptanceTemplate() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sMSampleAcceptanceTemplate`
+        `https://limsapi.vidyagxp.com/get-all-lims/sMSampleAcceptanceTemplate`
       );
       const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
 
@@ -104,16 +104,24 @@ function SampleAcceptanceTemplate() {
   const handleStatusUpdate = async (newStatus) => {
     try {
       const { sno, ...dataToSend } = viewModalData;
-      console.log("===========",dataToSend);
-      
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+  
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        },
+        {
+          timeout: 10000, 
+        }
+      );
+  
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -123,9 +131,11 @@ function SampleAcceptanceTemplate() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");``
+      toast.error("Error updating Approval status");
     }
   };
+  
+  
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -165,7 +175,7 @@ function SampleAcceptanceTemplate() {
 
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
+        `https://limsapi.vidyagxp.com/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -183,7 +193,7 @@ function SampleAcceptanceTemplate() {
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/manage-lims/add/sMSampleAcceptanceTemplate`,
+        `https://limsapi.vidyagxp.com/manage-lims/add/sMSampleAcceptanceTemplate`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
@@ -203,6 +213,25 @@ function SampleAcceptanceTemplate() {
       );
     }
   };
+  const handleEditSave = async (updatedData) => {
+    try {
+      const {sno,...dataToSend}=updatedData;
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`, dataToSend);
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+        );
+        toast.success("Approval updated successfully");
+      } else {
+        toast.error("Failed to update Approval");
+      }
+    } catch (error) {
+      console.error("Error updating Approval:", error);
+      toast.error("Error updating Approval");
+    }
+    setEditModalData(null);
+  };
+
 
   const StatusModal = ({visible , closeModal,onAdd}) => {
     const [numOfCheckItems, setNumOfCheckItems] = useState(0);

@@ -111,7 +111,7 @@ function StorageChamber() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStorageChamber/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStorageChamber/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });

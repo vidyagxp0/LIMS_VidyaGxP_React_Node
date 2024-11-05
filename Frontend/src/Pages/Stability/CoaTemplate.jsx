@@ -84,7 +84,7 @@ function CoaTemplate() {
 
   const addCoaChamber = async (newChamber) => {
     try {
-      const response = await axios.post(`http://localhost:9000/manage-lims/add/sMCOATemplate`, {
+      const response = await axios.post(`https://limsapi.vidyagxp.com/manage-lims/add/sMCOATemplate`, {
         ...newChamber,
         addDate: new Date().toISOString().split("T")[0],
         status: newChamber.status || "Active",
@@ -237,7 +237,7 @@ function CoaTemplate() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/sMCOATemplate/${item.uniqueId}`
+        `https://limsapi.vidyagxp.com/delete-lims/sMCOATemplate/${item.uniqueId}`
       );
       console.log(response);
       if (response.status === 200 || response.status === 201) {
@@ -268,7 +268,7 @@ function CoaTemplate() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sMCOATemplate`
+        `https://limsapi.vidyagxp.com/get-all-lims/sMCOATemplate`
       );
       const fetchedData = response?.data[0]?.sMCOATemplate || [];
 
@@ -292,7 +292,7 @@ function CoaTemplate() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
 
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -316,7 +316,7 @@ function CoaTemplate() {
   const handleEditSave = async (updatedData) => {
     try {
       const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`, dataToSend);
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`, dataToSend);
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))

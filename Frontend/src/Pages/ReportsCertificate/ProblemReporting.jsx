@@ -4,17 +4,7 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
-import {
-  CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-  CForm,
-  CFormInput,
-  CFormSelect,
-} from "@coreui/react";
+
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import ATMButton from "../../components/ATM components/Button/ATMButton";

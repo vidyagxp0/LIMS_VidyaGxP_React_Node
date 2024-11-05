@@ -15,7 +15,7 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
@@ -254,7 +254,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
       );
       // console.log(response.data);
 
@@ -283,7 +283,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async (formDataToSend) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/sample`,
+        `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -326,7 +326,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         updatedData = await handleEdit(formDataToSend); // Pass FormData to handleEdit and get updated data
       } else {
         const response = await axios.post(
-          `http://localhost:9000/create-sample`,
+          `https://limsapi.vidyagxp.com/create-sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         );

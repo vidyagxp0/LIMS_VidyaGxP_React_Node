@@ -21,7 +21,7 @@ import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
 import { BASE_URL } from "../config.json";
 import ToastContainer from "../components/HotToaster/ToastContainer";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {
@@ -172,7 +172,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/analyst/get-analyst/${id}`
+        `https://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -198,7 +198,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       await toast.promise(
         Promise.all([
           axios.put(
-            `http://localhost:9000/analyst/edit-analyst/${id}`,
+            `https://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
             formData
           ),
           delay(1300),
@@ -232,7 +232,7 @@ const AnalystQualificationModal = ({ onClose }) => {
         await toast.promise(
           Promise.all([
             axios.post(
-              `http://localhost:9000/analyst/create-analyst`,
+              `https://limsapi.vidyagxp.com/analyst/create-analyst`,
               updatedFormData
             ),
             delay(1300), // Optional delay for smoother loading effect

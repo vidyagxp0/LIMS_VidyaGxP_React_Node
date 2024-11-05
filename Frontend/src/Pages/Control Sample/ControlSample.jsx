@@ -6,6 +6,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import toast from "react-hot-toast";
 import {
   faEye,
   faPenToSquare,
@@ -26,7 +27,7 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../Modals/ResusableModal";
 
@@ -72,7 +73,7 @@ const ControlSample = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/controlSample/get-control-sample`
+        `https://limsapi.vidyagxp.com/controlSample/get-control-sample`
       );
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
@@ -117,7 +118,7 @@ const ControlSample = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:9000/controlSample/generate-report/${ControlSampId}`
+        `https://limsapi.vidyagxp.com/controlSample/generate-report/${ControlSampId}`
       );
       console.log("Response:", response);
 
@@ -184,6 +185,7 @@ const ControlSample = () => {
     { header: "Neutralizing Agent", accessor: "neutralizingAgent" },
     { header: "Destruction Date", accessor: "destructionDate" },
     { header: "Remarks", accessor: "remarks" },
+    { header: "Generate Audit Trail", accessor: "audit" },
     { header: "Generate PDF", accessor: "report" },
     { header: "Status", accessor: "status" },
     {
@@ -228,7 +230,7 @@ const ControlSample = () => {
   const handleDeleteControl = async (item) => {
     try {
       await axios.delete(
-        `http://localhost:9000/controlSample/delete-control-sample/${item.id}`
+        `https://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
@@ -412,7 +414,7 @@ const ControlSample = () => {
       )}
 
       {showModal && <ControlSampleModal onClose={closeWorkflowModal} />}
-    </>
+    </> 
   );
 };
 

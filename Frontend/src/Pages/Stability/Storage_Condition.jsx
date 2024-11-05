@@ -66,13 +66,12 @@ function Storage_Condition() {
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
   const [data, setData] = useState([]);
-  console.log(data, "datatatatatatata");
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sMStorageCondition`
+        `https://limsapi.vidyagxp.com/get-all-lims/sMStorageCondition`
       );
       const fetchedData = response?.data[0]?.sMStorageCondition || [];
 
@@ -128,7 +127,7 @@ function Storage_Condition() {
     const { sno, checkbox, ...dataToSend } = updatedData;
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
         dataToSend
       );
       if (response.status === 200) {
@@ -166,7 +165,7 @@ function Storage_Condition() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -249,7 +248,7 @@ function Storage_Condition() {
 
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/sMStorageCondition/${item.uniqueId}`
+        `https://limsapi.vidyagxp.com/delete-lims/sMStorageCondition/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -296,7 +295,7 @@ function Storage_Condition() {
   const handleAdd = async (newSampleType) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/manage-lims/add/sMStorageCondition`,
+        `https://limsapi.vidyagxp.com/manage-lims/add/sMStorageCondition`,
         {
           ...newSampleType,
           addDate: new Date().toISOString().split("T")[0],
@@ -332,7 +331,7 @@ function Storage_Condition() {
     };
     return (
       <>
-        <CModal alignment="center" visible={isViewModalOpen} onClose={closeViewModal}>
+        <CModal alignment="center" visible={visible} onClose={closeViewModal}>
           <CModalHeader>
             <CModalTitle>New Condition</CModalTitle>
           </CModalHeader>

@@ -81,6 +81,33 @@ function SampleStorage() {
     setIsModalsOpen(false);
   };
 
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
+
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleStorage/${viewModalData.uniqueId}`, {
+        ...dataToSend,
+        status: newStatus,
+      });
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status"); ``
+    }
+  };
+
+
   const handleEditSave = async (updatedData) => {
     const { sno, checkbox, ...dataToSend } = updatedData;
     try {
@@ -691,6 +718,7 @@ const StatusModal = ({ visible, closeModal, onAdd }) => {
           fields={fields}
           onClose={closeViewModal}
           title="Sample Storage Details"
+          updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (

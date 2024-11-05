@@ -19,7 +19,7 @@ import {
 import axios from "axios";
 import { BASE_URL } from "../../../config.json";
 import { toast } from "react-toastify";
-import Select from "react-select";
+// import Select from "react-select";
 
 const UserMgnt = () => {
   const [addModal, setAddModal] = useState(false);

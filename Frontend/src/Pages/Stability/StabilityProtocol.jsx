@@ -115,7 +115,7 @@ function StabilityProtocol() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -341,6 +341,7 @@ function StabilityProtocol() {
       );
       setData(updatedData);
     };
+    
 
     return (
       <>
@@ -974,7 +975,6 @@ function StabilityProtocol() {
                   onChange={handleChange}
                 />
               </CCol>
-
               <CCol sm={2}>
                 <CButton
                   className="bg-info text-white mb-3 mt-4"
@@ -1157,7 +1157,7 @@ function StabilityProtocol() {
       <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
-        <div className="grid grid-cols-5 gap-4 mb-4">
+        {/* <div className="grid grid-cols-5 gap-4 mb-4">
           <Card
             title="DROPPED"
             count={cardCounts.DROPPED}
@@ -1188,7 +1188,7 @@ function StabilityProtocol() {
             color="red"
             onClick={() => handleCardClick("REJECTED")}
           />
-        </div>
+        </div> */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />

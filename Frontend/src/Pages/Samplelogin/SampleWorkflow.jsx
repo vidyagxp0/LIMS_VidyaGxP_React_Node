@@ -33,7 +33,7 @@ import { FaFilePdf } from "react-icons/fa6";
 import Barcode from "react-barcode";
 
 import BarcodeExportButton from "./BarcodeExportButton";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
@@ -126,7 +126,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}`
+        `https://limsapi.vidyagxp.com/generate-report/${sampleId}`
       );
       console.log("Response", response);
 
@@ -283,7 +283,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
+      await axios.delete(`https://limsapi.vidyagxp.com/delete-Sample/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -524,7 +524,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);

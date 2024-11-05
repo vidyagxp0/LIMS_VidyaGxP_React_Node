@@ -21,6 +21,7 @@ import Barcode from "react-barcode";
 import { ProgressBar3 } from "../../components/Workflow/ProgressBar2";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
 import toast from "react-hot-toast";
+// import toast from "react-hot-toast"; 
 
 const ControlSampleModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Control Sample");
@@ -106,7 +107,7 @@ const ControlSampleModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/controlSample/get-control-sample/${id}`
+        `https://limsapi.vidyagxp.com/controlSample/get-control-sample/${id}`
       );
       // console.log(response.data);
 
@@ -132,7 +133,7 @@ const ControlSampleModal = ({ onClose }) => {
       await toast.promise(
         Promise.all([
           axios.put(
-            `http://localhost:9000/controlSample/edit-control-sample/${id}`,
+            `https://limsapi.vidyagxp.com/controlSample/edit-control-sample/${id}`,
             formData
           ),
           delay(1300),
@@ -167,7 +168,7 @@ const ControlSampleModal = ({ onClose }) => {
         await toast.promise(
           Promise.all([
             axios.post(
-              `http://localhost:9000/controlSample/create-control-sample`,
+              `https://limsapi.vidyagxp.com/controlSample/create-control-sample`,
               updatedFormData
             ),
             delay(1300),

@@ -78,7 +78,7 @@ function WorkSheetHeader() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sMWorkSheetHeader`
+        `https://limsapi.vidyagxp.com/get-all-lims/sMWorkSheetHeader`
       );
       const fetchedData = response?.data[0]?.sMWorkSheetHeader || [];
 
@@ -122,7 +122,7 @@ function WorkSheetHeader() {
       console.log(viewModalData);
   
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMWorkSheetHeader/${viewModalData.uniqueId}`,
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMWorkSheetHeader/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -246,7 +246,7 @@ function WorkSheetHeader() {
 
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/sMWorkSheetHeader/${item.uniqueId}`
+        `https://limsapi.vidyagxp.com/delete-lims/sMWorkSheetHeader/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -265,7 +265,7 @@ function WorkSheetHeader() {
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/manage-lims/add/sMWorkSheetHeader`,
+        `https://limsapi.vidyagxp.com/manage-lims/add/sMWorkSheetHeader`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
@@ -549,7 +549,7 @@ function WorkSheetHeader() {
   
       // Now, make the API call
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMWorkSheetHeader/${updatedData.uniqueId}`,
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMWorkSheetHeader/${updatedData.uniqueId}`,
         dataTosend
       );
       

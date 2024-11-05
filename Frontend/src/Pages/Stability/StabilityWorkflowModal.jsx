@@ -18,7 +18,7 @@ import {
 
 import axios from "axios";
 
-import { toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Barcode from "react-barcode";
@@ -56,8 +56,8 @@ const StabilityWorkflowModal = ({ onClose }) => {
         idx === index ? { ...row, [name]: value } : row
       );
       setTestParameters(updatedRows);
-      console.log(updatedRows,"Updadadadada");
-      
+      console.log(updatedRows, "Updadadadada");
+
     } else {
       console.error("testParameters is not an array:", testParameters);
     }
@@ -261,7 +261,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/stability`
+        `https://limsapi.vidyagxp.com/get-Sample/${id}/stability`
       );
       console.log(response.data);
 
@@ -290,7 +290,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
   const handleEdit = async (formDataToSend) => {
     try {
       const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/stability`,
+        `https://limsapi.vidyagxp.com/edit-sample/${id}/stability`,
         formDataToSend,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -307,7 +307,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     } catch (error) {
       toast.error(
         "Error updating Sample Workflow: " +
-          (error.response?.data || error.message)
+        (error.response?.data || error.message)
       );
       return null;
     }
@@ -338,7 +338,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
         updatedData = await handleEdit(formDataToSend); // Pass FormData to handleEdit and get updated data
       } else {
         const response = await axios.post(
-          `http://localhost:9000/create-sample`,
+          `https://limsapi.vidyagxp.com/create-sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
@@ -659,7 +659,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
                   onClick={toggleDropdown} // Toggle dropdown on input click
                 >
                   {Array.isArray(formData.requiredInstrument) &&
-                  formData.requiredInstrument.length > 0 ? (
+                    formData.requiredInstrument.length > 0 ? (
                     formData?.requiredInstrument?.map((instrument, index) => (
                       <span
                         key={index}
@@ -1621,11 +1621,10 @@ const StabilityWorkflowModal = ({ onClose }) => {
                 activeTab === "Sample Registration" ? "primary" : "secondary"
               }
               onClick={() => handleTabClick("Sample Registration")}
-              className={`transition-all duration-300 ${
-                activeTab === "Sample Registration"
+              className={`transition-all duration-300 ${activeTab === "Sample Registration"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700"
-              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+                } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
             >
               Sample Registration
             </CButton>
@@ -1633,11 +1632,10 @@ const StabilityWorkflowModal = ({ onClose }) => {
             <CButton
               color={activeTab === "Sample Analysis" ? "primary" : "secondary"}
               onClick={() => handleTabClick("Sample Analysis")}
-              className={`transition-all duration-300 ${
-                activeTab === "Sample Analysis"
+              className={`transition-all duration-300 ${activeTab === "Sample Analysis"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700"
-              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+                } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
             >
               Sample Analysis
             </CButton>
@@ -1647,11 +1645,10 @@ const StabilityWorkflowModal = ({ onClose }) => {
                 activeTab === "Supervisor Review" ? "primary" : "secondary"
               }
               onClick={() => handleTabClick("Supervisor Review")}
-              className={`transition-all duration-300 ${
-                activeTab === "Supervisor Review"
+              className={`transition-all duration-300 ${activeTab === "Supervisor Review"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700"
-              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+                } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
             >
               Supervisor Review
             </CButton>
@@ -1661,11 +1658,10 @@ const StabilityWorkflowModal = ({ onClose }) => {
                 activeTab === "Stability Information" ? "primary" : "secondary"
               }
               onClick={() => handleTabClick("Stability Information")}
-              className={`transition-all duration-300 ${
-                activeTab === "Stability Information"
+              className={`transition-all duration-300 ${activeTab === "Stability Information"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700"
-              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+                } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
             >
               Stability Information
             </CButton>
@@ -1673,11 +1669,10 @@ const StabilityWorkflowModal = ({ onClose }) => {
             <CButton
               color={activeTab === "QA Review" ? "primary" : "secondary"}
               onClick={() => handleTabClick("QA Review")}
-              className={`transition-all duration-300 ${
-                activeTab === "QA Review"
+              className={`transition-all duration-300 ${activeTab === "QA Review"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700"
-              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+                } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
             >
               QA Review
             </CButton>
@@ -1685,11 +1680,10 @@ const StabilityWorkflowModal = ({ onClose }) => {
             <CButton
               color={activeTab === "AActivity Log" ? "primary" : "secondary"}
               onClick={() => handleTabClick("Activity Log")}
-              className={`transition-all duration-300 ${
-                activeTab === "Activity Log"
+              className={`transition-all duration-300 ${activeTab === "Activity Log"
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700"
-              } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
+                } hover:bg-blue-500 hover:text-white shadow-lg py-2 px-4 rounded-full`}
             >
               Activity Log
             </CButton>

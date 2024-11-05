@@ -83,7 +83,7 @@ const SampleLoginTemplate = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sMSampleLoginTemplate`
+        `https://limsapi.vidyagxp.com/get-all-lims/sMSampleLoginTemplate`
       );
       const fetchedData = response?.data[0]?.sMSampleLoginTemplate || [];
 
@@ -146,7 +146,7 @@ const SampleLoginTemplate = () => {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -267,7 +267,7 @@ const SampleLoginTemplate = () => {
 
     try {
       const response = await axios.delete(
-        `http://localhost:9000/delete-lims/sMSampleLoginTemplate/${item.uniqueId}`
+        `https://limsapi.vidyagxp.com/delete-lims/sMSampleLoginTemplate/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -287,7 +287,7 @@ const SampleLoginTemplate = () => {
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
-        `http://localhost:9000/manage-lims/add/sMSampleLoginTemplate`,
+        `https://limsapi.vidyagxp.com/manage-lims/add/sMSampleLoginTemplate`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
@@ -602,7 +602,7 @@ const SampleLoginTemplate = () => {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`,
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`,
         dataTosend
       );
       if (response.status === 200) {
