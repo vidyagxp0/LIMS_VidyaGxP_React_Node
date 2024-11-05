@@ -144,7 +144,7 @@ const InstrumentMasterModal = ({
     e.preventDefault();
     axios
       .post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/iMRegistration`,
+        `http://localhost:9000/manage-lims/add/iMRegistration`,
         instrumentData
       )
       .then((response) => {

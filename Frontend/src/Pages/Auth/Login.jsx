@@ -41,12 +41,13 @@ function Login(props) {
 
     try {
       const response = await axios.post(
-        "https://limsapi.vidyagxp.com/admin/user-login",
+        "http://localhost:9000/admin/user-login",
         {
           email,
           password: passwd,
         }
       );
+      console.log("dataaaa ", response);
 
       const { token, data } = response.data;
 
@@ -55,6 +56,10 @@ function Login(props) {
       }
       if (data && data.name) {
         localStorage.setItem("user", JSON.stringify(data.name));
+      }
+
+      if (data.user_id) {
+        localStorage.setItem("user_id", data.user_id);
       }
 
       toast.success("Login successful");
