@@ -126,7 +126,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}`
+        `https://limsapi.vidyagxp.com/generate-report/${sampleId}`
       );
       console.log("Response", response);
 
@@ -283,7 +283,9 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
+      await axios.delete(
+        `https://limsapi.vidyagxp.com/delete-Sample/${item.id}`
+      );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -524,7 +526,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -600,28 +602,28 @@ const SampleWorkFlow = ({ instrumentData }) => {
         </div>
       </div>
       <div className="relative top-24">
-      <table className="min-w-full bg-white border border-gray-200 shadow-lg">
-        <thead>
-          <tr className="bg-yellow-600 text-white text-left">
-            <th colSpan="30" className="px-4 py-2 bg-yellow-600">
-              Sample Registration
-            </th>
-            <th colSpan="31" className="px-4 py-2 bg-green-600">
-              Sample Analysis
-            </th>
-            <th colSpan="4" className="px-4 py-2 bg-brown-600">
-              Supervisor Review
-            </th>
-            <th colSpan="10" className="px-4 py-2 bg-violet-600">
-              Stability Information
-            </th>
-            <th colSpan="4" className="px-4 py-2 bg-red-600">
-              QA Review
-            </th>
-            <th colSpan="5" className="px-4 py-2 bg-blue-600">
-              Actions
-            </th>
-            {/* <th colSpan="4" className="px-4 py-2 bg-orange-600">
+        <table className="min-w-full bg-white border border-gray-200 shadow-lg">
+          <thead>
+            <tr className="bg-yellow-600 text-white text-left">
+              <th colSpan="30" className="px-4 py-2 bg-yellow-600">
+                Sample Registration
+              </th>
+              <th colSpan="31" className="px-4 py-2 bg-green-600">
+                Sample Analysis
+              </th>
+              <th colSpan="4" className="px-4 py-2 bg-brown-600">
+                Supervisor Review
+              </th>
+              <th colSpan="10" className="px-4 py-2 bg-violet-600">
+                Stability Information
+              </th>
+              <th colSpan="4" className="px-4 py-2 bg-red-600">
+                QA Review
+              </th>
+              <th colSpan="5" className="px-4 py-2 bg-blue-600">
+                Actions
+              </th>
+              {/* <th colSpan="4" className="px-4 py-2 bg-orange-600">
               Resource Allocation
             </th>
             <th colSpan="4" className="px-4 py-2 bg-green-300">
@@ -630,313 +632,333 @@ const SampleWorkFlow = ({ instrumentData }) => {
             <th colSpan="16" className="px-4 py-2 bg-violet-500">
               Miscellaneous
             </th> */}
-          </tr>
-          <tr className="bg-slate-600 text-white">
-            <td className="border px-4 py-2">S.No</td>
-            <td className="border px-4 py-2">Sample Plan ID</td>
-            <td className="border px-4 py-2">Sample ID</td>
-            <td className="border px-4 py-2">Sample Name</td>
-            <td className="border px-4 py-2">Sample Type</td>
-            <td className="border px-4 py-2">Product/Material Name</td>
-            <td className="border px-4 py-2">Batch/Lot Number</td>
-            <td className="border px-4 py-2">Sample Source</td>
-            <td className="border px-4 py-2">Planned Date</td>
-            <td className="border px-4 py-2">Sample Priority</td>
-            <td className="border px-4 py-2">Sample Quantity</td>
-            <td className="border px-4 py-2">UOM</td>
-            <td className="border px-4 py-2">Market</td>
+            </tr>
+            <tr className="bg-slate-600 text-white">
+              <td className="border px-4 py-2">S.No</td>
+              <td className="border px-4 py-2">Sample Plan ID</td>
+              <td className="border px-4 py-2">Sample ID</td>
+              <td className="border px-4 py-2">Sample Name</td>
+              <td className="border px-4 py-2">Sample Type</td>
+              <td className="border px-4 py-2">Product/Material Name</td>
+              <td className="border px-4 py-2">Batch/Lot Number</td>
+              <td className="border px-4 py-2">Sample Source</td>
+              <td className="border px-4 py-2">Planned Date</td>
+              <td className="border px-4 py-2">Sample Priority</td>
+              <td className="border px-4 py-2">Sample Quantity</td>
+              <td className="border px-4 py-2">UOM</td>
+              <td className="border px-4 py-2">Market</td>
 
-            <td className="border px-4 py-2">Specification ID</td>
-            <td className="border px-4 py-2">Specification Attachment</td>
-            <td className="border px-4 py-2">STP ID</td>
-            <td className="border px-4 py-2">STP Attachment</td>
-            <td className="border px-4 py-2">Test Plan ID</td>
-            <td className="border px-4 py-2">Test Name</td>
-            <td className="border px-4 py-2">Test Method</td>
-            <td className="border px-4 py-2">Test Parameters</td>
-            <td className="border px-4 py-2">Testing Frequency</td>
-            <td className="border px-4 py-2">Testing Location</td>
-            <td className="border px-4 py-2">Required Instruments</td>
-            <td className="border px-4 py-2">Test Grouping</td>
-            <td className="border px-4 py-2">LSL</td>
-            <td className="border px-4 py-2">USL</td>
-            <td className="border px-4 py-2">Testing Deadline</td>
-            <td className="border px-4 py-2">Planner Name</td>
-            <td className="border px-4 py-2">Lab Technician</td>
-            <td className="border px-4 py-2">Reviewer/Approver</td>
-            <td className="border px-4 py-2">Assigned Department</td>
-            <td className="border px-4 py-2">Sample Collection Date</td>
+              <td className="border px-4 py-2">Specification ID</td>
+              <td className="border px-4 py-2">Specification Attachment</td>
+              <td className="border px-4 py-2">STP ID</td>
+              <td className="border px-4 py-2">STP Attachment</td>
+              <td className="border px-4 py-2">Test Plan ID</td>
+              <td className="border px-4 py-2">Test Name</td>
+              <td className="border px-4 py-2">Test Method</td>
+              <td className="border px-4 py-2">Test Parameters</td>
+              <td className="border px-4 py-2">Testing Frequency</td>
+              <td className="border px-4 py-2">Testing Location</td>
+              <td className="border px-4 py-2">Required Instruments</td>
+              <td className="border px-4 py-2">Test Grouping</td>
+              <td className="border px-4 py-2">LSL</td>
+              <td className="border px-4 py-2">USL</td>
+              <td className="border px-4 py-2">Testing Deadline</td>
+              <td className="border px-4 py-2">Planner Name</td>
+              <td className="border px-4 py-2">Lab Technician</td>
+              <td className="border px-4 py-2">Reviewer/Approver</td>
+              <td className="border px-4 py-2">Assigned Department</td>
+              <td className="border px-4 py-2">Sample Collection Date</td>
 
-            <td className="border px-4 py-2">Testing Start Date</td>
-            <td className="border px-4 py-2">Testing End Date</td>
-            <td className="border px-4 py-2">Delay Justification</td>
-            <td className="border px-4 py-2">Testing Outcome</td>
-            <td className="border px-4 py-2">Pass/Fail?</td>
-            <td className="border px-4 py-2">Turnaround Time (TAT)</td>
-            <td className="border px-4 py-2">Sample Retesting Date</td>
-            <td className="border px-4 py-2">Review Date</td>
-            <td className="border px-4 py-2">Sample Storage Location</td>
-            <td className="border px-4 py-2">Transportation Method</td>
-            <td className="border px-4 py-2">Sample Preparation Method</td>
-            <td className="border px-4 py-2">Sample Packaging Details</td>
-            <td className="border px-4 py-2">Sample Label</td>
-            <td className="border px-4 py-2">Regulatory Requirements</td>
-            <td className="border px-4 py-2">Quality Control Checks</td>
-            <td className="border px-4 py-2">Control Sample Reference</td>
-            <td className="border px-4 py-2">Sample Integrity Status</td>
-            <td className="border px-4 py-2">Assigned Department</td>
-            <td className="border px-4 py-2">Risk Assessment</td>
-            <td className="border px-4 py-2">Supervisor</td>
-            <td className="border px-4 py-2">Instruments Reserved</td>
-            <td className="border px-4 py-2">Lab Availability</td>
-            <td className="border px-4 py-2">Sample Cost Estimation</td>
-            <td className="border px-4 py-2">Resource Utilization</td>
-            <td className="border px-4 py-2">Sample Movement History</td>
-            <td className="border px-4 py-2">Testing Progress</td>
-            <td className="border px-4 py-2">Alerts/Notifications</td>
-            <td className="border px-4 py-2">Deviation Logs</td>
-            <td className="border px-4 py-2 text-wrap">Comments/Notes</td>
-            <td className="border px-4 py-2">Attachments</td>
-            <td className="border px-4 py-2">Sampling Frequency</td>
-            <td className="border px-4 py-2">Sample Disposition</td>
+              <td className="border px-4 py-2">Testing Start Date</td>
+              <td className="border px-4 py-2">Testing End Date</td>
+              <td className="border px-4 py-2">Delay Justification</td>
+              <td className="border px-4 py-2">Testing Outcome</td>
+              <td className="border px-4 py-2">Pass/Fail?</td>
+              <td className="border px-4 py-2">Turnaround Time (TAT)</td>
+              <td className="border px-4 py-2">Sample Retesting Date</td>
+              <td className="border px-4 py-2">Review Date</td>
+              <td className="border px-4 py-2">Sample Storage Location</td>
+              <td className="border px-4 py-2">Transportation Method</td>
+              <td className="border px-4 py-2">Sample Preparation Method</td>
+              <td className="border px-4 py-2">Sample Packaging Details</td>
+              <td className="border px-4 py-2">Sample Label</td>
+              <td className="border px-4 py-2">Regulatory Requirements</td>
+              <td className="border px-4 py-2">Quality Control Checks</td>
+              <td className="border px-4 py-2">Control Sample Reference</td>
+              <td className="border px-4 py-2">Sample Integrity Status</td>
+              <td className="border px-4 py-2">Assigned Department</td>
+              <td className="border px-4 py-2">Risk Assessment</td>
+              <td className="border px-4 py-2">Supervisor</td>
+              <td className="border px-4 py-2">Instruments Reserved</td>
+              <td className="border px-4 py-2">Lab Availability</td>
+              <td className="border px-4 py-2">Sample Cost Estimation</td>
+              <td className="border px-4 py-2">Resource Utilization</td>
+              <td className="border px-4 py-2">Sample Movement History</td>
+              <td className="border px-4 py-2">Testing Progress</td>
+              <td className="border px-4 py-2">Alerts/Notifications</td>
+              <td className="border px-4 py-2">Deviation Logs</td>
+              <td className="border px-4 py-2 text-wrap">Comments/Notes</td>
+              <td className="border px-4 py-2">Attachments</td>
+              <td className="border px-4 py-2">Sampling Frequency</td>
+              <td className="border px-4 py-2">Sample Disposition</td>
 
-            <td className="border px-4 py-2">Stability Study Type</td>
-            <td className="border px-4 py-2">Stability Study Protocol</td>
-            <td className="border px-4 py-2">
-              Stability Protocol Approval date
-            </td>
-            <td className="border px-4 py-2">
-              Country of Regulatory Submissions
-            </td>
-            <td className="border px-4 py-2">ICH Zone</td>
-            <td className="border px-4 py-2">Photostability Testing results</td>
-            <td className="border px-4 py-2">Reconstitution Stability</td>
-            <td className="border px-4 py-2">Testing Interval (months)</td>
-            <td className="border px-4 py-2">Shelf life reccommendation</td>
-            <td className="border px-4 py-2">Reviewer/Approver </td>
-            <td className="border px-4 py-2">Reviewer Comment</td>
-            <td className="border px-4 py-2">QA Reviewer/Approver </td>
-            <td className="border px-4 py-2">QA Reviewer Comment </td>
-            <td className="border px-4 py-2">QA Review Date </td>
-            <td className="border px-4 py-2">Status </td>
-            <td className="border px-4 py-2">Sample Barcode</td>
-            <td className="border px-4 py-2">Generate PDF </td>
-            <td className="border px-4 py-2">Copy Row </td>
-            <td className="border px-4 py-2">Actions</td>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.map((data, index) => (
-            <tr key={index} className=" ">
-              {/* { setSelectedSamppleId(data.sampleId)} */}
-              <td className="border px-4 py-2">{index + 1}</td>
-              <td
-                onClick={() => {
-                  navigate(`/sampleWorkflowEdit/${data.id}`);
-                }}
-                className="hover:bg-gray-200 border px-4 py-2 cursor-pointer"
-              >
-                {data.samplePlanId}
-              </td>
-              <td className="border px-4 py-2">{data.sampleId}</td>
-              <td className="border px-4 py-2">{data.sampleName}</td>
-              <td className="border px-4 py-2">{data.sampleType}</td>
-              <td className="border px-4 py-2">{data.productMaterialName}</td>
-              <td className="border px-4 py-2">{data.batchLotNumber}</td>
-              <td className="border px-4 py-2">{data.sampleSource}</td>
-              <td className="border px-4 py-2">{data.plannedDate}</td>
-              <td className="border px-4 py-2">{data.samplePriority}</td>
-              <td className="border px-4 py-2">{data.sampleQuantity}</td>
-              <td className="border px-4 py-2">{data.UOM}</td>
-              <td className="border px-4 py-2">{data.market}</td>
-              <td className="border px-4 py-2">{data.specificationId}</td>
+              <td className="border px-4 py-2">Stability Study Type</td>
+              <td className="border px-4 py-2">Stability Study Protocol</td>
               <td className="border px-4 py-2">
-                {data.specificationAttachment ? (
-                  <a
-                    href={data.specificationAttachment}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    View File
-                  </a>
-                ) : (
-                  "No Attachment"
-                )}
-              </td>
-              <td className="border px-4 py-2">{data.stpId}</td>
-              <td className="border px-4 py-2">
-                {data.stpAttachment ? (
-                  <a
-                    href={data.stpAttachment}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    View File
-                  </a>
-                ) : (
-                  "No Attachment"
-                )}
-              </td>
-              <td className="border px-4 py-2">{data.testPlanId}</td>
-              <td className="border px-4 py-2">{data.testName}</td>
-              <td className="border px-4 py-2">{data.testMethod}</td>
-              <td className="border px-4 py-2">{data.testParameter}</td>
-              <td className="border px-4 py-2">{data.testingFrequency}</td>
-              <td className="border px-4 py-2">{data.testingLocation}</td>
-              <td className="border px-4 py-2">{data.requiredInstrument}</td>
-              <td className="border px-4 py-2">{data.testGrouping}</td>
-              <td className="border px-4 py-2">{data.lsl}</td>{" "}
-              <td className="border px-4 py-2">{data.usl}</td>{" "}
-              <td className="border px-4 py-2">{data.testingDeadline}</td>
-              <td className="border px-4 py-2">{data.plannerName}</td>
-              <td className="border px-4 py-2">{data.labTechnician}</td>
-              <td className="border px-4 py-2">{data.reviewerApprover}</td>
-              <td className="border px-4 py-2">{data.assignedDepartment}</td>
-              <td className="border px-4 py-2">{data.sampleCollectionDate}</td>
-              <td className="border px-4 py-2">{data.testingStartDate}</td>
-              <td className="border px-4 py-2">{data.testingEndDate}</td>
-              <td className="border px-4 py-2">{data.delayJustification}</td>
-              <td className="border px-4 py-2">{data.testingOutCome}</td>
-              <td className="border px-4 py-2">{data.passFail}</td>
-              <td className="border px-4 py-2">{data.turnAroundTime}</td>
-              <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
-              <td className="border px-4 py-2">{data.reviewDate}</td>
-              <td className="border px-4 py-2">{data.sampleStorageLocation}</td>
-              <td className="border px-4 py-2">{data.transportationMethod}</td>
-              <td className="border px-4 py-2">
-                {data.samplePreparationMethod}
-              </td>
-              <td className="border px-4 py-2">{data.samplePackagingDetail}</td>
-              <td className="border px-4 py-2">{data.sampleLabel}</td>
-              <td className="border px-4 py-2">{data.regulatoryRequirement}</td>
-              <td className="border px-4 py-2">{data.qualityControlCheck}</td>
-              <td className="border px-4 py-2">
-                {data.controlSampleReference}
-              </td>
-              <td className="border px-4 py-2">{data.sampleIntegrityStatus}</td>
-              <td className="border px-4 py-2">{data.assignedDepartmentt}</td>
-              <td className="border px-4 py-2">{data.riskAssessment}</td>
-              <td className="border px-4 py-2">{data.supervisor}</td>{" "}
-              <td className="border px-4 py-2">{data.instrumentsReserved}</td>{" "}
-              <td className="border px-4 py-2">{data.labAvailability}</td>{" "}
-              <td className="border px-4 py-2">{data.sampleCostEstimation}</td>{" "}
-              <td className="border px-4 py-2">{data.resourceUtilization}</td>{" "}
-              <td className="border px-4 py-2">{data.sampleMovementHistory}</td>
-              <td className="border px-4 py-2">{data.testingProgress}</td>
-              <td className="border px-4 py-2">{data.alertNotification}</td>
-              <td className="border px-4 py-2">{data.deviationLog}</td>
-              <td className="border px-4 py-2 text-wrap">
-                {data.commentNotes}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.attachment ? (
-                  <a
-                    href={data.attachment}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    View File
-                  </a>
-                ) : (
-                  "No Attachment"
-                )}
-              </td>
-              <td className="border px-4 py-2">{data.samplingFrequency}</td>
-              <td className="border px-4 py-2">{data.sampleDisposition}</td>
-              <td className="border px-4 py-2">
-                {data.stabilityStudyType}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.stabilityStudyProtocol}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.stabilityProtocolApprovalDate}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.countryOfRegulatorySubmissions}
-              </td>{" "}
-              <td className="border px-4 py-2">{data.ichZone}</td>{" "}
-              <td className="border px-4 py-2">
-                {data.photoStabilityTestingResult}
-              </td>{" "}
-              <td className="border px-4 py-2">
-                {data.reConstitutionStability}
-              </td>{" "}
-              <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
-              <td className="border px-4 py-2">
-                {data.shelfLifeRecommendation}
-              </td>{" "}
-              <td className="border px-4 py-2">{data.reviewerApprover}</td>
-              <td className="border px-4 py-2">{data.reviewerComment}</td>{" "}
-              <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
-              <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
-              <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
-              <td className="border px-4 py-2 ml-2">{data.status}</td>{" "}
-              <td className="border px-4 py-2">
-                {barcodeID[index] ? (
-                  <Barcode value={barcodeID[index]} />
-                ) : (
-                  "No Barcode"
-                )}
+                Stability Protocol Approval date
               </td>
               <td className="border px-4 py-2">
-                {data.generatePDF}
-                <td className="flex justify-center items-center px-4 py-2">
-                  <FaFilePdf
-                    size={20}
-                    className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
-                    onClick={() => generatePDF(data.id)}
-                  />
-                  {loading[data.id] && (
-                    <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                Country of Regulatory Submissions
+              </td>
+              <td className="border px-4 py-2">ICH Zone</td>
+              <td className="border px-4 py-2">
+                Photostability Testing results
+              </td>
+              <td className="border px-4 py-2">Reconstitution Stability</td>
+              <td className="border px-4 py-2">Testing Interval (months)</td>
+              <td className="border px-4 py-2">Shelf life reccommendation</td>
+              <td className="border px-4 py-2">Reviewer/Approver </td>
+              <td className="border px-4 py-2">Reviewer Comment</td>
+              <td className="border px-4 py-2">QA Reviewer/Approver </td>
+              <td className="border px-4 py-2">QA Reviewer Comment </td>
+              <td className="border px-4 py-2">QA Review Date </td>
+              <td className="border px-4 py-2">Status </td>
+              <td className="border px-4 py-2">Sample Barcode</td>
+              <td className="border px-4 py-2">Generate PDF </td>
+              <td className="border px-4 py-2">Copy Row </td>
+              <td className="border px-4 py-2">Actions</td>
+            </tr>
+          </thead>
+          <tbody>
+            {data?.map((data, index) => (
+              <tr key={index} className=" ">
+                {/* { setSelectedSamppleId(data.sampleId)} */}
+                <td className="border px-4 py-2">{index + 1}</td>
+                <td
+                  onClick={() => {
+                    navigate(`/sampleWorkflowEdit/${data.id}`);
+                  }}
+                  className="hover:bg-gray-200 border px-4 py-2 cursor-pointer"
+                >
+                  {data.samplePlanId}
+                </td>
+                <td className="border px-4 py-2">{data.sampleId}</td>
+                <td className="border px-4 py-2">{data.sampleName}</td>
+                <td className="border px-4 py-2">{data.sampleType}</td>
+                <td className="border px-4 py-2">{data.productMaterialName}</td>
+                <td className="border px-4 py-2">{data.batchLotNumber}</td>
+                <td className="border px-4 py-2">{data.sampleSource}</td>
+                <td className="border px-4 py-2">{data.plannedDate}</td>
+                <td className="border px-4 py-2">{data.samplePriority}</td>
+                <td className="border px-4 py-2">{data.sampleQuantity}</td>
+                <td className="border px-4 py-2">{data.UOM}</td>
+                <td className="border px-4 py-2">{data.market}</td>
+                <td className="border px-4 py-2">{data.specificationId}</td>
+                <td className="border px-4 py-2">
+                  {data.specificationAttachment ? (
+                    <a
+                      href={data.specificationAttachment}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      View File
+                    </a>
+                  ) : (
+                    "No Attachment"
                   )}
                 </td>
-              </td>{" "}
-              <td className="border px-4 py-2">
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
-                  onClick={() => handleCopyRow(data)}
-                >
-                  Copy Row
-                </button>
-              </td>
-              <td className="border px-4 py-2 font-medium">
-                <div className="flex gap-2 font-medium">
-                  <FontAwesomeIcon
-                    icon={faEye}
-                    className="mr-2 cursor-pointer"
-                    onClick={() => {
-                      // Navigate to the specified URL
-                      // window.location.href = "https://ipc.mydemosoftware.com";
-                      navigate(`/sampleWorkflowEdit/${data.id}`);
-                    }}
-                  />
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    className="mr-2 cursor-pointer"
-                    onClick={() => {
-                      // Navigate to the specified URL
-                      navigate(`/sampleWorkflowEdit/${data.id}`);
-                    }}
-                  />
-                  <FontAwesomeIcon
-                    icon={faTrashCan}
-                    className="cursor-pointer"
-                    onClick={() => {
-                      // Navigate to the specified URL
-                      // window.location.href = "https://ipc.mydemosoftware.com";
-                      handleDelete(data);
-                    }}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                <td className="border px-4 py-2">{data.stpId}</td>
+                <td className="border px-4 py-2">
+                  {data.stpAttachment ? (
+                    <a
+                      href={data.stpAttachment}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      View File
+                    </a>
+                  ) : (
+                    "No Attachment"
+                  )}
+                </td>
+                <td className="border px-4 py-2">{data.testPlanId}</td>
+                <td className="border px-4 py-2">{data.testName}</td>
+                <td className="border px-4 py-2">{data.testMethod}</td>
+                <td className="border px-4 py-2">{data.testParameter}</td>
+                <td className="border px-4 py-2">{data.testingFrequency}</td>
+                <td className="border px-4 py-2">{data.testingLocation}</td>
+                <td className="border px-4 py-2">{data.requiredInstrument}</td>
+                <td className="border px-4 py-2">{data.testGrouping}</td>
+                <td className="border px-4 py-2">{data.lsl}</td>{" "}
+                <td className="border px-4 py-2">{data.usl}</td>{" "}
+                <td className="border px-4 py-2">{data.testingDeadline}</td>
+                <td className="border px-4 py-2">{data.plannerName}</td>
+                <td className="border px-4 py-2">{data.labTechnician}</td>
+                <td className="border px-4 py-2">{data.reviewerApprover}</td>
+                <td className="border px-4 py-2">{data.assignedDepartment}</td>
+                <td className="border px-4 py-2">
+                  {data.sampleCollectionDate}
+                </td>
+                <td className="border px-4 py-2">{data.testingStartDate}</td>
+                <td className="border px-4 py-2">{data.testingEndDate}</td>
+                <td className="border px-4 py-2">{data.delayJustification}</td>
+                <td className="border px-4 py-2">{data.testingOutCome}</td>
+                <td className="border px-4 py-2">{data.passFail}</td>
+                <td className="border px-4 py-2">{data.turnAroundTime}</td>
+                <td className="border px-4 py-2">{data.sampleRetestingDate}</td>
+                <td className="border px-4 py-2">{data.reviewDate}</td>
+                <td className="border px-4 py-2">
+                  {data.sampleStorageLocation}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.transportationMethod}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.samplePreparationMethod}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.samplePackagingDetail}
+                </td>
+                <td className="border px-4 py-2">{data.sampleLabel}</td>
+                <td className="border px-4 py-2">
+                  {data.regulatoryRequirement}
+                </td>
+                <td className="border px-4 py-2">{data.qualityControlCheck}</td>
+                <td className="border px-4 py-2">
+                  {data.controlSampleReference}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.sampleIntegrityStatus}
+                </td>
+                <td className="border px-4 py-2">{data.assignedDepartmentt}</td>
+                <td className="border px-4 py-2">{data.riskAssessment}</td>
+                <td className="border px-4 py-2">{data.supervisor}</td>{" "}
+                <td className="border px-4 py-2">{data.instrumentsReserved}</td>{" "}
+                <td className="border px-4 py-2">{data.labAvailability}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.sampleCostEstimation}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.resourceUtilization}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.sampleMovementHistory}
+                </td>
+                <td className="border px-4 py-2">{data.testingProgress}</td>
+                <td className="border px-4 py-2">{data.alertNotification}</td>
+                <td className="border px-4 py-2">{data.deviationLog}</td>
+                <td className="border px-4 py-2 text-wrap">
+                  {data.commentNotes}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.attachment ? (
+                    <a
+                      href={data.attachment}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 underline"
+                    >
+                      View File
+                    </a>
+                  ) : (
+                    "No Attachment"
+                  )}
+                </td>
+                <td className="border px-4 py-2">{data.samplingFrequency}</td>
+                <td className="border px-4 py-2">{data.sampleDisposition}</td>
+                <td className="border px-4 py-2">
+                  {data.stabilityStudyType}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.stabilityStudyProtocol}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.stabilityProtocolApprovalDate}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.countryOfRegulatorySubmissions}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.ichZone}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.photoStabilityTestingResult}
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  {data.reConstitutionStability}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.testingInterval}</td>{" "}
+                <td className="border px-4 py-2">
+                  {data.shelfLifeRecommendation}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.reviewerApprover}</td>
+                <td className="border px-4 py-2">
+                  {data.reviewerComment}
+                </td>{" "}
+                <td className="border px-4 py-2">{data.QaReviewerApprover}</td>{" "}
+                <td className="border px-4 py-2">{data.QaReviewerComment}</td>{" "}
+                <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
+                <td className="border px-4 py-2 ml-2">{data.status}</td>{" "}
+                <td className="border px-4 py-2">
+                  {barcodeID[index] ? (
+                    <Barcode value={barcodeID[index]} />
+                  ) : (
+                    "No Barcode"
+                  )}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.generatePDF}
+                  <td className="flex justify-center items-center px-4 py-2">
+                    <FaFilePdf
+                      size={20}
+                      className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                      onClick={() => generatePDF(data.id)}
+                    />
+                    {loading[data.id] && (
+                      <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                    )}
+                  </td>
+                </td>{" "}
+                <td className="border px-4 py-2">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
+                    onClick={() => handleCopyRow(data)}
+                  >
+                    Copy Row
+                  </button>
+                </td>
+                <td className="border px-4 py-2 font-medium">
+                  <div className="flex gap-2 font-medium">
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => {
+                        // Navigate to the specified URL
+                        // window.location.href = "https://ipc.mydemosoftware.com";
+                        navigate(`/sampleWorkflowEdit/${data.id}`);
+                      }}
+                    />
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => {
+                        // Navigate to the specified URL
+                        navigate(`/sampleWorkflowEdit/${data.id}`);
+                      }}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        // Navigate to the specified URL
+                        // window.location.href = "https://ipc.mydemosoftware.com";
+                        handleDelete(data);
+                      }}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       {isModalsOpen && (
         <ImportModal

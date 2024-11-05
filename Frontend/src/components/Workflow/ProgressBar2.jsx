@@ -58,7 +58,7 @@ export const ProgressBar2 = (props) => {
         return false;
       }
       const response = await axios.post(
-        "http://localhost:9000/e-signature",
+        "https://limsapi.vidyagxp.com/e-signature",
         { email, password },
         {
           headers: {
@@ -69,7 +69,7 @@ export const ProgressBar2 = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `http://localhost:9000/analyst/${url}`,
+          `https://limsapi.vidyagxp.com/analyst/${url}`,
           { analystId, comment },
           {
             headers: {
@@ -154,9 +154,7 @@ export const ProgressBar2 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() =>
-                  handleOpen("send-to-open", "Action Done.")
-                }
+                onClick={() => handleOpen("send-to-open", "Action Done.")}
               >
                 More Info Required
               </button>
@@ -223,7 +221,7 @@ export const ProgressBar3 = (props) => {
       }
 
       const response = await axios.post(
-        "http://localhost:9000/e-signature",
+        "https://limsapi.vidyagxp.com/e-signature",
         { email, password },
         {
           headers: {
@@ -234,7 +232,7 @@ export const ProgressBar3 = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `http://localhost:9000/controlSample/${url}`,
+          `https://limsapi.vidyagxp.com/controlSample/${url}`,
           { controlSampleId, comment },
           {
             headers: {
@@ -270,9 +268,19 @@ export const ProgressBar3 = (props) => {
               key={index}
               className={`flex-1 text-center p-2 cursor-pointer border rounded 
               ${index < currentStage ? "bg-green-500 text-white" : ""} 
-              ${index === currentStage && index !== 4 ? "bg-orange-500 text-white" : ""}
-              ${index === 2 && currentStage === 2 ? "bg-orange-500 text-white" : ""}
-              ${index === 3 && currentStage === 3 ? "bg-red-500 text-white" : ""}
+              ${
+                index === currentStage && index !== 4
+                  ? "bg-orange-500 text-white"
+                  : ""
+              }
+              ${
+                index === 2 && currentStage === 2
+                  ? "bg-orange-500 text-white"
+                  : ""
+              }
+              ${
+                index === 3 && currentStage === 3 ? "bg-red-500 text-white" : ""
+              }
               ${index > currentStage ? "bg-gray-200" : ""}
               ${index < stages.length - 1 ? "mr-1" : ""}`}
             >
@@ -286,7 +294,9 @@ export const ProgressBar3 = (props) => {
           {stage === 1 && (
             <button
               className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-              onClick={() => handleOpen("send-review", "Review submission initiated.")}
+              onClick={() =>
+                handleOpen("send-review", "Review submission initiated.")
+              }
             >
               Submit
             </button>
@@ -295,7 +305,9 @@ export const ProgressBar3 = (props) => {
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-reviewer", "Inspection complete.")}
+                onClick={() =>
+                  handleOpen("send-to-reviewer", "Inspection complete.")
+                }
               >
                 Inspection Complete
               </button>
@@ -311,7 +323,9 @@ export const ProgressBar3 = (props) => {
             <>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
-                onClick={() => handleOpen("send-to-closed", "Destruction complete.")}
+                onClick={() =>
+                  handleOpen("send-to-closed", "Destruction complete.")
+                }
               >
                 Destruction Complete
               </button>
