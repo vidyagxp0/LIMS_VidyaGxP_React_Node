@@ -406,6 +406,11 @@ export const SampleWorkFlow = sequelize.define("SampleWorkFlow", {
     allowNull: true,
     defaultValue: "Under Initiation",
   },
+  comments: {
+    type: DataTypes.JSON, // Use JSON for storing multiple comments
+    allowNull: true,
+    defaultValue: [], // Initialize as an empty array
+  },
   action: {
     type: DataTypes.TEXT,
     allowNull: true,

@@ -13,13 +13,20 @@ import {
   submitToQAReview,
   submitToClosed,
   ReviewToOpen,
+  getSampleAuditTrail,
 } from "../controllers/sampleWorkFlow.controller.js";
 
 import { upload } from "../utils/multer.js";
 
 import { checkJwtToken } from "../middleware/authentication.js";
+import multer from "multer";
+const uploads = multer({ storage: multer.memoryStorage() });
 
-import { generatePdfbyId, generatePdfbyIdStability, generatePdfIMRegistration } from "../controllers/report.controller.js";
+import {
+  generatePdfbyId,
+  generatePdfbyIdStability,
+  generatePdfIMRegistration,
+} from "../controllers/report.controller.js";
 
 const sampleRouter = express.Router();
 
@@ -100,5 +107,10 @@ sampleRouter.get("/generate-report/:id", generatePdfbyId);
 sampleRouter.get("/stability-generate-report/:id", generatePdfbyIdStability);
 
 sampleRouter.get("/generate-report/:type/:id", generatePdfIMRegistration);
+
+sampleRouter.get(
+  "/get-audit-trail/sample/:auditTrail_id",
+  getSampleAuditTrail
+);
 
 export default sampleRouter;

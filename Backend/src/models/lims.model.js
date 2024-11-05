@@ -161,13 +161,19 @@ const generateAttributes = (fields) => {
     primaryKey: true,
   };
 
-  fields.forEach((field) => {
-    attributes[field] = {
-      type: DataTypes.JSON,
-      allowNull: true,
-      defaultValue: [],
-    };
-  });
+  attributes.comments = {
+    type: DataTypes.JSON, // Use JSON for storing multiple comments
+    allowNull: true,
+    defaultValue: [], // Initialize as an empty array
+  },
+    
+    fields.forEach((field) => {
+      attributes[field] = {
+        type: DataTypes.JSON,
+        allowNull: true,
+        defaultValue: [],
+      };
+    });
 
   return attributes;
 };
