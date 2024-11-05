@@ -148,7 +148,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
+        `https://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -170,7 +170,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
+        `https://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
         formData
       );
       if (response.status === 200) {
@@ -193,7 +193,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     } else {
       try {
         const response = await axios.post(
-          `http://limsapi.vidyagxp.com/analyst/create-analyst`,
+          `https://limsapi.vidyagxp.com/analyst/create-analyst`,
           formData
         );
         // console.log(response, "iddddddddddddddddddddddd");
