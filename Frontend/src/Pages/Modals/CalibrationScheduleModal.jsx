@@ -167,6 +167,7 @@ const CalibrationScheduleModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             id="startDate"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             placeholder=""
             value={calibrationSchedule.startDate}
             onChange={(e) => handleChange("startDate", e.target.value)}

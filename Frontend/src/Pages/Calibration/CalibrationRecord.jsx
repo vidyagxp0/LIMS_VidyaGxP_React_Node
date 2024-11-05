@@ -365,6 +365,7 @@ function CalibrationRecord() {
             label="Schedule Date"
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             name="ScheduleDate"
             placeholder="Schedule Date"
             value={ScheduleDate}
@@ -374,6 +375,7 @@ function CalibrationRecord() {
             label="NextDue Date"
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             name="NextDueDate"
             placeholder="NextDue Date"
             value={NextDueDate}
@@ -517,6 +519,7 @@ function CalibrationRecord() {
             label="Schedule Date"
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             name="ScheduleDate"
             placeholder="Schedule Date"
             value={formData?.ScheduleDate}
@@ -526,6 +529,7 @@ function CalibrationRecord() {
             label="NextDue Date"
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             name="NextDueDate"
             placeholder="NextDue Date"
             value={formData?.NextDueDate}

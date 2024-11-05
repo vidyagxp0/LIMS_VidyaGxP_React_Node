@@ -34,7 +34,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
     e.preventDefault(); // Prevent default form submission behavior
     axios
       .put(
-        `http://limsapi.vidyagxp.com/manage-lims/update/sLSamplePA/${formData.uniqueId}`,
+        `https://limsapi.vidyagxp.com/manage-lims/update/sLSamplePA/${formData.uniqueId}`,
         formData
       )
       .then((response) => {
@@ -102,6 +102,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
             name="plannedDate"
             label="Planned Date"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.plannedDate}
             onChange={handleChange}
           />
@@ -193,6 +194,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
             name="testingLocation"
             label="Testing Location"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.testingLocation}
             onChange={handleChange}
           />
@@ -200,6 +202,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
             name="requiredInstruments"
             label="Require Instruments"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.requiredInstruments}
             onChange={handleChange}
           />
@@ -271,6 +274,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
             label="Sample Collection Date"
             value={formData.sampleCollectionDate}
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             onChange={handleChange}
             placeholder="Enter Sample Retention Time"
           />
@@ -299,6 +303,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
             name="sampleRetestingDate"
             label="Sample Retesting Date"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.sampleRetestingDate}
             onChange={handleChange}
             placeholder="Enter Sample Retention Time"
@@ -307,6 +312,7 @@ const SamplePlanningAEdit = ({ open, handleClose, data, fetchData }) => {
             name="reviewDate"
             label="Review Date"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.reviewDate}
             onChange={handleChange}
             placeholder="Enter Sample Retention Time"

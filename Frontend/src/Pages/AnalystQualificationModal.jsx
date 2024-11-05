@@ -15,11 +15,13 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
 import { BASE_URL } from "../config.json";
+import ToastContainer from "../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {
@@ -28,7 +30,6 @@ const AnalystQualificationModal = ({ onClose }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const { id } = useParams();
-  // console.log(id, "ididididididididiidioidiidid");
 
   const [formData, setFormData] = useState({
     analystId: "",
@@ -104,6 +105,30 @@ const AnalystQualificationModal = ({ onClose }) => {
   //   fetchAnalystData();
   // }, [id]);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user);
+
+  const [roles, setRoles] = useState([]);
+  console.log(roles, "ROLLLLLL");
+
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+  const fetchRoles = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${BASE_URL}/admin/get-all-roles`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(response.data.response, "ROlessssss");
+      setRoles(response.data.response);
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+    }
+  };
+
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
@@ -147,7 +172,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
+        `https://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -168,17 +193,24 @@ const AnalystQualificationModal = ({ onClose }) => {
 
   const handleEdit = async () => {
     try {
-      const response = await axios.put(
-        `http://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
-        formData
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      await toast.promise(
+        Promise.all([
+          axios.put(
+            `https://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
+            formData
+          ),
+          delay(1300),
+        ]).then(([response]) => response),
+        {
+          loading: "Updating data...",
+          success: <b>Data updated successfully.</b>,
+          error: <b>Failed to update data.</b>,
+        }
       );
-      if (response.status === 200) {
-        toast.success("Data updated successfully.");
-        setIsModalOpen(false);
-        navigate("/analyst-qualification");
-      } else {
-        toast.error("Failed to update Data.");
-      }
+      setIsModalOpen(false);
+      navigate("/analyst-qualification");
     } catch (error) {
       toast.error(
         "Error updating Data: " + (error.response?.data || error.message)
@@ -191,22 +223,33 @@ const AnalystQualificationModal = ({ onClose }) => {
       await handleEdit();
     } else {
       try {
-        const response = await axios.post(
-          `http://limsapi.vidyagxp.com/analyst/create-analyst`,
-          formData
+        const updatedFormData = {
+          ...formData,
+          status: "Under Initiation", // Static status
+        };
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        await toast.promise(
+          Promise.all([
+            axios.post(
+              `https://limsapi.vidyagxp.com/analyst/create-analyst`,
+              updatedFormData
+            ),
+            delay(1300), // Optional delay for smoother loading effect
+          ]).then(([response]) => response),
+          {
+            loading: "Saving data...", // Loading message
+            success: <b>Data added successfully.</b>, // Success message
+            error: <b>Failed to add data.</b>, // Error message
+          }
         );
-        // console.log(response, "iddddddddddddddddddddddd");
-        if (response.status === 200) {
-          toast.success("Data added successfully.");
-          setIsModalOpen(false);
-          navigate("/analyst-qualification");
-        } else {
-          toast.error("Failed to add Data.");
-        }
+        toast.success("Data added successfully.");
+        setIsModalOpen(false); // Close the modal on success
+        navigate("/analyst-qualification"); // Navigate to another page on success
       } catch (error) {
+        // Handle error
         toast.error(
-          "Error adding Sample Workflow: " +
-            (error.response?.data || error.message)
+          "Error adding Data: " + (error.response?.data || error.message)
         );
       }
     }
@@ -242,6 +285,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="dateOfBirth"
                   label="Date of Birth"
                   value={formData?.dateOfBirth || ""}
@@ -315,6 +359,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="dateOfQualification"
                   label="Date Of Qualification"
                   value={formData?.dateOfQualification || ""}
@@ -348,6 +393,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="expirationDate"
                   label="Expiration Date"
                   value={formData?.expirationDate || ""}
@@ -378,6 +424,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="trainingStartDate"
                   label="Training Start Date"
                   value={formData?.trainingStartDate || ""}
@@ -390,6 +437,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="trainingCompletionDate"
                   label="Training Completion Date"
                   value={formData?.trainingCompletionDate || ""}
@@ -432,6 +480,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="certificationDate"
                   label="Certification Date"
                   value={formData?.certificationDate || ""}
@@ -441,6 +490,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="nextReCertificationDate"
                   label="Next Recertification Date"
                   value={formData?.nextReCertificationDate || ""}
@@ -462,6 +512,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testDate"
                   label="Test Date"
                   value={formData?.testDate || ""}
@@ -525,6 +576,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qualificationDate"
                   label="Qualification Date"
                   value={formData?.qualificationDate || ""}
@@ -558,6 +610,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reQualificationDueDate"
                   label="Requalification Due Date"
                   value={formData?.reQualificationDueDate || ""}
@@ -600,6 +653,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="methodValidationDate"
                   label="Method Validation Date"
                   value={formData?.methodValidationDate || ""}
@@ -617,6 +671,97 @@ const AnalystQualificationModal = ({ onClose }) => {
               </CCol>
             </CRow>
 
+            <CCol md={8} className="mt-1 relative p-2">
+              <label
+                htmlFor="requiredInstrument"
+                className="block text-gray-700 text-sm font-medium mb-2"
+              >
+                Select Required Instruments
+              </label>
+
+              <div
+                className="form-control flex items-center flex-wrap gap-2 p-2 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
+                onClick={toggleDropdown} // Toggle dropdown on input click
+              >
+                {formData.requiredInstrument &&
+                formData.requiredInstrument.length > 0 ? (
+                  formData.requiredInstrument.map((instrument, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"
+                    >
+                      {instrument}
+                      <button
+                        type="button"
+                        className="text-red-500 hover:text-red-700"
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent closing dropdown when removing item
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            requiredInstrument:
+                              prevData.requiredInstrument.filter(
+                                (item) => item !== instrument
+                              ),
+                          }));
+                        }}
+                      >
+                        &times;
+                      </button>
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-gray-500">Select Instruments...</p> // Placeholder when nothing is selected
+                )}
+              </div>
+
+              {dropdownOpen && (
+                <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-10 transition-all duration-200 ease-in-out">
+                  {[
+                    "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+                    "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+                    "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+                    "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+                    "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+                    "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+                    "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+                    "Moisture Analyzers – For determining the moisture content in products.",
+                    "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+                    "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+                    "Autoclaves – For sterilizing lab equipment and samples.",
+                    "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+                    "Karl Fischer Titrator – For measuring water content in samples.",
+                    "Refractometer – For determining the refractive index of liquids.",
+                    "Polarimeter – For measuring the optical rotation of a substance.",
+                    "Melting Point Apparatus – For determining the melting point of substances.",
+                    "Viscometer – For measuring the viscosity of liquid samples.",
+                    "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+                    "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+                    "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+                    "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+                  ].map((instrument, index) => (
+                    <div
+                      key={index}
+                      className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition-colors duration-150"
+                      onClick={() => {
+                        if (!formData.requiredInstrument.includes(instrument)) {
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            requiredInstrument: [
+                              ...prevData.requiredInstrument,
+                              instrument,
+                            ],
+                          }));
+                        }
+                        setDropdownOpen(false);
+                      }}
+                    >
+                      {instrument}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CCol>
+
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
@@ -630,6 +775,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="dateAcknowledgedReviewed"
                   label="Date Acknowledged/Reviewed"
                   value={formData?.dateAcknowledgedReviewed || ""}
@@ -684,6 +830,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="approvalDate"
                   label="Approval Date"
                   value={formData?.approvalDate || ""}
@@ -726,6 +873,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="modificationDate"
                   label="Modification Date"
                   value={formData?.modificationDate || ""}
@@ -754,7 +902,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                 />
               </CCol>
 
-              <CCol md={6}>
+              {/* <CCol md={6}>
                 <CFormInput
                   type="text"
                   name="status"
@@ -762,99 +910,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                   value={formData?.status || ""}
                   onChange={handleInputChange}
                 />
-              </CCol>
-              <CCol md={6} className="mt-3 relative">
-                <label
-                  htmlFor="requiredInstrument"
-                  className="block text-gray-700 text-sm font-medium mb-2"
-                >
-                  Select Required Instruments
-                </label>
-
-                <div
-                  className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
-                  onClick={toggleDropdown} // Toggle dropdown on input click
-                >
-                  {formData.requiredInstrument &&
-                  formData.requiredInstrument.length > 0 ? (
-                    formData.requiredInstrument.map((instrument, index) => (
-                      <span
-                        key={index}
-                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"
-                      >
-                        {instrument}
-                        <button
-                          type="button"
-                          className="text-red-500 hover:text-red-700"
-                          onClick={(e) => {
-                            e.stopPropagation(); // Prevent closing dropdown when removing item
-                            setFormData((prevData) => ({
-                              ...prevData,
-                              requiredInstrument:
-                                prevData.requiredInstrument.filter(
-                                  (item) => item !== instrument
-                                ),
-                            }));
-                          }}
-                        >
-                          &times;
-                        </button>
-                      </span>
-                    ))
-                  ) : (
-                    <p className="text-gray-500">Select Instruments...</p> // Placeholder when nothing is selected
-                  )}
-                </div>
-
-                {dropdownOpen && (
-                  <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-10 transition-all duration-200 ease-in-out">
-                    {[
-                      "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
-                      "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
-                      "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
-                      "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
-                      "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
-                      "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
-                      "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
-                      "Moisture Analyzers – For determining the moisture content in products.",
-                      "Conductivity Meter – For measuring the electrical conductivity in solutions.",
-                      "Microbial Incubators – For cultivating and maintaining microbial cultures.",
-                      "Autoclaves – For sterilizing lab equipment and samples.",
-                      "Balances (Analytical and Microbalances) – For precise weighing of samples.",
-                      "Karl Fischer Titrator – For measuring water content in samples.",
-                      "Refractometer – For determining the refractive index of liquids.",
-                      "Polarimeter – For measuring the optical rotation of a substance.",
-                      "Melting Point Apparatus – For determining the melting point of substances.",
-                      "Viscometer – For measuring the viscosity of liquid samples.",
-                      "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
-                      "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
-                      "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
-                      "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
-                    ].map((instrument, index) => (
-                      <div
-                        key={index}
-                        className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition-colors duration-150"
-                        onClick={() => {
-                          if (
-                            !formData.requiredInstrument.includes(instrument)
-                          ) {
-                            setFormData((prevData) => ({
-                              ...prevData,
-                              requiredInstrument: [
-                                ...prevData.requiredInstrument,
-                                instrument,
-                              ],
-                            }));
-                          }
-                          setDropdownOpen(false);
-                        }}
-                      >
-                        {instrument}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CCol>
+              </CCol> */}
             </CRow>
           </CForm>
         );
@@ -868,13 +924,15 @@ const AnalystQualificationModal = ({ onClose }) => {
                   type="text"
                   name="initiator"
                   label="Initiator Name"
-                  value={formData?.initiator || ""}
-                  onChange={handleInputChange}
+                  value={user || ""}
+                  // onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
                   label=" Date of Initiation"
                   value={formData?.initiationDate || ""}
@@ -893,6 +951,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="labTechnicianDate"
                   label="Date of Lab Technician Review"
                   value={formData?.labTechnicianDate || ""}
@@ -911,6 +970,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
                   label="Date of Supervision Review "
                   value={formData?.supervisionDate || ""}
@@ -929,6 +989,7 @@ const AnalystQualificationModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="Date of QA Review"
                   value={formData?.qaReviewDate || ""}
@@ -948,6 +1009,9 @@ const AnalystQualificationModal = ({ onClose }) => {
   };
   return (
     <>
+      <div>
+        <ToastContainer />
+      </div>
       {id ? (
         <ProgressBar2
           stage={Number(formData.stage)}

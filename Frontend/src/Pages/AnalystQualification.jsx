@@ -16,13 +16,14 @@ import { BASE_URL } from "../config.json";
 import SearchBar from "../components/ATM components/SearchBar/SearchBar.jsx";
 // import AnalystPersonalModal from "./Modals/AnalystPersonalModal.jsx";
 import AnalystQualificationModal from "../Pages/AnalystQualificationModal.jsx";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS.jsx";
+import ToastContainer from "../components/HotToaster/ToastContainer.jsx";
+import toast from "react-hot-toast";
 
 const AnalystQualification = () => {
   const [data, setData] = useState([]);
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,6 +33,8 @@ const AnalystQualification = () => {
   const [editModalData, setEditModalData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedAnalyst, setSelectedAnalyst] = useState(null);
+  const [loading, setLoading] = useState({});
+
   const navigate = useNavigate();
 
   const openWorkflowModal = () => {
@@ -41,11 +44,9 @@ const AnalystQualification = () => {
   const handleEdit = (analyst) => {
     setSelectedAnalyst(analyst); // Set the selected analyst data
     // console.log(analyst,"ANNNNNNN");
-    
+
     setIsModalOpen(true); // Open the modal
   };
- 
-
 
   const closeWorkflowModal = () => {
     setShowModal(false);
@@ -53,7 +54,7 @@ const AnalystQualification = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/analyst/get-analyst`);
+      const response = await axios.get(`https://limsapi.vidyagxp.com/analyst/get-analyst`);
       // console.log("API Response:", response.data);
 
       const formattedData = response?.data.data || [];
@@ -84,7 +85,6 @@ const AnalystQualification = () => {
     );
   });
   // console.log(filteredData,"FILTERED DATA");
-  
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -95,6 +95,41 @@ const AnalystQualification = () => {
     setData(
       data.map((d) => (d === item ? { ...d, checkbox: e.target.checked } : d))
     );
+  };
+
+  const handlePdfGenerate = async (analystId) => {
+    console.log("Generating PDF for analyst ID:", analystId);
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
+
+    try {
+      const response = await fetch(
+        `https://limsapi.vidyagxp.com/analyst/generate-report/${analystId}`
+      );
+      console.log("Response:", response);
+
+      // Check if the response is actually a PDF
+      if (
+        !response.ok ||
+        response.headers.get("content-type") !== "application/pdf"
+      ) {
+        const errorText = await response.text();
+        console.error("Error Response Text:", errorText);
+        throw new Error("Network response was not ok or not a PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Analyst_Report_${analystId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
   };
 
   const columns = [
@@ -169,9 +204,15 @@ const AnalystQualification = () => {
     { header: "Modification Date", accessor: "modificationDate" },
     { header: "Modified By", accessor: "modifiedBy" },
     { header: "Change Description", accessor: "changeDescription" },
+    { header: "Status", accessor: "status" },
+    {
+      header: "Genrate PDf",
+      accessor: "report",
+    },
+
     {
       header: "Actions",
-      accessor: "action",
+      accessor: "actionAnalyst",
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon
@@ -258,25 +299,23 @@ const AnalystQualification = () => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(
-        `${BASE_URL}/analyst/delete-analyst/${item.id}`
-      );
+      await axios.delete(`https://limsapi.vidyagxp.com/analyst/delete-analyst/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
       closeModal();
       fetchData();
-      toast.success("Analyst deleted successfully");
+      toast.success("Data deleted successfully");
     } catch (error) {
-      console.error("Error deleting analyst:", error);
-      toast.error("Error deleting analyst");
+      // console.error("Error deleting Data:", error);
+      toast.error("Error deleting Data");
     }
   };
 
   const onViewDetails = (row) => {
     // setViewModalData(row);
     setIsViewModalOpen(true);
-    navigate(`/analyst-qualification-edit/${row.id}`)
+    navigate(`/analyst-qualification-edit/${row.id}`);
   };
 
   const closeViewModal = () => {
@@ -309,7 +348,10 @@ const AnalystQualification = () => {
 
   return (
     <>
-    <LaunchQMS/>
+      <div>
+        <ToastContainer />
+      </div>
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Analyst Qualification</h4>
@@ -347,7 +389,7 @@ const AnalystQualification = () => {
           </div>
         </div>
         {/* {console.log(filteredData, "Table Ko Sendd")} */}
-        
+
         <Table
           columns={columns}
           data={filteredData}
@@ -355,6 +397,7 @@ const AnalystQualification = () => {
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           // openEditModal={openEditModal}
+          onPdfGenerate={handlePdfGenerate}
           onEdit={handleEdit}
         />
       </div>

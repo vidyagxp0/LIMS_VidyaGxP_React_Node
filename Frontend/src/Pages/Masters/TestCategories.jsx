@@ -204,7 +204,7 @@ function Testcategories() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `http://limsapi.vidyagxp.com/delete-lims/mTestCategories/${item.sno}`
+        `https://limsapi.vidyagxp.com/delete-lims/mTestCategories/${item.sno}`
       );
       if (response?.status === 200) {
         const newData = data.filter((d) => d.sno !== item.sno);
@@ -322,6 +322,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effect From"
             placeholder="Effect From"
             value={effectFrom}
@@ -331,6 +332,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review Date"
             placeholder="Review Date"
             value={reviewDate}
@@ -403,7 +405,7 @@ function Testcategories() {
 
       axios
         .put(
-          `http://limsapi.vidyagxp.com/manage-lims/update/mTestCategories/${formData.uniqueId}`,
+          `https://limsapi.vidyagxp.com/manage-lims/update/mTestCategories/${formData.uniqueId}`,
           formData
         )
         .then((response) => {
@@ -464,6 +466,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effect From"
             placeholder="Effect From"
             name="effectfrom"
@@ -473,6 +476,7 @@ function Testcategories() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Review date"
             placeholder="Review date"
             name="reviewDate"

@@ -312,7 +312,7 @@ const Registration = () => {
             value={formData?.calibrationDate || ""}
             onChange={handleChange}
           />
-           <CFormInput
+          <CFormInput
             className="mb-3"
             type="text"
             label="Menu No."
@@ -332,6 +332,7 @@ const Registration = () => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Installed On"
             placeholder=" "
             name="installedOn"
@@ -341,6 +342,7 @@ const Registration = () => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Warranty Expires On"
             placeholder=" "
             name="warrantyExpiresOn"
@@ -740,7 +742,6 @@ const Registration = () => {
             onClose={handleCloseModals}
             columns={columns}
             onDataUpload={handleExcelDataUpload}
-            
           />
         )}
         {viewModalData && (

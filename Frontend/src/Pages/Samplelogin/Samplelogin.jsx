@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   CButton,
   CModal,
@@ -34,11 +38,10 @@ function SampleLogin() {
   const [editModalData, setEditModalData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const fetchSamples = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-all-lims/sL`);
-      const formattedData = response?.data[0]?.sL|| [];
+      const formattedData = response?.data[0]?.sL || [];
       const updatedData = formattedData.map((item, index) => ({
         ...item,
         sno: index + 1,
@@ -185,7 +188,9 @@ function SampleLogin() {
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === updatedData.uniqueId ? { ...item, ...updatedData } : item
+            item.uniqueId === updatedData.uniqueId
+              ? { ...item, ...updatedData }
+              : item
           )
         );
         toast.success("Sample updated successfully");
@@ -223,21 +228,21 @@ function SampleLogin() {
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-  
+
     const handleAddSample = async (e) => {
       e.preventDefault();
       const newErrors = {};
-      Object.keys(sampleData).forEach(key => {
-        if (!sampleData[key] && key !== 'attachment') {
+      Object.keys(sampleData).forEach((key) => {
+        if (!sampleData[key] && key !== "attachment") {
           newErrors[key] = "This field is required";
         }
       });
-  
+
       if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
         return;
       }
-  
+
       setIsLoading(true);
       try {
         await onAdd(sampleData);
@@ -249,7 +254,7 @@ function SampleLogin() {
         setIsLoading(false);
       }
     };
-  
+
     const handleInputChange = (field, value) => {
       setSampleData({ ...sampleData, [field]: value });
       if (errors[field]) {
@@ -258,7 +263,12 @@ function SampleLogin() {
     };
 
     return (
-      <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
+      <CModal
+        alignment="center"
+        visible={visible}
+        onClose={closeModal}
+        size="lg"
+      >
         <CModalHeader>
           <CModalTitle>Add Sample</CModalTitle>
         </CModalHeader>
@@ -280,7 +290,9 @@ function SampleLogin() {
               label="Product / Material"
               name="storageCondition"
               value={sampleData.storageCondition}
-              onChange={(e) => handleInputChange("storageCondition", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("storageCondition", e.target.value)
+              }
               invalid={!!errors.storageCondition}
               feedback={errors.storageCondition}
             />
@@ -310,7 +322,9 @@ function SampleLogin() {
               label="Specification Code"
               name="specificationCode"
               value={sampleData.specificationCode}
-              onChange={(e) => handleInputChange("specificationCode", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("specificationCode", e.target.value)
+              }
               invalid={!!errors.specificationCode}
               feedback={errors.specificationCode}
             />
@@ -342,10 +356,13 @@ function SampleLogin() {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Analysis Date"
               name="analysisDate"
               value={sampleData.analysisDate}
-              onChange={(e) => handleInputChange("analysisDate", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("analysisDate", e.target.value)
+              }
               invalid={!!errors.analysisDate}
               feedback={errors.analysisDate}
             />
@@ -354,7 +371,9 @@ function SampleLogin() {
               type="file"
               label="Attachment"
               name="attachment"
-              onChange={(e) => handleInputChange("attachment", e.target.files[0])}
+              onChange={(e) =>
+                handleInputChange("attachment", e.target.files[0])
+              }
             />
           </CForm>
         </CModalBody>
@@ -362,7 +381,11 @@ function SampleLogin() {
           <CButton color="secondary" onClick={closeModal}>
             Cancel
           </CButton>
-          <CButton color="primary" onClick={handleAddSample} disabled={isLoading}>
+          <CButton
+            color="primary"
+            onClick={handleAddSample}
+            disabled={isLoading}
+          >
             {isLoading ? "Adding..." : "Add Sample"}
           </CButton>
         </CModalFooter>
@@ -458,6 +481,7 @@ function SampleLogin() {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Analysis Date"
             name="analysisDate"
             value={formData?.analysisDate || ""}
@@ -530,7 +554,11 @@ function SampleLogin() {
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
-          fields={columns.map(col => ({ key: col.accessor, label: col.header })).filter(field => field.key !== 'action' && field.key !== 'checkbox')}
+          fields={columns
+            .map((col) => ({ key: col.accessor, label: col.header }))
+            .filter(
+              (field) => field.key !== "action" && field.key !== "checkbox"
+            )}
           title="Sample Details"
         />
       )}

@@ -1,13 +1,24 @@
-import { CButton, CForm, CFormInput, CFormSelect, CModal, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import React from 'react'
+import {
+  CButton,
+  CForm,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalFooter,
+  CModalHeader,
+  CModalTitle,
+} from "@coreui/react";
+import React from "react";
 
 const SampleLoginModal = (_props) => {
   return (
     <div>
-         <CModal
+      <CModal
         alignment="center"
-        visiAdd Sample login
-ble={_props.visible}
+        visiAdd
+        Sample
+        login
+        ble={_props.visible}
         onClose={_props.closeModal}
       >
         <CModalHeader className="p-3">
@@ -55,6 +66,7 @@ ble={_props.visible}
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Date of Monitoring
 
                 "
@@ -121,6 +133,7 @@ ble={_props.visible}
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Membrance Holder Sterilized On
 
                 "
@@ -141,6 +154,7 @@ ble={_props.visible}
             <div className="mb-3">
               <CFormInput
                 type="date"
+                onFocus={(e) => e.target.showPicker()}
                 label="Use Before
 
                 "
@@ -160,9 +174,8 @@ ble={_props.visible}
           </CButton>
         </CModalFooter>
       </CModal>
-      
     </div>
-  )
-}
+  );
+};
 
-export default SampleLoginModal
+export default SampleLoginModal;

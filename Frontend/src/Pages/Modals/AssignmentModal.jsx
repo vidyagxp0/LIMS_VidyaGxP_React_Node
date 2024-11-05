@@ -135,6 +135,7 @@ const AssignmentModal = (_props) => {
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label=" Recieved On"
             placeholder=""
             className=" mb-3  custom-placeholder"

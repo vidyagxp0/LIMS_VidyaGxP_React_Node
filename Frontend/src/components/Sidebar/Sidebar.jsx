@@ -8,7 +8,7 @@ import {
 import CIcon from "@coreui/icons-react";
 import React from "react";
 import { TfiDashboard } from "react-icons/tfi";
-import { MdOutlineVerified } from "react-icons/md";
+import { MdOutlineApproval, MdOutlineVerified } from "react-icons/md";
 import { AiOutlineContainer } from "react-icons/ai";
 import { TbCurrentLocation } from "react-icons/tb";
 import { FaUsers } from "react-icons/fa6";
@@ -20,7 +20,7 @@ import { MdOutlineInventory2 } from "react-icons/md";
 import { CiPillsBottle1 } from "react-icons/ci";
 import { LuWarehouse } from "react-icons/lu";
 import { MdOutlineCompassCalibration } from "react-icons/md";
-import { GrCertificate } from "react-icons/gr";
+import { GrCertificate, GrOfflineStorage, GrStorage } from "react-icons/gr";
 import { CiShop } from "react-icons/ci";
 import { FaPeopleLine } from "react-icons/fa6";
 import { PiNuclearPlant } from "react-icons/pi";
@@ -31,7 +31,7 @@ import { FaPerson } from "react-icons/fa6";
 import { FaPeopleRoof } from "react-icons/fa6";
 import { TfiLayoutMediaOverlay } from "react-icons/tfi";
 import { FaWater } from "react-icons/fa6";
-import { VscServerEnvironment } from "react-icons/vsc";
+import { VscDebugBreakpointConditional, VscDebugBreakpointConditionalUnverified, VscServerEnvironment } from "react-icons/vsc";
 import { FaNetworkWired } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -112,7 +112,8 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ ...isActive("/approval"), gap: "18px" }}
               className={isActive("/approval")}
             >
-              <MdOutlineVerified />
+            <MdOutlineApproval />
+
               Approval
             </CNavItem>
           </Link>
@@ -122,7 +123,8 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ ...isActive("/stCondition"), gap: "18px" }}
               className={isActive("/stCondition")}
             >
-              <AiOutlineContainer />
+             <GrOfflineStorage />
+
               Storage Condition
             </CNavItem>
           </Link>
@@ -132,7 +134,8 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ ...isActive("/SpecificationStp"), gap: "18px" }}
               className={isActive("/SpecificationStp")}
             >
-              <AiOutlineContainer />
+             <VscDebugBreakpointConditionalUnverified />
+
               Specification/STP
             </CNavItem>
           </Link>
@@ -143,7 +146,8 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ ...isActive("/specificationSpec"), gap: "18px" }}
               className={isActive("/specificationSpec")}
             >
-              <AiOutlineContainer />
+          <VscDebugBreakpointConditional />
+
               Specification Spec
             </CNavItem>
           </Link>
@@ -153,7 +157,8 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               style={{ ...isActive("/storage-location"), gap: "18px" }}
               className={isActive("/storage-location")}
             >
-              <TbCurrentLocation />
+              <GrStorage />
+
               Storage Location
             </CNavItem>
           </Link>
@@ -2239,14 +2244,14 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </CNavItem>
           </Link>
           <CNavGroup
-            toggler={
-              <>
-                <MdSettingsApplications />
-                <span style={{ marginLeft: "18px" }}>Settings</span>
-              </>
-            }
+            // toggler={
+            //   <>
+            //     <MdSettingsApplications />
+            //     <span style={{ marginLeft: "18px" }}>Settings</span>
+            //   </>
+            // }
           >
-            <Link to="/settings/businessAssociate">
+            {/* <Link to="/settings/businessAssociate">
               <CNavItem
                 href="#"
                 className={isActive(" /settings/businessAssociate")}
@@ -2365,7 +2370,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Handling Symbol
               </CNavItem>
-            </Link>
+            </Link> */}
             {/* <Link to="/settings/accessRight">
               <CNavItem
                 href="#"

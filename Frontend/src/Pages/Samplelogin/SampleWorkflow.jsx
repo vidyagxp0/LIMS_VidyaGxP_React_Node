@@ -25,14 +25,35 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import SampleWorkflowModal from "./SampleWorkflowModal";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
-import Barcode from "react-barcode"; // Import Barcode component
+// import BarcodeExportButton from "./BarcodeExportButton";
+import Barcode from "react-barcode";
+
 import BarcodeExportButton from "./BarcodeExportButton";
+import toast from "react-hot-toast";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
+  const [barcodeID, setBarcodeID] = useState([]);
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 10);
+    }
+    return randomNumbers;
+  };
+
+  useEffect(() => {
+    const idsWithRandomNumbers = data.map((item) => {
+      const randomSuffix = generateRandomNumbers(15);
+      return item.id + randomSuffix;
+    });
+    setBarcodeID(idsWithRandomNumbers);
+  }, [data]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -45,13 +66,6 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const [loading, setLoading] = useState({});
   const [selectedSampleId, setSelectedSamppleId] = useState(null);
   const [samples, setSamples] = useState([]);
-  const generateRandomNumbers = (length) => {
-    let randomNumbers = "";
-    for (let i = 0; i < length; i++) {
-      randomNumbers += Math.floor(Math.random() * 20);
-    }
-    return randomNumbers;
-  };
 
   const openWorkflowModal = () => {
     setShowModal(true);
@@ -65,7 +79,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get-sample/sample`);
-      console.log(response, "5656565656565656");
+      // console.log(response, "5656565656565656");
 
       const responseData = Array.isArray(response.data)
         ? response.data
@@ -111,9 +125,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     console.log("Generating PDF for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
-      const response = await fetch(
-        `http://limsapi.vidyagxp.com/generate-report/${sampleId}`
-      );
+      const response = await fetch(`https://limsapi.vidyagxp.com/generate-report/${sampleId}`);
       console.log("Response", response);
 
       if (!response.ok) {
@@ -269,16 +281,18 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`http://limsapi.vidyagxp.com/delete-Sample/${item.id}`);
+      await axios.delete(
+        `https://limsapi.vidyagxp.com/delete-Sample/${item.id}`
+      );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
       closeModal();
       fetchData();
-      toast.success("Analyst deleted successfully");
+      toast.success("Data deleted successfully");
     } catch (error) {
       console.error("Error deleting analyst:", error);
-      // toast.error("Error deleting analyst");
+      toast.error("Error deleting analyst");
     }
   };
 
@@ -510,7 +524,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -531,6 +545,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   return (
     <div className="m-5 mt-3">
       <LaunchQMS />
+      <ToastContainer />
       {/* <div>
       <h3>Instrument Details</h3>
       <p><strong>Instrument ID:</strong> {instrumentData?.InstrumentId}</p>
@@ -715,14 +730,14 @@ const SampleWorkFlow = ({ instrumentData }) => {
             <tr key={index} className=" ">
               {/* { setSelectedSamppleId(data.sampleId)} */}
               <td className="border px-4 py-2">{index + 1}</td>
-              <Link
-                to={`/sampleWorkflowEdit/${data.id}`}
-                className="contents mt-3"
+              <td
+                onClick={() => {
+                  navigate(`/sampleWorkflowEdit/${data.id}`);
+                }}
+                className="hover:bg-gray-200 border px-4 py-2"
               >
-                <td className="hover:bg-gray-200 border px-4 py-2">
-                  {data.samplePlanId}
-                </td>
-              </Link>
+                {data.samplePlanId}
+              </td>
               <td className="border px-4 py-2">{data.sampleId}</td>
               <td className="border px-4 py-2">{data.sampleName}</td>
               <td className="border px-4 py-2">{data.sampleType}</td>
@@ -861,7 +876,11 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
               <td className="border px-4 py-2 ml-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
-                <BarcodeExportButton />
+                {barcodeID[index] ? (
+                  <Barcode value={barcodeID[index]} />
+                ) : (
+                  "No Barcode"
+                )}
               </td>
               <td className="border px-4 py-2">
                 {data.generatePDF}

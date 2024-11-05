@@ -47,7 +47,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
     console.log(id, "iddddddddddd");
     try {
       const response = await axios.put(
-        `http://limsapi.vidyagxp.com/edit-sample/${id}`, // Replace :id with actual ID
+        `https://limsapi.vidyagxp.com/edit-sample/${id}`, // Replace :id with actual ID
         formData
       );
       console.log(response);
@@ -308,6 +308,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingDeadline"
                   label="Testing Deadline"
                   value={formData.testingDeadline || ""}
@@ -337,6 +338,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="plannedDate"
                   label="Planned Date"
                   value={formData.plannedDate || ""}
@@ -368,6 +370,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleCollectionDate"
                   label="Sample Collection Date"
                   value={formData.sampleCollectionDate || ""}
@@ -404,6 +407,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="analysisDate"
                   label="Analysis Date"
                   value={formData.analysisDate || ""}
@@ -413,6 +417,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingStartDate"
                   label="Testing Start Date"
                   value={formData.testingStartDate || ""}
@@ -424,6 +429,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingEndDate"
                   label="Testing End Date"
                   value={formData.testingEndDate || ""}
@@ -476,6 +482,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleRetestingDate"
                   label="Sample Retesting Date"
                   value={formData.sampleRetestingDate || ""}
@@ -487,6 +494,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData.reviewDate || ""}
@@ -732,6 +740,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="stabilityProtocolApprovalDate"
                   label="Stability Protocol Approval Date"
                   value={formData?.stabilityProtocolApprovalDate || ""}
@@ -827,6 +836,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData?.reviewDate || ""}
@@ -858,6 +868,7 @@ const SampleWorkflowPanel = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="QA Review Date"
                   value={formData?.qaReviewDate || ""}

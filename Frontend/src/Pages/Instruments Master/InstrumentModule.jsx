@@ -156,6 +156,8 @@
 //           <CFormInput
 //             className="mb-3"
 //             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
 //             label="Installed On"
 //             name="InstallOn"
 //             placeholder="05/10/2024"
@@ -165,6 +167,8 @@
 //           <CFormInput
 //             className="mb-3"
 //             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
 //             label="Warranty Expires On"
 //             placeholder="05/05/2023"
 //             name="ExpiresOn"

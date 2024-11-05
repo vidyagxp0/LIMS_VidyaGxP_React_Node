@@ -57,7 +57,7 @@ const InstrumentMasterModal = ({
     calibrationDate: "",
     calibrationDueOn: "",
     Model: "",
-    MenuNo:"",
+    MenuNo: "",
     fields: [],
     manufacturerSerialNo: "",
     capacitySize: "",
@@ -84,7 +84,7 @@ const InstrumentMasterModal = ({
       calibrationDueOn: "",
       Made: "",
       Model: "",
-      MenuNo:"",
+      MenuNo: "",
       fields: [],
       manufacturerSerialNo: "",
       capacitySize: "",
@@ -144,7 +144,7 @@ const InstrumentMasterModal = ({
     e.preventDefault();
     axios
       .post(
-        `http://limsapi.vidyagxp.com/manage-lims/add/iMRegistration`,
+        `https://limsapi.vidyagxp.com/manage-lims/add/iMRegistration`,
         instrumentData
       )
       .then((response) => {
@@ -224,6 +224,7 @@ const InstrumentMasterModal = ({
           </CFormSelect>
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Calibration Due On"
             placeholder=" "
             value={instrumentData.calibrationDate}
@@ -233,6 +234,7 @@ const InstrumentMasterModal = ({
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Calibration Due On"
             placeholder=" "
             value={instrumentData.calibrationDueOn}
@@ -248,14 +250,14 @@ const InstrumentMasterModal = ({
             value={instrumentData.Made}
             onChange={(e) => handleInputChange("Made", e.target.value)}
           />
-              <CFormInput
-                className="mb-3"
-                type="number"
-                label="MenuNo"
-                placeholder="MenuNo"
-                value={instrumentData.MenuNo}
-                onChange={(e) => handleInputChange("MenuNo", e.target.value)}
-              />
+          <CFormInput
+            className="mb-3"
+            type="number"
+            label="MenuNo"
+            placeholder="MenuNo"
+            value={instrumentData.MenuNo}
+            onChange={(e) => handleInputChange("MenuNo", e.target.value)}
+          />
           <CRow className="d-flex align-items-center justify-content-center">
             <CCol sm={8}>
               <CFormInput
@@ -354,6 +356,7 @@ const InstrumentMasterModal = ({
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Installed On"
             placeholder=" "
             value={instrumentData.installedOn}
@@ -362,6 +365,7 @@ const InstrumentMasterModal = ({
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Warranty Expires On"
             placeholder=" "
             value={instrumentData.warrantyExpiresOn}

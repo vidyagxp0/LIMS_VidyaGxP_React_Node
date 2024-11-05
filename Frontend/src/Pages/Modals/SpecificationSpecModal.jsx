@@ -97,7 +97,7 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
         size="xl"
       >
         <CModalHeader>
-            <p className="font-bold ml-4">Add Specification</p>
+          <p className="font-bold ml-4">Add Specification</p>
         </CModalHeader>
         <CModalBody>
           <CFormInput
@@ -135,18 +135,22 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Effective Date"
             placeholder="Effective Date"
             value={usageData.effectiveDate}
             onChange={(e) => handleInputChange("effectiveDate", e.target.value)}
+            onFocus={(e) => e.target.showPicker()}
           />
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Creation Date"
             placeholder="Creation Date"
             value={usageData.creationDate}
             onChange={(e) => handleInputChange("creationDate", e.target.value)}
+            onFocus={(e) => e.target.showPicker()}
           />
           <CFormInput
             className="mb-3"
@@ -295,10 +299,12 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Test Frequency"
             placeholder="Test Frequency"
             value={usageData.testFrequency}
             onChange={(e) => handleInputChange("testFrequency", e.target.value)}
+            onFocus={(e) => e.target.showPicker()}
           />
           <CFormInput
             className="mb-3"
@@ -453,9 +459,11 @@ const SpecificationSpecModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             className="mb-3"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Expiry Date"
             placeholder="Expiry Date"
             value={usageData.expiryDate}
+            onFocus={(e) => e.target.showPicker()}
             onChange={(e) => handleInputChange("expiryDate", e.target.value)}
           />
         </CModalBody>

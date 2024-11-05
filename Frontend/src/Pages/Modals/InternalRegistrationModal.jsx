@@ -110,7 +110,7 @@ const InternalRegistrationModal = ({
 
     axios
       .post(
-        `http://limsapi.vidyagxp.com/manage-lims/add/iWSInternalRegistration`,
+        `https://limsapi.vidyagxp.com/manage-lims/add/iWSInternalRegistration`,
         newSampleData
       )
       .then((response) => {
@@ -284,6 +284,7 @@ const InternalRegistrationModal = ({
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="W.s Validate On"
             className="custom-placeholder mb-3"
             value={internalData.wsValidateOn}
@@ -291,6 +292,7 @@ const InternalRegistrationModal = ({
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Lot Valid Upto"
             className="custom-placeholder mb-3"
             value={internalData.lotValidUpto}

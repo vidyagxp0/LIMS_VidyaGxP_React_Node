@@ -112,6 +112,7 @@ const ServiceProviderModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Valid Upto            "
             placeholder=" "
             className="custom-placeholder"

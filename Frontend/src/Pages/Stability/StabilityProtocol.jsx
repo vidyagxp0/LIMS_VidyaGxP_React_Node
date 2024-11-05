@@ -450,6 +450,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Manufacturing Date"
               placeholder=" "
               value={manufacturingDate}
@@ -513,6 +514,7 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="date"
+              onFocus={(e) => e.target.showPicker()}
               label="Starting Date"
               placeholder=""
               value={startDate}
@@ -839,9 +841,301 @@ function StabilityProtocol() {
             <CFormInput
               className="mb-3"
               type="text"
-              label="Status"
-              name="status"
-              value={formData?.status || ""}
+              label="Protocol Id"
+              placeholder="Protocol Id"
+              value={formData?.protocolID || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="select"
+              label="Sample Login Template"
+              placeholder="Select..."
+              options={[
+                "Select Sample Type",
+                { label: "ARZ Temp" },
+                { label: "AAT" },
+              ]}
+              value={formData?.sampleLoginTemplet || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="date"
+              onFocus={(e) => e.target.showPicker()}
+              label="Manufacturing Date"
+              placeholder=" "
+              value={formData?.manufacturingDate || ""}
+              onChange={handleChange}
+            />
+
+            <label>DateFormat</label>
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="DateFormatShort"
+              name="DateFormat"
+              label="Short Date"
+              value={formData?.shortDate || ""}
+              onChange={handleChange}
+            />
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="DateFormatLong"
+              name="DateFormat"
+              label="Long Date"
+              value={formData?.longDate || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Sample By"
+              placeholder="Sample By"
+              value={formData?.sampleBy || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Storage Condition UOM"
+              placeholder="Storage Condition UOM"
+              value={formData?.storageConditionUOM || ""}
+              onChange={handleChange}
+            />
+            <label className="mb-3">Define Charging Start Date</label>
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="DateFormatNow"
+              name="ChangingDate"
+              label="Now"
+              value={formData?.defineChargingStartDate || ""}
+              onChange={handleChange}
+            />
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="DateFormatLater"
+              name="ChangingDate"
+              label="Later"
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="date"
+              onFocus={(e) => e.target.showPicker()}
+              label="Starting Date"
+              placeholder=""
+              value={formData?.startDate || ""}
+              onChange={handleChange}
+            />
+
+            <label className="mb-3">Initial Testing Required</label>
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="TestingRequiredYes"
+              name="TestingRequired"
+              label="Yes"
+              value={formData?.initialTestingRequired || ""}
+              onChange={handleChange}
+            />
+            <CFormCheck
+              className="mb-3"
+              type="radio"
+              id="TestingRequiredNo"
+              name="TestingRequired"
+              label="No"
+              value={formData?.initialTestingRequired || ""}
+              onChange={handleChange}
+            />
+
+            <CFormInput
+              className="mb-3"
+              type="file"
+              label="Certificates If Any"
+              placeholder=" "
+              value={formData?.certificatesIfAny || ""}
+              onChange={handleChange}
+            />
+
+            <CRow>
+              <CCol sm={10}>
+                <CFormInput
+                  className="mb-3"
+                  type="text"
+                  id="numberOfConditions"
+                  label="Number Of Storage Conditions"
+                  placeholder="Number Of Storage Conditions"
+                  value={formData?.numberOfStorageConditions || ""}
+                  onChange={handleChange}
+                />
+              </CCol>
+
+              <CCol sm={2}>
+                <CButton
+                  className="bg-info text-white mb-3 mt-4"
+                  onClick={handleAddConditions}
+                >
+                  Add
+                </CButton>
+              </CCol>
+            </CRow>
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Test Plan / Revision No."
+              placeholder="Select..."
+              options={[
+                "Select Sample Type",
+                { label: "Hydraulic Oil" },
+                { label: "CHP Oil" },
+                { label: "Sacubitril" },
+                { label: "Bio Burden Test For PM" },
+              ]}
+              value={formData?.testPlanet || ""}
+              onChange={handleChange}
+            />
+
+            {conditions.map((condition, index) => (
+              <div className="each-condition-data mt-4" key={condition.id}>
+                <h6 className="font-extrabold">
+                  Stability Storage Condition-{condition.id}
+                </h6>
+                <div className="form-group">
+                  <label
+                    className="form-label"
+                    htmlFor={`conditions_data.${index}.storage_condition`}
+                  >
+                    Storage Condition
+                  </label>
+                  <div className="form-control-wrap">
+                    <select
+                      className="form-control form-select"
+                      id={`conditions_data.${index}.storage_condition`}
+                      name={`conditions_data.${index}.storage_condition`}
+                      placeholder="Storage condition Uom"
+                    >
+                      <option value="">Select</option>
+                      <option value="6651c0dfa9d2755d7705ce05">10 to 25</option>
+                      <option value="664f1373a9d2755d770568b4">
+                        -20 ± 5°c
+                      </option>
+                      <option value="664f06cea9d2755d77055787">
+                        25 ± 2°c 60 ± 5% rh
+                      </option>
+                      <option value="664f06aaa9d2755d77055748">
+                        30 ± 2°c 65 ± 5% rh
+                      </option>
+                      <option value="664f02f0a9d2755d77055627">
+                        40 ± 2°c and 75 ± 5% rh
+                      </option>
+                      <option value="664f02c3a9d2755d7705561b">40 ± 2°c</option>
+                      <option value="664c24cdc105e11a716a938a">15℃</option>
+                      <option value="65cb1132de5392629a1b59b6">℉</option>
+                      <option value="6527cb451d0d0c3cb2ddceac">30℃</option>
+                      <option value="65262853842e2542b312a465">42℉</option>
+                      <option value="652580fc842e2542b3129c77">32℃</option>
+                      <option value="651fd1c204e9976b7c625a57">24℉</option>
+                      <option value="64eb669f4b131677f6614266">25℃ ± 2</option>
+                      <option value="64e9fbba4b131677f66140d1">25℃</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label
+                    className="form-label"
+                    htmlFor={`conditions_data.${index}.no_of_pulls`}
+                  >
+                    No of Pulls
+                  </label>
+                  <div className="form-control-wrap">
+                    <div className="d-flex">
+                      <input
+                        type="number"
+                        className="form-control"
+                        id={`conditions_data.${index}.no_of_pulls`}
+                        name={`conditions_data.${index}.no_of_pulls`}
+                        placeholder="No"
+                        value="1"
+                      />
+                      <button
+                        className="btn btn-primary"
+                        style={{ height: "36px", marginLeft: "8px" }}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="row d-flex flex-nowrap">
+                    <div style={{ width: "400px" }}>
+                      <label
+                        className="form-label mt-3"
+                        htmlFor={`conditions_data.${index}.station`}
+                      >
+                        Station
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label
+                    className="form-label"
+                    htmlFor={`conditions_data.${index}.additional_quantity`}
+                  >
+                    Additional Quantity
+                  </label>
+                  <div className="form-control-wrap">
+                    <input
+                      type="number"
+                      className="form-control"
+                      id={`conditions_data.${index}.additional_quantity`}
+                      name={`conditions_data.${index}.additional_quantity`}
+                      placeholder="Additional Quantity"
+                      value="0"
+                    />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <label
+                    className="form-label"
+                    htmlFor={`conditions_data.${index}.comments`}
+                  >
+                    Comments
+                  </label>
+                  <div className="form-control-wrap">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id={`conditions_data.${index}.comments`}
+                      name={`conditions_data.${index}.comments`}
+                      placeholder="comments"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Instructions"
+              placeholder="Instructions"
+              name="instructions"
+              value={formData?.instructions || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Package Configuration"
+              placeholder="Package Configuration"
+              value={formData?.packageConfiguration || ""}
               onChange={handleChange}
             />
           </CModalBody>
@@ -861,9 +1155,39 @@ function StabilityProtocol() {
   return (
     <>
       <LaunchQMS />
-      <div className="m-5 mt-3">
-        <div className="main-head">
-          <h4 className="fw-bold">Stability Protocol</h4>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          <Card
+            title="DROPPED"
+            count={cardCounts.DROPPED}
+            color="pink"
+            onClick={() => handleCardClick("DROPPED")}
+          />
+          <Card
+            title="INITIATED"
+            count={cardCounts.INITIATED}
+            color="blue"
+            onClick={() => handleCardClick("INITIATED")}
+          />
+          <Card
+            title="REINITIATED"
+            count={cardCounts.REINITIATED}
+            color="yellow"
+            onClick={() => handleCardClick("REINITIATED")}
+          />
+          <Card
+            title="APPROVED"
+            count={cardCounts.APPROVED}
+            color="green"
+            onClick={() => handleCardClick("APPROVED")}
+          />
+          <Card
+            title="REJECTED"
+            count={cardCounts.REJECTED}
+            color="red"
+            onClick={() => handleCardClick("REJECTED")}
+          />
         </div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">

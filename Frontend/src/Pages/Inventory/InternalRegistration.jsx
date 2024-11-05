@@ -56,7 +56,7 @@ const InternalRegistration = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://limsapi.vidyagxp.com/get-all-lims/iWSInternalRegistration`
+          `https://limsapi.vidyagxp.com/get-all-lims/iWSInternalRegistration`
         );
         const fetchData = response?.data[0]?.iWSInternalRegistration || [];
         const updatedData = fetchData?.map((item, index) => ({
@@ -268,6 +268,7 @@ const InternalRegistration = () => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="W.s Validate On"
             className="custom-placeholder mb-3"
             value={formData?.wsValidateOn || ""}
@@ -276,6 +277,7 @@ const InternalRegistration = () => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Lot Valid Upto"
             className="custom-placeholder mb-3"
             value={formData?.lotValidUpto || ""}

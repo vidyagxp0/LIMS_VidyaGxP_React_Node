@@ -581,6 +581,8 @@ function SpecificationStp() {
     //       />
     //       <CFormInput
     //         type="date"
+            // onFocus={(e) => e.target.showPicker()}
+
     //         label="Due Date"
     //         placeholder="Due Date"
     //         value={dueDate}
@@ -588,6 +590,8 @@ function SpecificationStp() {
     //       />
     //       <CFormInput
     //         type="date"
+            // onFocus={(e) => e.target.showPicker()}
+
     //         label="Effective Date"
     //         placeholder="Effective Date"
     //         value={effectiveDate}
@@ -720,6 +724,8 @@ function SpecificationStp() {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
             label="Due Date"
             placeholder="Due Date"
             value={formData?.dueDate || ""}
@@ -728,6 +734,8 @@ function SpecificationStp() {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
+
             label="Effective Date"
             placeholder="Effective Date"
             value={formData?.effectiveDate || ""}
@@ -792,6 +800,8 @@ function SpecificationStp() {
               <div className="relative">
                 <input
                   type="date"
+            onFocus={(e) => e.target.showPicker()}
+
                   value={dateFrom}
                   onChange={handleDateFromChange}
                   className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
@@ -805,6 +815,8 @@ function SpecificationStp() {
               <div className="relative">
                 <input
                   type="date"
+            onFocus={(e) => e.target.showPicker()}
+
                   value={dateTo}
                   onChange={handleDateToChange}
                   className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"

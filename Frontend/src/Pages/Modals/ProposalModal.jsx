@@ -11,7 +11,6 @@ import {
 import React, { useEffect, useState } from "react";
 
 const ProposalModal = ({ visible, closeModal, handleSubmit }) => {
-
   const [proposal, setProposal] = useState({
     trainingConfirmationId: "",
     employeeId: "",
@@ -21,7 +20,7 @@ const ProposalModal = ({ visible, closeModal, handleSubmit }) => {
     testPlan: "",
     arNo: "",
     comments: "",
-    dueDate: ""
+    dueDate: "",
   });
   const handleInputChange = (field, value) => {
     const updatedData = { ...proposal, [field]: value };
@@ -45,7 +44,7 @@ const ProposalModal = ({ visible, closeModal, handleSubmit }) => {
       testPlan: "",
       arNo: "",
       comments: "",
-      dueDate: ""
+      dueDate: "",
     });
   };
 
@@ -74,7 +73,9 @@ const ProposalModal = ({ visible, closeModal, handleSubmit }) => {
             placeholder="Training Confirmation ID"
             options={["Select", { label: "No Options" }]}
             value={proposal.trainingConfirmationId}
-            onChange={(e) => handleInputChange("trainingConfirmationId", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("trainingConfirmationId", e.target.value)
+            }
           />
           <CFormInput
             type="text"
@@ -106,7 +107,9 @@ const ProposalModal = ({ visible, closeModal, handleSubmit }) => {
             label="Test Of Technique"
             placeholder="Test Of Technique"
             value={proposal.testOfTechnique}
-            onChange={(e) => handleInputChange("testOfTechnique", e.target.value)}
+            onChange={(e) =>
+              handleInputChange("testOfTechnique", e.target.value)
+            }
           />
           <CFormSelect
             type="text"
@@ -127,6 +130,7 @@ const ProposalModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             className="mb-3"
             label="Due Date"
             placeholder="Due Date"
@@ -146,7 +150,9 @@ const ProposalModal = ({ visible, closeModal, handleSubmit }) => {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton className="bg-info text-white" onClick={handleFormSubmit}>Submit</CButton>
+          <CButton className="bg-info text-white" onClick={handleFormSubmit}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     </div>

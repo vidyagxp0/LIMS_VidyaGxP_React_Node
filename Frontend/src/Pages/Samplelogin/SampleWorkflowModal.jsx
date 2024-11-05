@@ -15,13 +15,14 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
 import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -39,10 +40,15 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleRowChange = (index, e) => {
     const { name, value } = e.target;
-    const updatedRows = testParameters.map((row, idx) =>
-      idx === index ? { ...row, [name]: value } : row
-    );
-    setTestParameters(updatedRows);
+
+    if (Array.isArray(testParameters)) {
+      const updatedRows = testParameters.map((row, idx) =>
+        idx === index ? { ...row, [name]: value } : row
+      );
+      setTestParameters(updatedRows);
+    } else {
+      console.error("testParameters is not an array:", testParameters);
+    }
   };
 
   const [formData, setFormData] = useState({
@@ -229,30 +235,37 @@ const SampleWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  useEffect(() => {
-    const storedTestParameters = JSON.parse(
-      localStorage.getItem("testParameters")
-    );
-    if (storedTestParameters) {
-      setTestParameters(storedTestParameters);
-      console.log(storedTestParameters, "testParameters from localStorage");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedTestParameters = JSON.parse(
+  //     localStorage.getItem("testParameters")
+  //   );
+  //   if (storedTestParameters) {
+  //     setTestParameters(storedTestParameters);
+  //     console.log(storedTestParameters, "testParameters from localStorage");
+  //   }
+  // }, []);
 
   const fetchData = async () => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://limsapi.vidyagxp.com/get-Sample/${id}/sample`
+        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
-      // console.log(responseData);
-      setFormData(responseData);
-      console.log(formData.stage);
+
+      const testParamterResponse = responseData.testParameters[1];
+      const fetchedData = JSON.parse(testParamterResponse);
+
+      setTestParameters(fetchedData.length > 0 ? fetchedData : []);
+      setFormData((prevData) => ({
+        ...prevData,
+        ...responseData,
+        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+      }));
     } catch (error) {
       console.error("Error fetching ", error);
       toast.error("Failed to fetch ");
@@ -265,7 +278,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `http://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
+        `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
         formData
       );
       if (response.status === 200) {
@@ -284,9 +297,9 @@ const SampleWorkflowModal = ({ onClose }) => {
   };
 
   const handleSave = async () => {
-    const formDataToSend = new FormData(); // Create a new FormData object
+    const formDataToSend = new FormData();
 
-    // Append all form data to the FormData object
+    // Append all form data to FormData object
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
         formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
@@ -295,31 +308,38 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
     }
 
-    // Manually append the test parameters as an array of objects
+    // Manually append the test parameters as an array of objects, if applicable
     if (testParameters && testParameters.length > 0) {
-      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
-      console.log("Test Parameters being sent:", testParameters);
-
-      // Save testParameters to local storage
-      localStorage.setItem("testParameters", JSON.stringify(testParameters));
+      formDataToSend.append("testParameters", JSON.stringify(testParameters));
     }
 
     try {
       if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+        await handleEdit(formDataToSend); // Pass FormData to handleEdit function
       } else {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } } // Set the content type
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        await toast.promise(
+          Promise.all([
+            axios.post(
+              `https://limsapi.vidyagxp.com/create-sample`,
+              formDataToSend,
+              { headers: { "Content-Type": "multipart/form-data" } } // Set content type for multipart data
+            ),
+            delay(1300),
+          ]).then(([response]) => response),
+          {
+            loading: "Saving data...",
+            success: <b>Data added successfully.</b>,
+            error: <b>Failed to add Data.</b>,
+          }
         );
-        // Handle success response
-        toast.success("Sample Workflow added successfully.");
+
         setIsModalOpen(false);
         navigate("/sampleWorkflow");
       }
     } catch (error) {
-      console.error("Error uploading file:", error); // Log the error
+      console.error("Error uploading file:", error);
       toast.error(
         "Failed to upload file: " + (error.response?.data || error.message)
       );
@@ -742,6 +762,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingDeadline"
                   label="Testing Deadline"
                   value={formData.testingDeadline || ""}
@@ -771,6 +792,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="plannedDate"
                   label="Planned Date"
                   value={formData.plannedDate || ""}
@@ -831,6 +853,7 @@ const SampleWorkflowModal = ({ onClose }) => {
                 <CCol md={6}>
                   <CFormInput
                     type="date"
+                    onFocus={(e) => e.target.showPicker()}
                     name="sampleCollectionDate"
                     label="Sample Collection Date"
                     value={formData.sampleCollectionDate || ""}
@@ -856,7 +879,7 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-
+            {/* {console.log(testParameters, "TESTPARAMETER")} */}
             {/* Use the TestParametersTable component */}
             <TestParametersTable
               testParameters={testParameters}
@@ -888,6 +911,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="analysisDate"
                   label="Analysis Date"
                   value={formData.analysisDate || ""}
@@ -897,6 +921,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingStartDate"
                   label="Testing Start Date"
                   value={formData.testingStartDate || ""}
@@ -908,6 +933,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="testingEndDate"
                   label="Testing End Date"
                   value={formData.testingEndDate || ""}
@@ -979,6 +1005,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleRetestingDate"
                   label="Sample Retesting Date"
                   value={formData.sampleRetestingDate || ""}
@@ -990,6 +1017,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData.reviewDate || ""}
@@ -1154,6 +1182,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6}>
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="sampleDate"
                   label="Sample Date"
                   value={formData.sampleDate || ""}
@@ -1285,6 +1314,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="stabilityProtocolApprovalDate"
                   label="Stability Protocol Approval Date"
                   value={formData?.stabilityProtocolApprovalDate || ""}
@@ -1394,6 +1424,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="reviewDate"
                   label="Review Date"
                   value={formData?.reviewDate || ""}
@@ -1438,6 +1469,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="QaReviewDate"
                   label="QA Review Date"
                   value={formData?.QaReviewDate || ""}
@@ -1473,6 +1505,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="initiationDate"
                   label=" Date of Initiation"
                   value={formData?.initiationDate || ""}
@@ -1491,6 +1524,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="labTechnicianDate"
                   label="Date of Lab Technician Review"
                   value={formData?.labTechnicianDate || ""}
@@ -1509,6 +1543,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="supervisionDate"
                   label="Date of Supervision Review "
                   value={formData?.supervisionDate || ""}
@@ -1527,6 +1562,7 @@ const SampleWorkflowModal = ({ onClose }) => {
               <CCol md={6} className="mb-3">
                 <CFormInput
                   type="date"
+                  onFocus={(e) => e.target.showPicker()}
                   name="qaReviewDate"
                   label="Date of QA Review"
                   value={formData?.qaReviewDate || ""}
@@ -1544,8 +1580,17 @@ const SampleWorkflowModal = ({ onClose }) => {
   const handleStageChange = () => {
     fetchData();
   };
+  const [loading, setLoading] = useState(false);
+  const handleClick = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1300);
+  };
+
   return (
     <>
+      <ToastContainer />
       {id ? (
         <ProgressBar
           stage={Number(formData.stage)}
@@ -1653,9 +1698,13 @@ const SampleWorkflowModal = ({ onClose }) => {
           <div className="flex flex-col gap-3 justify-end mt-6 fixed bottom-24 left-[95%]">
             <CButton
               type="submit"
-              className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300"
+              className="bg-green-600 text-white px-6 py-2 w-[100px] rounded-md shadow-lg hover:bg-green-500 transition-all duration-300 flex items-center"
+              onClick={handleClick}
             >
               {id ? "Update" : "Save"}
+              {loading && (
+                <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-3"></div>
+              )}
             </CButton>
             <CButton
               onClick={() => {

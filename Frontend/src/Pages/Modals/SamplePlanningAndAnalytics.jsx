@@ -86,7 +86,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
     e.preventDefault();
 
     axios
-      .post(`http://limsapi.vidyagxp.com/manage-lims/add/sLSamplePA`, formData)
+      .post(`https://limsapi.vidyagxp.com/manage-lims/add/sLSamplePA`, formData)
       .then((response) => {
         addRow(formData);
         handleClose();
@@ -210,6 +210,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             name="plannedDate"
             label="Planned Date"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.plannedDate}
             onChange={handleChange}
           />
@@ -295,6 +296,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             name="testingLocation"
             label="Testing Location"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.testingLocation}
             onChange={handleChange}
           />
@@ -302,6 +304,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             name="requiredInstruments"
             label="Require Instruments"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.requiredInstruments}
             onChange={handleChange}
           />
@@ -365,10 +368,12 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             label="Sample Collection Date"
             value={formData.sampleCollectionDate}
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             onChange={handleChange}
           />
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             name="testingStartDate"
             label="Testing Start Date"
             value={formData.testingStartDate}
@@ -377,6 +382,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
           <CFormInput
             name="testingEndDate"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Testing End Date"
             value={formData.testingEndDate}
             onChange={handleChange}
@@ -391,6 +397,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             name="sampleRetestingDate"
             label="Sample Retesting Date"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.sampleRetestingDate}
             onChange={handleChange}
           />
@@ -398,6 +405,7 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
             name="reviewDate"
             label="Review Date"
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             value={formData.reviewDate}
             onChange={handleChange}
           />

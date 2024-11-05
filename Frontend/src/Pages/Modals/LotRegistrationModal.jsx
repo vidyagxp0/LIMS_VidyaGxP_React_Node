@@ -184,6 +184,7 @@ const LotRegistrationModal = ({ visible, closeModal, handleSubmit }) => {
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Received On"
             placeholder="select"
             className="custom-placeholder mb-3"
@@ -237,6 +238,7 @@ const LotRegistrationModal = ({ visible, closeModal, handleSubmit }) => {
 
           <CFormInput
             type="date"
+            onFocus={(e) => e.target.showPicker()}
             label="Expiry Date"
             placeholder="select"
             className="custom-placeholder mb-3"

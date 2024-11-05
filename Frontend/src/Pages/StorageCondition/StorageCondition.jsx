@@ -28,8 +28,8 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
-import { toast } from "react-toastify";
-
+import toast from 'react-hot-toast';
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 const fields = [
   { label: "Storage Name.", key: "name" },
   { label: "Condition Code", key: "conditionCode" },
@@ -60,6 +60,7 @@ function StorageCondition() {
       const updatedData = formattedData.map((item, index) => ({
         ...item,
         sno: index + 1,
+        createdAt: new Date(item.createdAt).toISOString().split("T")[0],
         checkbox: false,
       }));
 
@@ -219,83 +220,49 @@ function StorageCondition() {
 
     const concatenatedData = [...updatedData];
     setData(concatenatedData);
-    setIsModalsOpen(false); // Update data state with parsed Excel data
+    setIsModalsOpen(false);
   };
 
-  const handleStatusUpdate = async (newStatus) => {
-    if (!newStatus) {
-      console.error("New status is undefined");
-      toast.error("Invalid Status update");
-      return;
-    }
-    if (!viewModalData) {
-      console.error("No data selected for update");
-      toast.error("No data selected for update");
-      return;
-    }
-    try {
-      const { sno, ...dataToSend } = viewModalData;
-      console.log(viewModalData);
-      
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
-      if (response.status === 200) {
-        setData((prevData) =>
-          prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
-          )
-        );
-        toast.success("Approval status updated successfully");
-        closeViewModal();
-      } else {
-        toast.error("Failed to update Approval status");
-      }
-    } catch (error) {
-      console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");
-    }
-  };
-
-  // Function to add a new storage condition
   const addNewStorageCondition = async (newCondition) => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/storageCondition`,
+      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
+      const response = await toast.promise(
+        Promise.all([
+          axios.post(`${BASE_URL}/manage-lims/add/storageCondition`, newCondition),
+          delay(1300),
+        ]).then(([response]) => response),
         {
-          name: newCondition.name,
-          conditionCode: newCondition.conditionCode,
-          storageCondition: newCondition.storageCondition,
-          createdAt: new Date().toISOString(), // Current date as createdAt
-          attachment: newCondition.attachment || null,
-          status: newCondition.status || "Active",
+          loading: 'Saving...',
+          success: <b>Storage Condition added successfully.</b>,
+          error: <b>Couldn't add Storage Condition.</b>,
         }
       );
-
+  
       if (response.status === 200) {
-        const addedStorageCondition = response.data.addLIMS; // Accessing the added item from the response
-
+        const addedStorageCondition = response.data.addLIMS;
+  
         setData((prevData) => [
           ...prevData,
           {
             ...addedStorageCondition,
-            sno: addedStorageCondition.uniqueId, // Using uniqueId as sno
+            sno: addedStorageCondition.uniqueId,
             checkbox: false,
           },
         ]);
+  
+        // Close the modal and refresh the data
         closeModal();
         fetchStorageCondition();
-        toast.success("Storage Condition added successfully");
-        // Optionally, you can call fetchCalibrationTypes() here to refresh the data from the server
       }
     } catch (error) {
       console.error("Error adding Storage Condition:", error);
-      toast.error("Failed to add Storage Condition");
+      toast.error("Failed to add Storage Condition"); // Error toast for unexpected failures
     }
-
-    setIsModalOpen(false);
+  
+    setIsModalOpen(false); // Close the modal after adding
   };
+  
 
   // const handleStatusUpdate = (testPlan, newStatus) => {
   //   const updatedData = data.map((item) =>
@@ -469,6 +436,7 @@ function StorageCondition() {
 
   return (
     <>
+    <div><ToastContainer/></div>
       <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">

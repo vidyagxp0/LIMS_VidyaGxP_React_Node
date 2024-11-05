@@ -25,7 +25,8 @@ import {
   CModalTitle,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../Modals/ResusableModal";
 
@@ -43,6 +44,7 @@ const ControlSample = () => {
   const [showModal, setShowModal] = useState(false);
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
   const [selectedSample, setSelectedSample] = useState(null);
+  const [loading, setLoading] = useState({});
   const navigate = useNavigate();
 
   const filteredData = data.filter((row) => {
@@ -70,7 +72,7 @@ const ControlSample = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://limsapi.vidyagxp.com/controlSample/get-control-sample`
+        `https://limsapi.vidyagxp.com/controlSample/get-control-sample`
       );
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
@@ -108,6 +110,44 @@ const ControlSample = () => {
   const closeControlModal = () => {
     setIsModalOpen(false);
   };
+
+  const handlePdfGenerate = async (ControlSampId) => {
+    console.log("Generating PDF for Control Sample ID:", ControlSampId);
+    setLoading((prevLoading) => ({ ...prevLoading, [ControlSampId]: true }));
+
+    try {
+      const response = await fetch(
+        `https://limsapi.vidyagxp.com/controlSample/generate-report/${ControlSampId}`
+      );
+      console.log("Response:", response);
+
+      // Check if the response is actually a PDF
+      if (
+        !response.ok ||
+        response.headers.get("content-type") !== "application/pdf"
+      ) {
+        const errorText = await response.text();
+        console.error("Error Response Text:", errorText);
+        throw new Error("Network response was not ok or not a PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `ControlSample_Report_${ControlSampId}.pdf`
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+
+    setLoading((prevLoading) => ({ ...prevLoading, [ControlSampId]: false }));
+  };
   const columns = [
     {
       header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -144,10 +184,11 @@ const ControlSample = () => {
     { header: "Neutralizing Agent", accessor: "neutralizingAgent" },
     { header: "Destruction Date", accessor: "destructionDate" },
     { header: "Remarks", accessor: "remarks" },
+    { header: "Generate PDF", accessor: "report" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
-      accessor: "action",
+      accessor: "actionControl",
       Cell: ({ row }) => (
         <>
           <FontAwesomeIcon
@@ -187,16 +228,16 @@ const ControlSample = () => {
   const handleDeleteControl = async (item) => {
     try {
       await axios.delete(
-        `http://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`
+        `https://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
-      toast.success("Control Sample deleted successfully!");
+      toast.success("Data deleted successfully!");
       fetchData();
     } catch (error) {
-      console.error("Error deleting Control Sample:", error);
-      toast.error("Error deleting Control Sample.");
+      console.error("Error deleting Data:", error);
+      toast.error("Error deleting Data.");
     }
   };
 
@@ -288,6 +329,7 @@ const ControlSample = () => {
 
   return (
     <>
+      <ToastContainer />
       <LaunchQMS />
 
       <div className="m-5 mt-3">
@@ -329,6 +371,7 @@ const ControlSample = () => {
           onDelete={handleDeleteControl}
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
+          onPdfGenerate={handlePdfGenerate}
           // openEditModal={openEditModal}
           onEdit={handleEdit}
         />

@@ -25,16 +25,32 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
-import { toast } from "react-toastify";
-
+import { toast } from "react-hot-toast";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
 import Barcode from "react-barcode"; // Import Barcode component
 import BarcodeExportButton from "../Samplelogin/BarcodeExportButton";
 import SampleWorkflowModal from "../Samplelogin/SampleWorkflowModal";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 
 const StabilityWorkFlow = () => {
   const [data, setData] = useState([]);
+  const [barcodeID, setBarcodeID] = useState([]);
+  const generateRandomNumbers = (length) => {
+    let randomNumbers = "";
+    for (let i = 0; i < length; i++) {
+      randomNumbers += Math.floor(Math.random() * 10);
+    }
+    return randomNumbers;
+  };
+
+  useEffect(() => {
+    const idsWithRandomNumbers = data.map((item) => {
+      const randomSuffix = generateRandomNumbers(15);
+      return item.id + randomSuffix;
+    });
+    setBarcodeID(idsWithRandomNumbers);
+  }, [data]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -105,7 +121,7 @@ const StabilityWorkFlow = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://limsapi.vidyagxp.com/stability-generate-report/${sampleId}`
+        `https://limsapi.vidyagxp.com/stability-generate-report/${sampleId}`
       );
       // console.log("Response", response);
 
@@ -263,7 +279,9 @@ const StabilityWorkFlow = () => {
   const handleDelete = (item) => {
     // console.log(item);
     axios
-      .delete(`http://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`)
+      .delete(
+        `https://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`
+      )
       .then((response) => {
         // console.log(response.data.message);
         toast.success("Record deleted successfully");
@@ -487,7 +505,7 @@ const StabilityWorkFlow = () => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -508,7 +526,7 @@ const StabilityWorkFlow = () => {
   return (
     <div className="m-5 mt-3">
       <LaunchQMS />
-
+      <ToastContainer />
       <div className="">
         <div className="main-head">
           <h2 className="fw-bold">Stability WorkFlow</h2>
@@ -793,7 +811,11 @@ const StabilityWorkFlow = () => {
               <td className="border px-4 py-2">{data.QaReviewDate}</td>{" "}
               <td claossName="border px-4 py-2">{data.status}</td>{" "}
               <td className="border px-4 py-2">
-                <BarcodeExportButton />
+                {barcodeID[index] ? (
+                  <Barcode value={barcodeID[index]} />
+                ) : (
+                  "No Barcode"
+                )}
               </td>
               <td className="border px-4 py-2">
                 {data.generatePDF}
