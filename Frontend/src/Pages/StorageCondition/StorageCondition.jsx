@@ -66,8 +66,8 @@ function StorageCondition() {
 
       setData(updatedData);
     } catch (error) {
-      console.error("Error fetching ", error);
-      toast.error("Failed to fetch ");
+      // console.error("Error fetching ", error);
+      toast.error("Failed to fetch data");
     }
   };
 
@@ -102,13 +102,13 @@ function StorageCondition() {
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
         setData(newData);
-        toast.success(" deleted successfully");
+        toast.success("Data deleted successfully");
 
-        console.log("Deleted item:", item);
+        // console.log("Deleted item:", item);
       }
       fetchStorageCondition();
     } catch (error) {
-      console.error("Error deleting storage condition:", error);
+      console.error("Error deleting data:", error);
     }
   };
 
@@ -242,8 +242,8 @@ function StorageCondition() {
         ]).then(([response]) => response),
         {
           loading: 'Saving...',
-          success: <b>Storage Condition added successfully.</b>,
-          error: <b>Couldn't add Storage Condition.</b>,
+          success: <b>Data added successfully.</b>,
+          error: <b>Couldn't add Data.</b>,
         }
       );
   
@@ -303,6 +303,7 @@ function StorageCondition() {
         </CModalHeader>
         <CModalBody>
           <CFormInput
+          className="mb-3"
             type="text"
             label="Name"
             placeholder="Storage Name"
@@ -311,6 +312,7 @@ function StorageCondition() {
           />
 
           <CFormInput
+          className="mb-3"
             type="text"
             label="Condition Code"
             placeholder="Condition Code"
@@ -360,11 +362,11 @@ function StorageCondition() {
         );
 
         setData(newData);
-        toast.success(" updated successfully");
+        toast.success("Data updated successfully");
       }
     } catch (error) {
-      console.error("Error updating ", error);
-      toast.error("Failed to update");
+      console.error("Error updating data", error);
+      toast.error("Failed to update data");
     } finally {
       setEditModalData(null);
     }

@@ -208,7 +208,7 @@ const AnalystQualification = () => {
     { header: "Change Description", accessor: "changeDescription" },
     { header: "Status", accessor: "status" },
     {
-      header: "Genrate PDf",
+      header: "Generate PDf",
       accessor: "report",
     },
 

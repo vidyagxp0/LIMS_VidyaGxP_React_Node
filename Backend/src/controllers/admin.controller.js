@@ -307,6 +307,36 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+export const getUserByid = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      where: { user_id: req.params.id, isActive: true },
+      include: {
+        model: UserRole,
+        attributes: ["role_id", "role"],
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        error: true,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      error: false,
+      message: "User details fetched successfully",
+      response: user,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      error: true,
+      message: err.message,
+    });
+  }
+};
+
 export const getAllUsers = async (req, res) => {
   try {
     const data = await User.findAll({
