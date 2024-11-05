@@ -644,7 +644,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
             <th colSpan="4" className="px-4 py-2 bg-red-600">
               QA Review
             </th>
-            <th colSpan="5" className="px-4 py-2 bg-blue-600">
+            <th colSpan="6" className="px-4 py-2 bg-blue-600">
               Actions
             </th>
             {/* <th colSpan="4" className="px-4 py-2 bg-orange-600">
@@ -746,6 +746,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
             <td className="border px-4 py-2">QA Review Date </td>
             <td className="border px-4 py-2">Status </td>
             <td className="border px-4 py-2">Sample Barcode</td>
+            <td className="border px-4 py-2">Generate Audit Trail </td>
             <td className="border px-4 py-2">Generate PDF </td>
             <td className="border px-4 py-2">Copy Row </td>
             <td className="border px-4 py-2">Actions</td>
