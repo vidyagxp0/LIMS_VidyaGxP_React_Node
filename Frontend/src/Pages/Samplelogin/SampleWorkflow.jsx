@@ -146,6 +146,24 @@ const SampleWorkFlow = ({ instrumentData }) => {
     }
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
   };
+  async function generateAuditTrail() {
+    try {
+      const response = await axios.get(
+        "http://localhost:9000/get-audit-trail/sample",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Audit Trail Data:", response.data);
+    } catch (error) {
+      console.error(
+        "Failed to fetch audit trail:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  }
 
   const columns = [
     {
@@ -247,6 +265,10 @@ const SampleWorkFlow = ({ instrumentData }) => {
     { header: "QA Reviewer/Approver", accessor: "QaReviewerApprover" },
     { header: "QA Reviewer Comment", accessor: " QaReviewerComment" },
     { header: "QA Review Date", accessor: "QaReviewDate" },
+    {
+      header: "Genrate Audit Trail",
+      accessor: "report2",
+    },
     {
       header: "Actions",
       accessor: "action",
@@ -412,6 +434,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
       QaReviewerApprover: item["QA Reviewer/Approver"] || "",
       QaReviewerComment: item["QA Reviewer Comment"] || "",
       QaReviewDate: item["QA Review Date"] || "",
+      report2: item["QA Audit Trail"] || "",
 
       actions: item["Actions"] || "",
     }));
@@ -429,6 +452,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     "productMaterialName",
     "batchNumber",
     "sampleSource",
+    "report2",
     "plannedDate",
     "samplePriority",
     "sampleQuantity",
@@ -883,6 +907,19 @@ const SampleWorkFlow = ({ instrumentData }) => {
                 ) : (
                   "No Barcode"
                 )}
+              </td>
+              <td className="border px-4 py-2">
+                {data.generateAuditTrail}
+                <td className="flex justify-center items-center px-4 py-2">
+                  <FaFilePdf
+                    size={20}
+                    className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                    onClick={() => generateAuditTrail(data.id)}
+                  />
+                  {loading[data.id] && (
+                    <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                  )}
+                </td>
               </td>
               <td className="border px-4 py-2">
                 {data.generatePDF}

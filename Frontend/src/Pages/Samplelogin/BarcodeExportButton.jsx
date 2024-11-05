@@ -8,7 +8,7 @@ import SampleWorkFlow from "./SampleWorkflow";
 
 const BarcodeExportButton = () => {
   const [idForBarcode, setIdForBarcode] = useState(null);
-  console.log(idForBarcode);
+  // console.log(idForBarcode);
   const barcodeRef = useRef(null);
 
   const generateRandomNumbers = (length) => {

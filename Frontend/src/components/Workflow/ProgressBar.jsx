@@ -14,6 +14,13 @@ const baseStages = [
 ];
 
 const ProgressBar = (props) => {
+  const [showAuditTrail, setShowAuditTrail] = useState(false);
+
+  const handleAuditTrailOpen = () => {
+    navigate("/auditTrail");
+    // setShowAuditTrail(true);
+  };
+
   const navigate = useNavigate();
   const { stage = 1, sampleId = 1, onStageClick } = props;
 
@@ -23,7 +30,7 @@ const ProgressBar = (props) => {
   const [url, setUrl] = useState("");
   useEffect(() => {
     setCurrentStage(stage - 1);
-    console.log(stage);
+    // console.log(stage);
 
     // if (stage === 5) {
     //   setStages([...baseStages, "Closed Cancelled"]);
@@ -136,6 +143,12 @@ const ProgressBar = (props) => {
         <div className="flex justify-end gap-4 bg-slate-700 p-3">
           {stage == "1" && (
             <>
+             <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
                 onClick={() => handleOpen("send-review")}
@@ -146,6 +159,12 @@ const ProgressBar = (props) => {
           )}
           {stage == "2" && (
             <>
+             <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
                 onClick={() => handleOpen("send-supervisor")}
@@ -186,6 +205,12 @@ const ProgressBar = (props) => {
           )}
           {stage == "3" && (
             <>
+             <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
                 onClick={() => handleOpen("send-qa")}
@@ -202,6 +227,12 @@ const ProgressBar = (props) => {
           )}
           {stage == "4" && (
             <>
+             <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
                 onClick={() => handleOpen("send-qa-review")}

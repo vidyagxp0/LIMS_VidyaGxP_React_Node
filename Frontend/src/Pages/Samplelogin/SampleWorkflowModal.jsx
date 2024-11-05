@@ -159,7 +159,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     initiator: "",
     testParameters: [],
   });
-  console.log(testParameters, "TTTTRRREE");
+  // console.log(testParameters, "TTTTRRREE");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -245,7 +245,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   //     setTestParameters(storedTestParameters);
   //     console.log(storedTestParameters, "testParameters from localStorage");
   //   }
-  // }, []);
+  // }, []);  
 
   const fetchData = async () => {
     if (!id) return;

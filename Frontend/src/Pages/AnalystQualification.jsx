@@ -133,40 +133,26 @@ const AnalystQualification = () => {
 
     setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
   };
-  const handleAuditTrailGenerate = async (analystId) => {
-    console.log("Generating PDF for analyst ID:", analystId);
-    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
 
+  async function handleAuditTrailGenerate() {
     try {
-      const response = await fetch(
-        `https://limsapi.vidyagxp.com/analyst/generate-report/${analystId}`
+      const response = await axios.get(
+        "http://localhost:9000/get-audit-trail/sample",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
-      console.log("Response:", response);
-
-      // Check if the response is actually a PDF
-      if (
-        !response.ok ||
-        response.headers.get("content-type") !== "application/pdf"
-      ) {
-        const errorText = await response.text();
-        console.error("Error Response Text:", errorText);
-        throw new Error("Network response was not ok or not a PDF");
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `Analyst_Report_${analystId}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
+      console.log("Audit Trail Data:", response.data);
     } catch (error) {
-      console.error("Error downloading PDF:", error);
+      console.error(
+        "Failed to fetch audit trail:",
+        error.response ? error.response.data : error.message
+      );
     }
+  }
 
-    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
-  };
 
   const columns = [
     {

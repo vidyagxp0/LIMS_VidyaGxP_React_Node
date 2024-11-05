@@ -4,14 +4,14 @@ import { Table } from "reactstrap";
 const AuditTrail = () => {
   const [auditData, setAuditData] = useState([]);
 
-  useEffect(() => {
-    fetch("/api/audit-trail")
-      .then((response) => response.json())
-      .then((data) => setAuditData(data))
-      .catch((error) =>
-        console.error("Error fetching audit trail data:", error)
-      );
-  }, []);
+  // useEffect(() => {
+  //   fetch("/api/audit-trail")
+  //     .then((response) => response.json())
+  //     .then((data) => setAuditData(data))
+  //     .catch((error) =>
+  //       console.error("Error fetching audit trail data:", error)
+  //     );
+  // }, []);
 
   return (
     <div className="audit-trail-container mt-3 m-1">
@@ -21,10 +21,10 @@ const AuditTrail = () => {
           <tr>
             <th>S. No</th>
             <th>Action Type</th>
-            <th>Data Field  Changed From</th>
-            <th>Data Field  Changed To</th>
-            <th>Data Field  Changed By</th>
-            <th>Data Field  Changed On</th>
+            <th>Data Field Changed From</th>
+            <th>Data Field Changed To</th>
+            <th>Data Field Changed By</th>
+            <th>Data Field Changed On</th>
             <th>Action Type</th>
           </tr>
         </thead>

@@ -106,10 +106,10 @@ const AnalystQualificationModal = ({ onClose }) => {
   // }, [id]);
 
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
+  // console.log(user);
 
   const [roles, setRoles] = useState([]);
-  console.log(roles, "ROLLLLLL");
+  // console.log(roles, "ROLLLLLL");
 
   useEffect(() => {
     fetchRoles();

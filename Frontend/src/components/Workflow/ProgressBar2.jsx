@@ -27,7 +27,7 @@ export const ProgressBar2 = (props) => {
 
   useEffect(() => {
     setCurrentStage(stage - 1);
-    console.log(stage);
+    // console.log(stage);
   }, [stage]);
 
   const handleClose = () => {
