@@ -8,6 +8,7 @@ import {
 import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import { FaFilePdf } from "react-icons/fa6";
+import { BsFileTextFill } from "react-icons/bs";
 
 const Table = ({
   columns,
@@ -17,6 +18,7 @@ const Table = ({
   onDelete,
   openEditModal,
   onPdfGenerate,
+  handleAuditTrailGenerate,
 }) => {
   const pageSize = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -148,17 +150,23 @@ const Table = ({
                         >
                           {row.status}
                         </span>
-                      ) : column.accessor === "action" || column.accessor === "actionAnalyst" || column.accessor === "actionControl" ? (
+                      ) : column.accessor === "action" ||
+                        column.accessor === "actionAnalyst" ||
+                        column.accessor === "actionControl" ? (
                         <div className="flex space-x-2">
                           <FontAwesomeIcon
                             icon={faEye}
                             className="mr-2 cursor-pointer"
                             onClick={
                               column.accessor === "actionAnalyst"
-                                ? () => navigate(`/analyst-qualification-edit/${row.id}`)
+                                ? () =>
+                                    navigate(
+                                      `/analyst-qualification-edit/${row.id}`
+                                    )
                                 : column.accessor === "actionControl"
-                                ? () => navigate(`/control-Sample-edit/${row.id}`)
-                                : () =>  onViewDetails(row)
+                                ? () =>
+                                    navigate(`/control-Sample-edit/${row.id}`)
+                                : () => onViewDetails(row)
                             }
                           />
                           <FontAwesomeIcon
@@ -166,12 +174,15 @@ const Table = ({
                             className="mr-2 cursor-pointer"
                             onClick={
                               column.accessor === "actionAnalyst"
-                                ? () => navigate(`/analyst-qualification-edit/${row.id}`)
+                                ? () =>
+                                    navigate(
+                                      `/analyst-qualification-edit/${row.id}`
+                                    )
                                 : column.accessor === "actionControl"
-                                ? () => navigate(`/control-Sample-edit/${row.id}`)
+                                ? () =>
+                                    navigate(`/control-Sample-edit/${row.id}`)
                                 : () => openEditModal(row)
                             }
-                            
                           />
                           <FontAwesomeIcon
                             icon={faTrashCan}
@@ -182,6 +193,17 @@ const Table = ({
                       ) : column.accessor === "report" ? (
                         <div className="flex space-x-2">
                           <FaFilePdf
+                            size={20}
+                            className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                            onClick={() => onPdfGenerate(row.id)}
+                          />
+                          {loading[data.id] && (
+                            <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                          )}
+                        </div>
+                      ) : column.accessor === "report2" ? (
+                        <div className="flex space-x-2">
+                          <BsFileTextFill
                             size={20}
                             className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
                             onClick={() => onPdfGenerate(row.id)}
@@ -217,124 +239,132 @@ const Table = ({
             </tbody>
           )}
         </table>
-        {currentData.length > 0 && totalPageCount > 1 && ( // Check if there's more than one page
-  <div className="mt-2 flex justify-end fixed right-10">
-    <nav
-      className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-      aria-label="Pagination"
-    >
-      {/* Previous Button */}
-      {totalPageCount > 1 && (
-        <button
-          onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
-          className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-            currentPage === 1 ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-          }`}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-      )}
+        {currentData.length > 0 &&
+          totalPageCount > 1 && ( // Check if there's more than one page
+            <div className="mt-2 flex justify-end fixed right-10">
+              <nav
+                className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+                aria-label="Pagination"
+              >
+                {/* Previous Button */}
+                {totalPageCount > 1 && (
+                  <button
+                    onClick={() =>
+                      handlePageChange(Math.max(currentPage - 1, 1))
+                    }
+                    className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+                      currentPage === 1
+                        ? "cursor-not-allowed opacity-50"
+                        : "cursor-pointer"
+                    }`}
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                )}
 
-      {/* Render Pages Based on totalPageCount */}
-      {totalPageCount > 3 && (
-        <>
-          {/* First Two Pages */}
-          {[1, 2].map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
-                currentPage === page
-                  ? "bg-blue-50 border-blue-500 text-blue-600"
-                  : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
+                {/* Render Pages Based on totalPageCount */}
+                {totalPageCount > 3 && (
+                  <>
+                    {/* First Two Pages */}
+                    {[1, 2].map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+                          currentPage === page
+                            ? "bg-blue-50 border-blue-500 text-blue-600"
+                            : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
 
-          {/* Ellipsis Before Current Range */}
-          {currentPage > 3 && <span className="px-2 py-2 text-gray-500">...</span>}
+                    {/* Ellipsis Before Current Range */}
+                    {currentPage > 3 && (
+                      <span className="px-2 py-2 text-gray-500">...</span>
+                    )}
 
-          {/* Current Page and Surrounding Pages */}
-          {Array.from(
-            { length: Math.min(3, totalPageCount - 2) },
-            (_, index) => currentPage - 1 + index
-          ).filter(
-            (page) => page > 2 && page < totalPageCount - 1
-          ).map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
-                currentPage === page
-                  ? "bg-blue-50 border-blue-500 text-blue-600"
-                  : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
+                    {/* Current Page and Surrounding Pages */}
+                    {Array.from(
+                      { length: Math.min(3, totalPageCount - 2) },
+                      (_, index) => currentPage - 1 + index
+                    )
+                      .filter((page) => page > 2 && page < totalPageCount - 1)
+                      .map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+                            currentPage === page
+                              ? "bg-blue-50 border-blue-500 text-blue-600"
+                              : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ))}
 
-          {/* Ellipsis After Current Range */}
-          {currentPage < totalPageCount - 2 && (
-            <span className="px-2 py-2 text-gray-500">...</span>
+                    {/* Ellipsis After Current Range */}
+                    {currentPage < totalPageCount - 2 && (
+                      <span className="px-2 py-2 text-gray-500">...</span>
+                    )}
+
+                    {/* Last Two Pages */}
+                    {[totalPageCount - 1, totalPageCount].map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+                          currentPage === page
+                            ? "bg-blue-50 border-blue-500 text-blue-600"
+                            : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                  </>
+                )}
+
+                {/* Show Pages if totalPageCount is 3 or less */}
+                {totalPageCount <= 3 &&
+                  Array.from({ length: totalPageCount }).map((_, index) => (
+                    <button
+                      key={index + 1}
+                      onClick={() => handlePageChange(index + 1)}
+                      className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
+                        currentPage === index + 1
+                          ? "bg-blue-50 border-blue-500 text-blue-600"
+                          : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
+                      }`}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+
+                {/* Next Button */}
+                {totalPageCount > 1 && (
+                  <button
+                    onClick={() =>
+                      handlePageChange(
+                        Math.min(currentPage + 1, totalPageCount)
+                      )
+                    }
+                    className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
+                      currentPage === totalPageCount
+                        ? "cursor-not-allowed opacity-50"
+                        : "cursor-pointer"
+                    }`}
+                    disabled={currentPage === totalPageCount}
+                  >
+                    Next
+                  </button>
+                )}
+              </nav>
+            </div>
           )}
-
-          {/* Last Two Pages */}
-          {[totalPageCount - 1, totalPageCount].map((page) => (
-            <button
-              key={page}
-              onClick={() => handlePageChange(page)}
-              className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
-                currentPage === page
-                  ? "bg-blue-50 border-blue-500 text-blue-600"
-                  : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-        </>
-      )}
-
-      {/* Show Pages if totalPageCount is 3 or less */}
-      {totalPageCount <= 3 && (
-        Array.from({ length: totalPageCount }).map((_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => handlePageChange(index + 1)}
-            className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
-              currentPage === index + 1
-                ? "bg-blue-50 border-blue-500 text-blue-600"
-                : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))
-      )}
-
-      {/* Next Button */}
-      {totalPageCount > 1 && (
-        <button
-          onClick={() =>
-            handlePageChange(Math.min(currentPage + 1, totalPageCount))
-          }
-          className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
-            currentPage === totalPageCount
-              ? "cursor-not-allowed opacity-50"
-              : "cursor-pointer"
-          }`}
-          disabled={currentPage === totalPageCount}
-        >
-          Next
-        </button>
-      )}
-    </nav>
-  </div>
-)}
       </div>
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}

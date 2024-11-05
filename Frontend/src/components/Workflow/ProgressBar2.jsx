@@ -4,11 +4,18 @@ import ESignatureModal from "./ESignature/ESignatureModal";
 import { useNavigate } from "react-router-dom";
 import ToastContainer from "../HotToaster/ToastContainer";
 import toast from "react-hot-toast";
+import AuditTrail from "../../Pages/AuditTrail/AuditTrail";
 
-// Updated base stages to include only the specified stages
 const baseStages = ["Opened", "Pending Qualification", "Closed Done"];
 
 export const ProgressBar2 = (props) => {
+  const [showAuditTrail, setShowAuditTrail] = useState(false);
+
+  const handleAuditTrailOpen = () => {
+    navigate("/auditTrail");
+    // setShowAuditTrail(true);
+  };
+
   const navigate = useNavigate();
   const { stage = 1, sampleId = 1, onStageClick } = props;
 
@@ -35,6 +42,7 @@ export const ProgressBar2 = (props) => {
       setIsModalOpen(true);
     }
   };
+
   const handleOpen = (url) => {
     setUrl(url);
     setIsModalOpen(true);
@@ -46,11 +54,11 @@ export const ProgressBar2 = (props) => {
       const password = formData.password.trim();
       const comment = formData.comment.trim();
 
-      // Check if email and password are provided
       if (!email || !password) {
         toast.error("All fields are required!");
         return false;
       }
+
       const response = await axios.post(
         "https://limsapi.vidyagxp.com/e-signature",
         { email, password },
@@ -80,7 +88,6 @@ export const ProgressBar2 = (props) => {
         return false;
       }
     } catch (error) {
-      // console.error("API error:", error);
       toast.error(error.response?.data?.message || "Error during request");
       return false;
     }
@@ -124,15 +131,29 @@ export const ProgressBar2 = (props) => {
       <div className="inner-container pqrform-topdiv">
         <div className="flex justify-end gap-4 bg-slate-700 p-3">
           {stage === 1 && (
-            <button
-              className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-              onClick={() => handleOpen("send-review")}
-            >
-              Submit
-            </button>
+            <>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={() => handleOpen("send-review")}
+              >
+                Submit
+              </button>
+            </>
           )}
           {stage === 2 && (
             <>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
                 onClick={() => handleOpen("send-to-reviewer")}
@@ -148,6 +169,7 @@ export const ProgressBar2 = (props) => {
             </>
           )}
         </div>
+        {showAuditTrail && <AuditTrail />}
       </div>
     </>
   );
@@ -160,6 +182,13 @@ const baseStages2 = [
   "Closed Done",
 ];
 export const ProgressBar3 = (props) => {
+  const [showAuditTrail, setShowAuditTrail] = useState(false);
+
+  const handleAuditTrailOpen = () => {
+    // setShowAuditTrail(true);
+    navigate("/auditTrail");
+  };
+
   const navigate = useNavigate();
   const { stage = 1, sampleId = 1, onStageClick } = props;
 
@@ -261,7 +290,7 @@ export const ProgressBar3 = (props) => {
                 index === 2 && currentStage === 2
                   ? "bg-orange-500 text-white"
                   : ""
-              } 
+              }
               ${
                 index === 3 && currentStage === 3 ? "bg-red-500 text-white" : ""
               } 
@@ -276,15 +305,29 @@ export const ProgressBar3 = (props) => {
       <div className="inner-container pqrform-topdiv">
         <div className="flex justify-end gap-4 bg-slate-700 p-3">
           {stage === 1 && (
-            <button
-              className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-              onClick={() => handleOpen("send-review")}
-            >
-              Submit
-            </button>
+            <>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={() => handleOpen("send-review")}
+              >
+                Submit
+              </button>
+            </>
           )}
           {stage === 2 && (
             <>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
+                onClick={handleAuditTrailOpen}
+              >
+                Audit Trail
+              </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
                 onClick={() => handleOpen("send-to-reviewer")}
@@ -299,22 +342,7 @@ export const ProgressBar3 = (props) => {
               </button>
             </>
           )}
-          {stage === 3 && (
-            <>
-              <button
-                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
-                onClick={() => handleOpen("send-to-closed")}
-              >
-                Destruction Complete
-              </button>
-              <button
-                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
-                onClick={() => handleOpen("send-to-open")}
-              >
-                More Info Required
-              </button>
-            </>
-          )}
+          {showAuditTrail && <AuditTrail />}
         </div>
       </div>
     </>

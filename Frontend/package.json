@@ -51,6 +51,7 @@
     "react-select": "^5.8.1",
     "react-toastify": "^10.0.6",
     "react-vertical-timeline-component": "^3.6.0",
+    "reactstrap": "^9.2.3",
     "redux": "^5.0.1",
     "xlsx": "^0.18.5",
     "xlsx-style": "^0.8.13"

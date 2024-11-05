@@ -133,6 +133,40 @@ const AnalystQualification = () => {
 
     setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
   };
+  const handleAuditTrailGenerate = async (analystId) => {
+    console.log("Generating PDF for analyst ID:", analystId);
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: true }));
+
+    try {
+      const response = await fetch(
+        `https://limsapi.vidyagxp.com/analyst/generate-report/${analystId}`
+      );
+      console.log("Response:", response);
+
+      // Check if the response is actually a PDF
+      if (
+        !response.ok ||
+        response.headers.get("content-type") !== "application/pdf"
+      ) {
+        const errorText = await response.text();
+        console.error("Error Response Text:", errorText);
+        throw new Error("Network response was not ok or not a PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Analyst_Report_${analystId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+
+    setLoading((prevLoading) => ({ ...prevLoading, [analystId]: false }));
+  };
 
   const columns = [
     {
@@ -208,6 +242,10 @@ const AnalystQualification = () => {
     { header: "Change Description", accessor: "changeDescription" },
     { header: "Status", accessor: "status" },
     {
+      header: "Genrate Audit Trail",
+      accessor: "report2",
+    },
+    {
       header: "Genrate PDf",
       accessor: "report",
     },
@@ -235,6 +273,7 @@ const AnalystQualification = () => {
   const fields = [
     "AnalystID",
     "FullName",
+    "auditTrail",
     "DateOfBirth",
     "EmailAddress",
     "PhoneNumber",
@@ -402,6 +441,7 @@ const AnalystQualification = () => {
           onViewDetails={onViewDetails}
           // openEditModal={openEditModal}
           onPdfGenerate={handlePdfGenerate}
+          onAuditTrailGenerate={handleAuditTrailGenerate}
           onEdit={handleEdit}
         />
       </div>
