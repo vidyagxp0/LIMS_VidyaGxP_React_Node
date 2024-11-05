@@ -734,7 +734,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
                 onClick={() => {
                   navigate(`/sampleWorkflowEdit/${data.id}`);
                 }}
-                className="hover:bg-gray-200 border px-4 py-2"
+                className="hover:bg-gray-200 border px-4 py-2 cursor-pointer"
               >
                 {data.samplePlanId}
               </td>

@@ -147,10 +147,6 @@ function Approval() {
   
     setIsModalOpen(false);
   };
-  
-  
-  
-
   const handleEditSave = async (updatedData) => {
     try {
       const {sno,...dataToSend}=updatedData;

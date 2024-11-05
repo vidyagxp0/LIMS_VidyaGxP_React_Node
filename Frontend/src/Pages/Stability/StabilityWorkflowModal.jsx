@@ -289,14 +289,22 @@ const StabilityWorkflowModal = ({ onClose }) => {
 
   const handleEdit = async (formDataToSend) => {
     try {
-      const response = await axios.put(
-        `http://localhost:9000/edit-sample/${id}/stability`,
-        formDataToSend,
-        { headers: { "Content-Type": "multipart/form-data" } }
+      const response = await toast.promise(
+        axios.put(
+          `http://localhost:9000/edit-sample/${id}/stability`,
+          formDataToSend,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        ),
+        {
+          loading: "Updating Sample Workflow...",
+          success: <b>Data updated successfully.</b>,
+          error: <b>Failed to update Data.</b>,
+        }
       );
-
+  
+      // console.log(response, "EDITTT");
+  
       if (response.status === 200) {
-        toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
         navigate("/stabilityWorkflow");
         return response.data; // Return updated data
@@ -306,16 +314,16 @@ const StabilityWorkflowModal = ({ onClose }) => {
       }
     } catch (error) {
       toast.error(
-        "Error updating Sample Workflow: " +
-          (error.response?.data || error.message)
+        "Error updating Sample Workflow: " + (error.response?.data || error.message)
       );
       return null;
     }
   };
+  
 
   const handleSave = async () => {
     const formDataToSend = new FormData(); // Create a new FormData object
-
+  
     // Append all form data to FormData object
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
@@ -324,39 +332,47 @@ const StabilityWorkflowModal = ({ onClose }) => {
         formDataToSend.append(key, formData[key]);
       }
     }
-
+  
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Convert testParameters to JSON
       console.log("Test Parameters being sent:", testParameters);
     }
-
+  
     try {
       let updatedData;
-
+  
       if (id) {
-        updatedData = await handleEdit(formDataToSend); // Pass FormData to handleEdit and get updated data
+        // Update existing data without toast notification
+        updatedData = await handleEdit(formDataToSend);
       } else {
-        const response = await axios.post(
-          `http://localhost:9000/create-sample`,
-          formDataToSend,
-          { headers: { "Content-Type": "multipart/form-data" } }
+        // Add new data with a toast notification
+        const response = await toast.promise(
+          axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
+          {
+            loading: "Saving data...",
+            success: <b>Data added successfully.</b>,
+            error: <b>Failed to add data.</b>,
+          }
         );
         updatedData = response.data; // Store response data for newly created item
-        toast.success("Stability Workflow added successfully.");
       }
-
+  
       // Update formData with the latest data from the server response
       setFormData(updatedData);
       setIsModalOpen(false);
       navigate("/stabilityWorkflow");
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error(
-        "Failed to upload file: " + (error.response?.data || error.message)
-      );
+      toast.error("Failed to upload file: " + (error.response?.data || error.message));
     }
   };
+  
+  
+  
+  
 
   const renderFields = (tab) => {
     switch (tab) {
