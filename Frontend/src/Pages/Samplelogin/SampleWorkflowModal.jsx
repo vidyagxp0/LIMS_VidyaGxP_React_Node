@@ -46,8 +46,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         idx === index ? { ...row, [name]: value } : row
       );
       setTestParameters(updatedRows);
-      console.log(updatedRows,"UPUPUPUP");
-      
+      console.log(updatedRows, "UPUPUPUP");
     } else {
       console.error("testParameters is not an array:", testParameters);
     }
@@ -160,9 +159,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     initiator: "",
     testParameters: [],
   });
-  console.log(testParameters,"TTTTRRREE");
-  
-  
+  console.log(testParameters, "TTTTRRREE");
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -254,7 +251,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-Sample/${id}/sample`
+        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
       );
       // console.log(response.data);
 
@@ -284,7 +281,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     try {
       const response = await toast.promise(
         axios.put(
-          `http://localhost:9000/edit-sample/${id}/sample`,
+          `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         ),
@@ -294,7 +291,7 @@ const SampleWorkflowModal = ({ onClose }) => {
           error: <b>Failed to update Data.</b>,
         }
       );
-  
+
       if (response.status === 200) {
         setIsModalOpen(false);
         navigate("/sampleWorkflow");
@@ -306,11 +303,10 @@ const SampleWorkflowModal = ({ onClose }) => {
       );
     }
   };
-  
 
   const handleSave = async () => {
     const formDataToSend = new FormData();
-  
+
     // Append all form data to FormData object
     for (const key in formData) {
       if (Array.isArray(formData[key])) {
@@ -319,24 +315,28 @@ const SampleWorkflowModal = ({ onClose }) => {
         formDataToSend.append(key, formData[key]);
       }
     }
-  
+
     // Manually append the test parameters as an array of objects, if applicable
     if (testParameters && testParameters.length > 0) {
       formDataToSend.append("testParameters", JSON.stringify(testParameters));
     }
-  
+
     try {
       let updatedData;
-  
+
       if (id) {
         // Update existing data without toast notification
         updatedData = await handleEdit(formDataToSend);
       } else {
         // Add new data with a toast notification
         const response = await toast.promise(
-          axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
-            headers: { "Content-Type": "multipart/form-data" },
-          }),
+          axios.post(
+            `https://limsapi.vidyagxp.com/create-sample`,
+            formDataToSend,
+            {
+              headers: { "Content-Type": "multipart/form-data" },
+            }
+          ),
           {
             loading: "Saving Sample Workflow...",
             success: <b>Data added successfully.</b>,
@@ -345,7 +345,7 @@ const SampleWorkflowModal = ({ onClose }) => {
         );
         updatedData = response.data; // Store response data for newly created item
       }
-  
+
       // Update formData with the latest data from the server response
       setFormData(updatedData);
       setIsModalOpen(false);
@@ -357,7 +357,6 @@ const SampleWorkflowModal = ({ onClose }) => {
       );
     }
   };
-  
 
   const renderFields = (tab) => {
     switch (tab) {
