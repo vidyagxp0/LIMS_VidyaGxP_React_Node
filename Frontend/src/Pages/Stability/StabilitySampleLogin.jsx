@@ -96,8 +96,6 @@ function StabilitySampleLogin() {
     fetchData();
   }, []);
 
-
-
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -135,20 +133,24 @@ function StabilitySampleLogin() {
     setData(newData);
   };
 
-
   const handleStatusUpdate = async (newStatus) => {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-      
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLogin/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLogin/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -158,10 +160,10 @@ function StabilitySampleLogin() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
-
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -223,7 +225,6 @@ function StabilitySampleLogin() {
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
-
 
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
@@ -300,7 +301,6 @@ function StabilitySampleLogin() {
       );
     }
   };
-
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [testPlan, setTestPlan] = useState("");
@@ -473,7 +473,6 @@ function StabilitySampleLogin() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-
 
   const handleEditSave = async (updatedData) => {
     const { sno, checkbox, ...dataTosend } = updatedData;
@@ -725,7 +724,12 @@ function StabilitySampleLogin() {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload columns={columns} data={filteredData} fileName="Sample_Login.pdf" title="Sample Login Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Sample_Login.pdf"
+              title="Sample Login Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Sample LogIn"

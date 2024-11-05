@@ -31,11 +31,13 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
-
 const fields = [
   { label: "Standard Protocol Name", key: "StandardProtocolName" },
   { label: "Standard Protocol Id", key: "StandardProtocolId" },
-  { label: "Standard Protocol Description", key: "StandardProtocolDescription" },
+  {
+    label: "Standard Protocol Description",
+    key: "StandardProtocolDescription",
+  },
   { label: "Status", key: "status" },
 ];
 
@@ -68,13 +70,13 @@ function SampleAcceptanceTemplate() {
   const [viewModalData, setViewModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Active");
-  const [editModalData, setEditModalData] = useState(null)
+  const [editModalData, setEditModalData] = useState(null);
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
         `https://limsapi.vidyagxp.com/get-all-lims/sMSampleAcceptanceTemplate`
-      );
+      );
       const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
 
       const updatedData = fetchedData.map((item, index) => ({
@@ -92,7 +94,6 @@ function SampleAcceptanceTemplate() {
     fetchData();
   }, []);
 
-
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -104,7 +105,7 @@ function SampleAcceptanceTemplate() {
   const handleStatusUpdate = async (newStatus) => {
     try {
       const { sno, ...dataToSend } = viewModalData;
-  
+
       const response = await axios.put(
         `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`,
         {
@@ -112,10 +113,10 @@ function SampleAcceptanceTemplate() {
           status: newStatus,
         },
         {
-          timeout: 10000, 
+          timeout: 10000,
         }
       );
-  
+
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
@@ -134,8 +135,6 @@ function SampleAcceptanceTemplate() {
       toast.error("Error updating Approval status");
     }
   };
-  
-  
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -162,13 +161,18 @@ function SampleAcceptanceTemplate() {
 
   const addNewStorageCondition = (newCondition) => {
     const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
-    setData((prevData)=>[
+    setData((prevData) => [
       ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
+      {
+        ...newCondition,
+        sno: prevData.length + 1,
+        checkbox: false,
+        status: nextStatus,
+      },
+    ]);
+    setLastStatus(nextStatus);
     setIsModalOpen(false);
-  }
+  };
 
   const handleDelete = async (item) => {
     console.log(item);
@@ -215,11 +219,18 @@ function SampleAcceptanceTemplate() {
   };
   const handleEditSave = async (updatedData) => {
     try {
-      const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`, dataToSend);
+      const { sno, ...dataToSend } = updatedData;
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`,
+        dataToSend
+      );
       if (response.status === 200) {
         setData((prevData) =>
-          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+          prevData.map((item) =>
+            item.uniqueId === updatedData.uniqueId
+              ? { ...updatedData, sno: item.sno }
+              : item
+          )
         );
         toast.success("Approval updated successfully");
       } else {
@@ -232,24 +243,22 @@ function SampleAcceptanceTemplate() {
     setEditModalData(null);
   };
 
-
-  const StatusModal = ({visible , closeModal,onAdd}) => {
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [numOfCheckItems, setNumOfCheckItems] = useState(0);
     const [checkItems, setCheckItems] = useState([]);
-    const [name , setName] = useState("");
-    const [uniqueCode , setUniqueCode]=useState("")
+    const [name, setName] = useState("");
+    const [uniqueCode, setUniqueCode] = useState("");
 
-    const handleAdd = ()=>{
+    const handleAdd = () => {
       const newCondition = {
-        name:name,
-        uniqueCode:uniqueCode,
-        NoOfCheckItems:numOfCheckItems,
-        updatedAt:"24-08-2020",
-        action:[],
-      }
-      onAdd(newCondition)
-    }
-
+        name: name,
+        uniqueCode: uniqueCode,
+        NoOfCheckItems: numOfCheckItems,
+        updatedAt: "24-08-2020",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
     useEffect(() => {
       const newCheckItems = Array.from(
@@ -273,11 +282,7 @@ function SampleAcceptanceTemplate() {
     };
 
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>New Condition</CModalTitle>
         </CModalHeader>
@@ -288,7 +293,7 @@ function SampleAcceptanceTemplate() {
             label="Name"
             placeholder="Name"
             value={name}
-            onChange={(e)=>setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -296,7 +301,7 @@ function SampleAcceptanceTemplate() {
             label="Unique Code"
             placeholder="Unique Code"
             value={uniqueCode}
-            onChange={(e)=>setUniqueCode(e.target.value)}
+            onChange={(e) => setUniqueCode(e.target.value)}
           />
           <CFormInput
             className="mb-3"
@@ -322,7 +327,9 @@ function SampleAcceptanceTemplate() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -399,7 +406,6 @@ function SampleAcceptanceTemplate() {
     const [checkItems, setCheckItems] = useState([]);
     const [formData, setFormData] = useState(data);
 
-
     useEffect(() => {
       const newCheckItems = Array.from(
         { length: numOfCheckItems },
@@ -435,11 +441,7 @@ function SampleAcceptanceTemplate() {
     };
 
     return (
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-      >
+      <CModal alignment="center" visible={visible} onClose={closeModal}>
         <CModalHeader>
           <CModalTitle>New Condition</CModalTitle>
         </CModalHeader>
@@ -450,7 +452,7 @@ function SampleAcceptanceTemplate() {
             label="Name"
             placeholder="Name"
             name="name"
-            value={formData?.name||""}
+            value={formData?.name || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -459,7 +461,7 @@ function SampleAcceptanceTemplate() {
             label="Unique Code"
             name="uniqueCode"
             placeholder="Unique Code"
-            value={formData?.uniqueCode||""}
+            value={formData?.uniqueCode || ""}
             onChange={handleChange}
           />
           <CFormInput
@@ -468,8 +470,8 @@ function SampleAcceptanceTemplate() {
             label="No. Of Check Items"
             name="NoOfCheckItems"
             placeholder="No. of Check Items"
-            value={formData?.numOfCheckItems||""}
-            onChange={handleNumOfCheckItemsChange }
+            value={formData?.numOfCheckItems || ""}
+            onChange={handleNumOfCheckItemsChange}
           />
           {checkItems.map((item, index) => (
             <CFormInput
@@ -487,16 +489,17 @@ function SampleAcceptanceTemplate() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleSave}>Submit</CButton>
+          <CButton color="primary" onClick={handleSave}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
   };
 
-
   return (
     <>
-    <LaunchQMS />
+      <LaunchQMS />
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Sample Acceptance Template</h4>
@@ -516,7 +519,12 @@ function SampleAcceptanceTemplate() {
             />
           </div>
           <div className="float-right flex gap-4">
-          <PDFDownload columns={columns} data={filteredData} fileName="Sample_Acceptance_Template.pdf" title="Sample Acceptance Template Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="Sample_Acceptance_Template.pdf"
+              title="Sample Acceptance Template Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton
               text="Add Sample Acceptance"

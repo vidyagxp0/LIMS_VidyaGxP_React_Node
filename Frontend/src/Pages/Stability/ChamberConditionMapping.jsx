@@ -43,7 +43,7 @@ function ChamberConditionMapping() {
     { label: "Initiated On", key: "initiatedOn" },
     { label: "Status", key: "status" },
   ];
-  
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -62,11 +62,10 @@ function ChamberConditionMapping() {
       toast.error("Failed to fetch chamber condition mapping data");
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     fetchData();
-  },[])
+  }, []);
 
-  
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -79,15 +78,20 @@ function ChamberConditionMapping() {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-      
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMChamberConditionMapping/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMChamberConditionMapping/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -97,17 +101,25 @@ function ChamberConditionMapping() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
 
   const handleEditSave = async (updatedData) => {
     try {
-      const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMChamberConditionMapping/${updatedData.uniqueId}`, dataToSend);
+      const { sno, ...dataToSend } = updatedData;
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMChamberConditionMapping/${updatedData.uniqueId}`,
+        dataToSend
+      );
       if (response.status === 200) {
         setData((prevData) =>
-          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+          prevData.map((item) =>
+            item.uniqueId === updatedData.uniqueId
+              ? { ...updatedData, sno: item.sno }
+              : item
+          )
         );
         toast.success("Approval updated successfully");
         closeEditModal();
@@ -120,7 +132,6 @@ function ChamberConditionMapping() {
     }
     setEditModalData(null);
   };
-
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -137,7 +148,7 @@ function ChamberConditionMapping() {
         );
       })
     : [];
-  
+
   const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
       setIsViewModalOpen(false);
@@ -147,7 +158,7 @@ function ChamberConditionMapping() {
       setIsViewModalOpen(true);
     }
   };
-  
+
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -155,11 +166,17 @@ function ChamberConditionMapping() {
   };
 
   const columns = [
-    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
     { header: "SrNo.", accessor: "sno" },
     { header: "Chamber ID", accessor: "chamberId" },
     { header: "Description", accessor: "description" },
-    { header: "Current Storage Condition", accessor: "currentStorageCondition" },
+    {
+      header: "Current Storage Condition",
+      accessor: "currentStorageCondition",
+    },
     { header: "Initiated On", accessor: "initiatedOn" },
     { header: "Status", accessor: "status" },
     {
@@ -167,9 +184,21 @@ function ChamberConditionMapping() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            onClick={() => openEditModal(row.original)}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
@@ -186,11 +215,11 @@ function ChamberConditionMapping() {
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  
+
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
@@ -206,7 +235,10 @@ function ChamberConditionMapping() {
         toast.success("Chamber condition mapping deleted successfully");
         fetchData();
       } else {
-        console.error("Failed to delete chamber condition mapping:", response.statusText);
+        console.error(
+          "Failed to delete chamber condition mapping:",
+          response.statusText
+        );
         toast.error("Failed to delete chamber condition mapping");
       }
     } catch (error) {
@@ -235,11 +267,12 @@ function ChamberConditionMapping() {
       }
     } catch (error) {
       toast.error(
-        "Error adding chamber condition mapping: " + (error.response?.data || error.message)
+        "Error adding chamber condition mapping: " +
+          (error.response?.data || error.message)
       );
     }
   };
- 
+
   const handleExcelDataUpload = async (excelData) => {
     try {
       const response = await axios.post(
@@ -254,10 +287,12 @@ function ChamberConditionMapping() {
         toast.error("Failed to upload data");
       }
     } catch (error) {
-      toast.error("Error uploading data: " + (error.response?.data || error.message));
+      toast.error(
+        "Error uploading data: " + (error.response?.data || error.message)
+      );
     }
   };
-  
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [chamberId, setChamberId] = useState("");
     const [description, setDescription] = useState("");
@@ -272,7 +307,7 @@ function ChamberConditionMapping() {
       };
       onAdd(newMapping);
     };
-    
+
     return (
       <>
         <CModal alignment="center" visible={visible} onClose={closeModal}>
@@ -341,7 +376,7 @@ function ChamberConditionMapping() {
               label="Chamber ID"
               name="chamberId"
               value={formData?.chamberId || ""}
-              onChange={handleChange}  
+              onChange={handleChange}
             />
             <CFormInput
               className="mb-3"
@@ -379,7 +414,7 @@ function ChamberConditionMapping() {
         </CModal>
       </>
     );
-  }
+  };
 
   return (
     <>
@@ -468,5 +503,3 @@ function ChamberConditionMapping() {
 }
 
 export default ChamberConditionMapping;
-
-

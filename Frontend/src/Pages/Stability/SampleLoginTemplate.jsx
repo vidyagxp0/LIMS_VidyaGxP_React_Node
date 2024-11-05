@@ -102,8 +102,6 @@ const SampleLoginTemplate = () => {
     fetchData();
   }, []);
 
-
-
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -145,15 +143,20 @@ const SampleLoginTemplate = () => {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-      
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -163,10 +166,10 @@ const SampleLoginTemplate = () => {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
-
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -190,7 +193,6 @@ const SampleLoginTemplate = () => {
       setIsViewModalOpen(true);
     }
   };
-
 
   const columns = [
     {
@@ -282,8 +284,6 @@ const SampleLoginTemplate = () => {
     }
   };
 
-
-
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
@@ -307,8 +307,6 @@ const SampleLoginTemplate = () => {
       );
     }
   };
-
-
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [inputValue, setInputValue] = useState(0);
@@ -457,7 +455,6 @@ const SampleLoginTemplate = () => {
     setEditModalData(null);
   };
 
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [inputValue, setInputValue] = useState(0);
     const [formData, setFormData] = useState(data);
@@ -597,7 +594,6 @@ const SampleLoginTemplate = () => {
     );
   };
 
-
   const handleEditSave = async (updatedData) => {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
@@ -624,7 +620,6 @@ const SampleLoginTemplate = () => {
       toast.error("Error updating investigation");
     }
   };
-
 
   return (
     <>

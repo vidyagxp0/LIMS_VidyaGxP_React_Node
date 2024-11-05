@@ -39,12 +39,13 @@ function StandardProtocol() {
   const fields = [
     { label: "Standard Protocol Name", key: "StandardProtocolName" },
     { label: "Standard Protocol Id", key: "StandardProtocolId" },
-    { label: "Standard Protocol Description", key: "StandardProtocolDescription" },
+    {
+      label: "Standard Protocol Description",
+      key: "StandardProtocolDescription",
+    },
     { label: "Status", key: "status" },
   ];
 
- 
-  
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -67,18 +68,18 @@ function StandardProtocol() {
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
-  
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  
+
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
@@ -87,20 +88,24 @@ function StandardProtocol() {
     setIsModalsOpen(false);
   };
 
-
   const handleStatusUpdate = async (newStatus) => {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-      
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -110,7 +115,8 @@ function StandardProtocol() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
 
@@ -120,16 +126,16 @@ function StandardProtocol() {
     setData(newData);
   };
   const filteredData = Array.isArray(data)
-  ? data.filter((row) => {
-    console.log("Row:", row);
-    const conditionCode = row.conditionCode || "";
-    return (
-      conditionCode?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  })
-: [];
-  
+    ? data.filter((row) => {
+        console.log("Row:", row);
+        const conditionCode = row.conditionCode || "";
+        return (
+          conditionCode?.toLowerCase()?.includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
+
   const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
       setIsViewModalOpen(false);
@@ -139,7 +145,7 @@ function StandardProtocol() {
       setIsViewModalOpen(true);
     }
   };
-  
+
   // ... (keep other functions like handleSelectAll, filteredData, onViewDetails, etc.)
 
   const handleCheckboxChange = (index) => {
@@ -147,14 +153,21 @@ function StandardProtocol() {
     newData[index].checkbox = !newData[index].checkbox;
     setData(newData);
   };
-  
+
   const handleEditSave = async (updatedData) => {
     try {
-      const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`, dataToSend);
+      const { sno, ...dataToSend } = updatedData;
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`,
+        dataToSend
+      );
       if (response.status === 200) {
         setData((prevData) =>
-          prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
+          prevData.map((item) =>
+            item.uniqueId === updatedData.uniqueId
+              ? { ...updatedData, sno: item.sno }
+              : item
+          )
         );
         toast.success("Approval updated successfully");
       } else {
@@ -167,12 +180,11 @@ function StandardProtocol() {
     setEditModalData(null);
   };
 
-
-  
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [StandardProtocolName, setStandardProtocolName] = useState("");
     const [StandardProtocolId, setStandardProtocolId] = useState("");
-    const [StandardProtocolDescription, setsetStandardProtocolDescription] = useState("");
+    const [StandardProtocolDescription, setsetStandardProtocolDescription] =
+      useState("");
     const handleProduct = () => {
       const newCondition = {
         StandardProtocolName,
@@ -182,8 +194,7 @@ function StandardProtocol() {
       };
       onAdd(newCondition);
     };
-    
-    
+
     return (
       <>
         <CModal alignment="center" visible={visible} onClose={closeModal}>
@@ -191,7 +202,7 @@ function StandardProtocol() {
             <CModalTitle>New Condition</CModalTitle>
           </CModalHeader>
           <CModalBody>
-          <CFormInput
+            <CFormInput
               className="mb-3"
               type="text"
               placeholder=" "
@@ -199,7 +210,7 @@ function StandardProtocol() {
               value={StandardProtocolName}
               onChange={(e) => setStandardProtocolName(e.target.value)}
             />
-          
+
             <CFormInput
               className="mb-3"
               type="text"
@@ -208,14 +219,16 @@ function StandardProtocol() {
               value={StandardProtocolId}
               onChange={(e) => setStandardProtocolId(e.target.value)}
             />
-           
+
             <CFormInput
               className="mb-3"
               type="text"
               label="Standard Protocol Description"
               value={StandardProtocolDescription}
               placeholder=" "
-              onChange={(e) => setsetStandardProtocolDescription(e.target.value)}
+              onChange={(e) =>
+                setsetStandardProtocolDescription(e.target.value)
+              }
             />
           </CModalBody>
           <CModalFooter>
@@ -230,22 +243,40 @@ function StandardProtocol() {
       </>
     );
   };
-  
+
   const columns = [
-    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
     { header: "SrNo.", accessor: "sno" },
     { header: "Standard Protocol Name", accessor: "StandardProtocolName" },
     { header: "Standard Protocol Id", accessor: "StandardProtocolId" },
-    { header: "Standard Protocol Description", accessor: "StandardProtocolDescription" },
+    {
+      header: "Standard Protocol Description",
+      accessor: "StandardProtocolDescription",
+    },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            onClick={() => openEditModal(row.original)}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
@@ -266,14 +297,15 @@ function StandardProtocol() {
         toast.success("Data deleted successfully");
         fetchData();
       } else {
-        console.error("Failed to delete standard protocol:", response.statusText);
+        console.error(
+          "Failed to delete standard protocol:",
+          response.statusText
+        );
       }
     } catch (error) {
       console.error("Error deleting standard protocol:", error);
     }
   };
-
-  
 
   const handleAdd = async (newStandardProtocol) => {
     try {
@@ -288,13 +320,13 @@ function StandardProtocol() {
 
       if (response.status === 200) {
         toast.success("Standard protocol added successfully.");
-        
+
         // Instead of waiting for a fetchData call, immediately update the state
         setData((prevData) => [
           ...prevData,
           {
             sno: prevData.length + 1, // Add new serial number
-            ...newStandardProtocol,   // Spread new protocol data
+            ...newStandardProtocol, // Spread new protocol data
             uniqueId: response.data.uniqueId, // Ensure uniqueId from response is added
             addDate: new Date().toISOString().split("T")[0], // Add current date
           },
@@ -306,7 +338,8 @@ function StandardProtocol() {
       }
     } catch (error) {
       toast.error(
-        "Error adding standard protocol: " + (error.response?.data || error.message)
+        "Error adding standard protocol: " +
+          (error.response?.data || error.message)
       );
     }
   };
@@ -315,7 +348,7 @@ function StandardProtocol() {
   useEffect(() => {
     fetchData();
   }, []);
- 
+
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
 
@@ -343,15 +376,15 @@ function StandardProtocol() {
               className="mb-3"
               type="text"
               label="Standard Protocol Name"
-              placeholder="°C °F "  
+              placeholder="°C °F "
               name="StandardProtocolName"
               value={formData?.StandardProtocolName || ""}
               onChange={handleChange}
             />
-             <CFormInput
+            <CFormInput
               className="mb-3"
               type="text"
-              label="Standard Protocol Id"     
+              label="Standard Protocol Id"
               placeholder=" "
               name="StandardProtocolId"
               value={formData?.StandardProtocolId}
@@ -361,7 +394,7 @@ function StandardProtocol() {
               className="mb-3"
               type="text"
               label="Standard Protocol Description"
-              name="StandardProtocolDescription" 
+              name="StandardProtocolDescription"
               placeholder=" "
               value={formData?.StandardProtocolDescription || ""}
               onChange={handleChange}
@@ -379,7 +412,6 @@ function StandardProtocol() {
       </>
     );
   };
-
 
   // ... (keep StatusModal and EditModal components)
 

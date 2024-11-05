@@ -11,7 +11,7 @@ import {
   CFormSelect,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { BASE_URL } from "../../config.json";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 

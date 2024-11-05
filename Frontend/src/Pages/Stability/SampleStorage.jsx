@@ -72,7 +72,7 @@ function SampleStorage() {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -86,14 +86,19 @@ function SampleStorage() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
 
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleStorage/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleStorage/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -103,10 +108,10 @@ function SampleStorage() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status"); ``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
-
 
   const handleEditSave = async (updatedData) => {
     const { sno, checkbox, ...dataToSend } = updatedData;
@@ -150,7 +155,7 @@ function SampleStorage() {
         );
       })
     : [];
-  
+
   const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
       setIsViewModalOpen(false);
@@ -160,7 +165,7 @@ function SampleStorage() {
       setIsViewModalOpen(true);
     }
   };
-  
+
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -168,7 +173,10 @@ function SampleStorage() {
   };
 
   const columns = [
-    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
     { header: "SrNo.", accessor: "sno" },
     { header: "Product Name", accessor: "productName" },
     { header: "Chamber ID", accessor: "chamberID" },
@@ -181,17 +189,21 @@ function SampleStorage() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon 
-            icon={faEye} 
-            className="mr-2 cursor-pointer"
-            onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon 
-            icon={faPenToSquare}
-            onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
           <FontAwesomeIcon
-            icon={faTrashCan} 
-            className="cursor-pointer" 
-            onClick={() => handleDelete(row.original)} />
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            onClick={() => openEditModal(row.original)}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
@@ -208,11 +220,11 @@ function SampleStorage() {
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  
+
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
@@ -255,7 +267,8 @@ function SampleStorage() {
       }
     } catch (error) {
       toast.error(
-        "Error adding sample storage: " + (error.response?.data || error.message)
+        "Error adding sample storage: " +
+          (error.response?.data || error.message)
       );
     }
   };
@@ -274,291 +287,292 @@ function SampleStorage() {
         toast.error("Failed to upload data");
       }
     } catch (error) {
-      toast.error("Error uploading data: " + (error.response?.data || error.message));
+      toast.error(
+        "Error uploading data: " + (error.response?.data || error.message)
+      );
     }
   };
-  
 
-const StatusModal = ({ visible, closeModal, onAdd }) => {
-  const [rows, setRows] = useState([]);
-  const [specificationsID, setSpecificationsID] = useState("");
-  const [protocolID, setProtocolID] = useState("");
-  const [storageCondition, setStorageCondition] = useState("");
-  const [chamberID, setChamberID] = useState("");
-  const [actualStorageQuantity, setActualStorageQuantity] = useState("");
-  const [availableStorageQuantity, setAvailableStorageQuantity] =
-    useState("");
-  const [numberOfStoragePosition, setNumberOfStoragePosition] = useState("");
-  const [chamberDescription, setChamberDescription] = useState("");
-  const [chamberLocation, setChamberLocation] = useState("");
+  const StatusModal = ({ visible, closeModal, onAdd }) => {
+    const [rows, setRows] = useState([]);
+    const [specificationsID, setSpecificationsID] = useState("");
+    const [protocolID, setProtocolID] = useState("");
+    const [storageCondition, setStorageCondition] = useState("");
+    const [chamberID, setChamberID] = useState("");
+    const [actualStorageQuantity, setActualStorageQuantity] = useState("");
+    const [availableStorageQuantity, setAvailableStorageQuantity] =
+      useState("");
+    const [numberOfStoragePosition, setNumberOfStoragePosition] = useState("");
+    const [chamberDescription, setChamberDescription] = useState("");
+    const [chamberLocation, setChamberLocation] = useState("");
 
-  const handleAddRow = () => {
-    const newRow = {
-      id: rows.length + 1,
-      rackNo: "",
-      shelfNo: "",
-      position: "",
-      quantity: "",
-      remarks: "",
+    const handleAddRow = () => {
+      const newRow = {
+        id: rows.length + 1,
+        rackNo: "",
+        shelfNo: "",
+        position: "",
+        quantity: "",
+        remarks: "",
+      };
+      setRows([...rows, newRow]);
     };
-    setRows([...rows, newRow]);
-  };
 
-  const handleInputChange = (e) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value >= 0) {
-      setInputValue(value);
-    }
-  };
-  const handleAdd = () => {
-    const newCondition = {
-      productName: "Product",
-      chamberID: chamberID,
-      actualQuantity: actualStorageQuantity,
-      availableQuantity: availableStorageQuantity,
-      protocolType: "protocol-X",
-      action: [],
+    const handleInputChange = (e) => {
+      const value = parseInt(e.target.value, 10);
+      if (!isNaN(value) && value >= 0) {
+        setInputValue(value);
+      }
     };
-    onAdd(newCondition);
-  };
+    const handleAdd = () => {
+      const newCondition = {
+        productName: "Product",
+        chamberID: chamberID,
+        actualQuantity: actualStorageQuantity,
+        availableQuantity: availableStorageQuantity,
+        protocolType: "protocol-X",
+        action: [],
+      };
+      onAdd(newCondition);
+    };
 
-  return (
-    <>
-      <CModal
-        alignment="center"
-        visible={visible}
-        onClose={closeModal}
-        size="lg"
-      >
-        <CModalHeader>
-          <CModalTitle>Add Sample Storage</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Specification ID"
-            placeholder="Select... "
-            options={[
-              "",
-              { label: "HCL10132%" },
-              { label: "HOS 234" },
-              { label: "CHPOIL001" },
-              { label: "MB-PM-001/01" },
-              { label: "RPS-TSLV-00" },
-              { label: "rest0001" },
-            ]}
-            value={specificationsID}
-            onChange={(e) => setSpecificationsID(e.target.value)}
-          />
-          <CFormInput
-            type="text"
-            label="Product/Material Name"
-            placeholder="Testamine "
-            disabled
-          />
-          <CFormSelect
-            type="text"
-            label="Protocol ID"
-            placeholder="select... "
-            options={[
-              "select...",
-              { label: "asdf3453" },
-              { label: "001" },
-              { label: "STP132432" },
-              { label: "MB-PM-001/01" },
-              { label: "RPS-TSLV-00" },
-              { label: "rest0001" },
-            ]}
-            value={protocolID}
-            onChange={(e) => setProtocolID(e.target.value)}
-          />
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Storage Conditions"
-            placeholder="select... "
-            options={[
-              "select...",
-              { label: "asdf3453" },
-              { label: "001" },
-              { label: "STP132432" },
-              { label: "MB-PM-001/01" },
-              { label: "RPS-TSLV-00" },
-              { label: "rest0001" },
-            ]}
-            value={storageCondition}
-            onChange={(e) => setStorageCondition(e.target.value)}
-          />
-          <CFormSelect
-            className="mb-3"
-            type="select"
-            label="Chamber ID"
-            placeholder="select... "
-            value={chamberID}
-            options={[
-              "select...",
-              { label: "asdf3453" },
-              { label: "001" },
-              { label: "STP132432" },
-              { label: "MB-PM-001/01" },
-              { label: "RPS-TSLV-00" },
-              { label: "rest0001" },
-            ]}
-            onChange={(e) => setChamberID(e.target.value)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label=" Actual Storage Quantity"
-            placeholder="Actual Storage Quantity "
-            value={actualStorageQuantity}
-            onChange={(e) => setActualStorageQuantity(e.target.value)}
-          />
-
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Available Storage Quantity"
-            placeholder="Available Storage Quantity "
-            value={availableStorageQuantity}
-            onChange={(e) => setAvailableStorageQuantity(e.target.value)}
-          />
-
-          <div className="gap-4">
+    return (
+      <>
+        <CModal
+          alignment="center"
+          visible={visible}
+          onClose={closeModal}
+          size="lg"
+        >
+          <CModalHeader>
+            <CModalTitle>Add Sample Storage</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Specification ID"
+              placeholder="Select... "
+              options={[
+                "",
+                { label: "HCL10132%" },
+                { label: "HOS 234" },
+                { label: "CHPOIL001" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={specificationsID}
+              onChange={(e) => setSpecificationsID(e.target.value)}
+            />
+            <CFormInput
+              type="text"
+              label="Product/Material Name"
+              placeholder="Testamine "
+              disabled
+            />
+            <CFormSelect
+              type="text"
+              label="Protocol ID"
+              placeholder="select... "
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={protocolID}
+              onChange={(e) => setProtocolID(e.target.value)}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Storage Conditions"
+              placeholder="select... "
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              value={storageCondition}
+              onChange={(e) => setStorageCondition(e.target.value)}
+            />
+            <CFormSelect
+              className="mb-3"
+              type="select"
+              label="Chamber ID"
+              placeholder="select... "
+              value={chamberID}
+              options={[
+                "select...",
+                { label: "asdf3453" },
+                { label: "001" },
+                { label: "STP132432" },
+                { label: "MB-PM-001/01" },
+                { label: "RPS-TSLV-00" },
+                { label: "rest0001" },
+              ]}
+              onChange={(e) => setChamberID(e.target.value)}
+            />
             <CFormInput
               className="mb-3"
               type="text"
-              label="Number Of Storage Positions"
-              placeholder="Number Of Positions"
-              value={numberOfStoragePosition}
-              onChange={(e) => setNumberOfStoragePosition(e.target.value)}
+              label=" Actual Storage Quantity"
+              placeholder="Actual Storage Quantity "
+              value={actualStorageQuantity}
+              onChange={(e) => setActualStorageQuantity(e.target.value)}
             />
-            <CButton
-              className="bg-primary text-white mb-4"
-              onClick={handleAddRow}
-            >
-              Add Rows
-            </CButton>
-          </div>
-          {rows.length > 0 && (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>S No.</th>
-                  <th>Rack No.</th>
-                  <th>Shelf No.</th>
-                  <th>Position</th>
-                  <th>Quantity (kg)</th>
-                  <th>Remarks</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, index) => (
-                  <tr key={row.id}>
-                    <td>{index + 1}</td>
-                    <td>
-                      <select
-                        value={row.rackNo}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].rackNo = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      >
-                        {/* Populate options as needed */}
-                        <option value="">Select..</option>
-                        <option value="rack1">Rack 1</option>
-                        <option value="rack2">Rack 2</option>
-                        {/* Add more options */}
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        value={row.shelfNo}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].shelfNo = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      >
-                        <option value="">Shelfs</option>
-                        <option value="shelf1">Shelf 1</option>
-                        <option value="shelf2">Shelf 2</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select
-                        value={row.shelfNo}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].shelfNo = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      >
-                        <option value="">Positions</option>
-                        <option value="shelf1">Shelf 1</option>
-                        <option value="shelf2">Shelf 2</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="border-1 border-gray-500"
-                        value={row.quantity}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].quantity = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={row.remarks}
-                        onChange={(e) => {
-                          const updatedRows = [...rows];
-                          updatedRows[index].remarks = e.target.value;
-                          setRows(updatedRows);
-                        }}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
 
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Chamber Description"
-            placeholder=" Chamber Description"
-            value={chamberDescription}
-            onChange={(e) => setChamberDescription(e.target.value)}
-          />
-          <CFormInput
-            className="mb-3"
-            type="text"
-            label="Chamber Location"
-            placeholder=" Chamber Location"
-            value={chamberLocation}
-            onChange={(e) => setChamberLocation(e.target.value)}
-          />
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="light" onClick={closeModal}>
-            Back
-          </CButton>
-          <CButton className="bg-info text-white" onClick={handleAdd}>
-            Submit
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
-  );
-};
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Available Storage Quantity"
+              placeholder="Available Storage Quantity "
+              value={availableStorageQuantity}
+              onChange={(e) => setAvailableStorageQuantity(e.target.value)}
+            />
+
+            <div className="gap-4">
+              <CFormInput
+                className="mb-3"
+                type="text"
+                label="Number Of Storage Positions"
+                placeholder="Number Of Positions"
+                value={numberOfStoragePosition}
+                onChange={(e) => setNumberOfStoragePosition(e.target.value)}
+              />
+              <CButton
+                className="bg-primary text-white mb-4"
+                onClick={handleAddRow}
+              >
+                Add Rows
+              </CButton>
+            </div>
+            {rows.length > 0 && (
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>S No.</th>
+                    <th>Rack No.</th>
+                    <th>Shelf No.</th>
+                    <th>Position</th>
+                    <th>Quantity (kg)</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row, index) => (
+                    <tr key={row.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <select
+                          value={row.rackNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].rackNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          {/* Populate options as needed */}
+                          <option value="">Select..</option>
+                          <option value="rack1">Rack 1</option>
+                          <option value="rack2">Rack 2</option>
+                          {/* Add more options */}
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Shelfs</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <select
+                          value={row.shelfNo}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].shelfNo = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        >
+                          <option value="">Positions</option>
+                          <option value="shelf1">Shelf 1</option>
+                          <option value="shelf2">Shelf 2</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="border-1 border-gray-500"
+                          value={row.quantity}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].quantity = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={row.remarks}
+                          onChange={(e) => {
+                            const updatedRows = [...rows];
+                            updatedRows[index].remarks = e.target.value;
+                            setRows(updatedRows);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Description"
+              placeholder=" Chamber Description"
+              value={chamberDescription}
+              onChange={(e) => setChamberDescription(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Chamber Location"
+              placeholder=" Chamber Location"
+              value={chamberLocation}
+              onChange={(e) => setChamberLocation(e.target.value)}
+            />
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="light" onClick={closeModal}>
+              Back
+            </CButton>
+            <CButton className="bg-info text-white" onClick={handleAdd}>
+              Submit
+            </CButton>
+          </CModalFooter>
+        </CModal>
+      </>
+    );
+  };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);
@@ -743,5 +757,3 @@ const StatusModal = ({ visible, closeModal, onAdd }) => {
 }
 
 export default SampleStorage;
-
-

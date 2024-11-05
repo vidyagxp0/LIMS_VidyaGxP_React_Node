@@ -30,7 +30,6 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ReusableModal from "../Modals/ResusableModal";
 import { BASE_URL } from "../../config.json";
 
-
 function StabilityProtocol() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -50,7 +49,7 @@ function StabilityProtocol() {
     { label: "Initiated On", key: "initiatedOn" },
     { label: "Status", key: "status" },
   ];
-  
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -73,7 +72,7 @@ function StabilityProtocol() {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -100,7 +99,10 @@ function StabilityProtocol() {
         toast.success("Stability protocol updated successfully");
         fetchData();
       } else {
-        console.error("Failed to update stability protocol:", response.statusText);
+        console.error(
+          "Failed to update stability protocol:",
+          response.statusText
+        );
         toast.error("Failed to update stability protocol");
       }
     } catch (error) {
@@ -109,20 +111,24 @@ function StabilityProtocol() {
     }
   };
 
-
   const handleStatusUpdate = async (newStatus) => {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-      
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -132,7 +138,8 @@ function StabilityProtocol() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
 
@@ -151,7 +158,7 @@ function StabilityProtocol() {
         );
       })
     : [];
-  
+
   const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
       setIsViewModalOpen(false);
@@ -161,7 +168,7 @@ function StabilityProtocol() {
       setIsViewModalOpen(true);
     }
   };
-  
+
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -169,7 +176,10 @@ function StabilityProtocol() {
   };
 
   const columns = [
-    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
     { header: "SrNo.", accessor: "sno" },
     { header: "Protocol ID", accessor: "protocolID" },
     { header: "Description", accessor: "description" },
@@ -183,9 +193,21 @@ function StabilityProtocol() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            onClick={() => openEditModal(row.original)}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
@@ -202,11 +224,11 @@ function StabilityProtocol() {
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  
+
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
@@ -222,7 +244,10 @@ function StabilityProtocol() {
         toast.success("Stability protocol deleted successfully");
         fetchData();
       } else {
-        console.error("Failed to delete stability protocol:", response.statusText);
+        console.error(
+          "Failed to delete stability protocol:",
+          response.statusText
+        );
         toast.error("Failed to delete stability protocol");
       }
     } catch (error) {
@@ -250,7 +275,8 @@ function StabilityProtocol() {
       }
     } catch (error) {
       toast.error(
-        "Error adding stability protocol: " + (error.response?.data || error.message)
+        "Error adding stability protocol: " +
+          (error.response?.data || error.message)
       );
     }
   };
@@ -269,10 +295,12 @@ function StabilityProtocol() {
         toast.error("Failed to upload data");
       }
     } catch (error) {
-      toast.error("Error uploading data: " + (error.response?.data || error.message));
+      toast.error(
+        "Error uploading data: " + (error.response?.data || error.message)
+      );
     }
   };
-  
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [conditions, setConditions] = useState([]);
     const [specificationID, setSpecificationID] = useState("");
@@ -341,7 +369,6 @@ function StabilityProtocol() {
       );
       setData(updatedData);
     };
-    
 
     return (
       <>
@@ -401,7 +428,7 @@ function StabilityProtocol() {
             />
             <label className="mb-3">Protocol Type</label>
             <CFormCheck
-              className="mb-3"  
+              className="mb-3"
               type="radio"
               id="protocolTypeNew"
               name="protocolType"
@@ -425,7 +452,7 @@ function StabilityProtocol() {
               value={protocolID}
               onChange={(e) => setProtocolID(e.target.value)}
             />
-            
+
             <CFormInput
               className="mb-3"
               type="text"
@@ -434,7 +461,7 @@ function StabilityProtocol() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            
+
             <CFormInput
               className="mb-3"
               type="select"
@@ -727,7 +754,7 @@ function StabilityProtocol() {
               value={packageConfiguration}
               onChange={(e) => setPackageConfiguration(e.target.value)}
             />
-              <CFormInput
+            <CFormInput
               className="mb-3"
               type="text"
               label="Instructions"
@@ -744,7 +771,7 @@ function StabilityProtocol() {
               value={sampleType}
               onChange={(e) => setSampleType(e.target.value)}
             />
-              <CFormInput
+            <CFormInput
               className="mb-3"
               type="text"
               label="Instructions"
@@ -785,8 +812,7 @@ function StabilityProtocol() {
       const { name, type, value, files } = e.target;
       const val = type === "file" ? files[0] : value;
       setFormData({ ...formData, [name]: value });
-  };
-  
+    };
 
     const handleSave = () => {
       onSave(formData);
@@ -1269,4 +1295,3 @@ function StabilityProtocol() {
 }
 
 export default StabilityProtocol;
-

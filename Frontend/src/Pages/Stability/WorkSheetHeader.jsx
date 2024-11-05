@@ -73,7 +73,6 @@ function WorkSheetHeader() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("INITIATED");
   const [editModalData, setEditModalData] = useState(null);
- 
 
   const fetchData = async () => {
     try {
@@ -89,7 +88,6 @@ function WorkSheetHeader() {
 
       setData(updatedData);
     } catch (error) {
-      
       console.error("Error fetching data:", error);
     }
   };
@@ -120,7 +118,7 @@ function WorkSheetHeader() {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-  
+
       const response = await axios.put(
         `https://limsapi.vidyagxp.com/manage-lims/update/sMWorkSheetHeader/${viewModalData.uniqueId}`,
         {
@@ -131,14 +129,15 @@ function WorkSheetHeader() {
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
-        closeViewModal(); 
-        await fetchData(); 
+        closeViewModal();
+        await fetchData();
         setViewModalData(null);
-        
       } else {
         toast.error("Failed to update Approval status");
       }
@@ -147,8 +146,6 @@ function WorkSheetHeader() {
       toast.error("Error updating Approval status");
     }
   };
-  
-
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -261,7 +258,6 @@ function WorkSheetHeader() {
     }
   };
 
-
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
@@ -275,7 +271,7 @@ function WorkSheetHeader() {
       if (response.status === 200) {
         toast.success("Product added successfully.");
         fetchData();
-        setViewModalData(null)
+        setViewModalData(null);
         setIsModalOpen(false);
       } else {
         toast.error("Failed to adsd Product.");
@@ -287,12 +283,11 @@ function WorkSheetHeader() {
     }
   };
 
-
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [headerRows, setHeaderRows] = useState(0);
     const [footerRows, setFooterRows] = useState(0);
     const [headerColumns, setHeaderColumns] = useState(2);
-    const [productCaption,setProductCaption] = useState("")
+    const [productCaption, setProductCaption] = useState("");
     const [footerColumns, setFooterColumns] = useState(2);
     const [numRows, setNumRows] = useState(0);
     const [inputValue, setInputValue] = useState(0);
@@ -442,7 +437,7 @@ function WorkSheetHeader() {
               })
             }
           />
-          <CFormInput 
+          <CFormInput
             className="mb-3"
             type="text"
             label="Product/Material Caption"
@@ -542,17 +537,19 @@ function WorkSheetHeader() {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       // Optimistically update the data locally
-      const updatedIndex = data.findIndex(item => item.uniqueId === updatedData.uniqueId);
+      const updatedIndex = data.findIndex(
+        (item) => item.uniqueId === updatedData.uniqueId
+      );
       const updatedArray = [...data];
       updatedArray[updatedIndex] = updatedData;
       setData(updatedArray); // This should trigger the UI update
-  
+
       // Now, make the API call
       const response = await axios.put(
         `https://limsapi.vidyagxp.com/manage-lims/update/sMWorkSheetHeader/${updatedData.uniqueId}`,
         dataTosend
       );
-      
+
       if (response.status === 200) {
         // Sync the data again from server after update
         await fetchData();
@@ -566,7 +563,6 @@ function WorkSheetHeader() {
       toast.error("Error updating investigation");
     }
   };
-  
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [headerRows, setHeaderRows] = useState(0);
@@ -844,19 +840,24 @@ function WorkSheetHeader() {
             />
           </div>
           <div className="float-right flex gap-4">
-            <PDFDownload columns={columns} data={filteredData} fileName="WorkSheet_Header.pdf" title="WorkSheet Header Data" />
+            <PDFDownload
+              columns={columns}
+              data={filteredData}
+              fileName="WorkSheet_Header.pdf"
+              title="WorkSheet Header Data"
+            />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
             <ATMButton text="Add WorkSheet" color="blue" onClick={openModal} />
           </div>
         </div>
-          <Table
-            columns={columns}
-            data={filteredData}
-            onDelete={handleDelete}
-            onCheckboxChange={handleCheckboxChange}
-            onViewDetails={onViewDetails}
-            openEditModal={openEditModal}
-          />
+        <Table
+          columns={columns}
+          data={filteredData}
+          onDelete={handleDelete}
+          onCheckboxChange={handleCheckboxChange}
+          onViewDetails={onViewDetails}
+          openEditModal={openEditModal}
+        />
 
         {isModalOpen && (
           <StatusModal

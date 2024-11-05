@@ -414,7 +414,7 @@ const ControlSample = () => {
       )}
 
       {showModal && <ControlSampleModal onClose={closeWorkflowModal} />}
-    </> 
+    </>
   );
 };
 

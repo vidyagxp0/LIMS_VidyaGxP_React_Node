@@ -71,7 +71,6 @@ function SummaryReportHeader() {
   const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
 
-
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -93,7 +92,6 @@ function SummaryReportHeader() {
   useEffect(() => {
     fetchData();
   }, []);
-
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -138,20 +136,24 @@ function SummaryReportHeader() {
     setData(newData);
   };
 
-
   const handleStatusUpdate = async (newStatus) => {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
 
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -161,10 +163,10 @@ function SummaryReportHeader() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status"); ``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
-
 
   const filteredData = data.filter((row) => {
     return (
@@ -220,8 +222,6 @@ function SummaryReportHeader() {
     setStatusFilter(status);
   };
 
-
-
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
@@ -256,7 +256,7 @@ function SummaryReportHeader() {
     } catch (error) {
       toast.error(
         "Error adding Summary Report Header: " +
-        (error.response?.data || error.message)
+          (error.response?.data || error.message)
       );
     }
   };
@@ -403,7 +403,6 @@ function SummaryReportHeader() {
             value={reportTitle}
             onChange={(e) => setReportTitle(e.target.value)}
           />
-
 
           <CFormInput
             className="mb-3"

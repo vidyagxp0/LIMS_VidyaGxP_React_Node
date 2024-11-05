@@ -44,7 +44,7 @@ function StorageChamber() {
     { label: "Location", key: "location" },
     { label: "Status", key: "status" },
   ];
-  
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -67,7 +67,7 @@ function StorageChamber() {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -110,15 +110,20 @@ function StorageChamber() {
     try {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
-      
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStorageChamber/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMStorageChamber/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
-            item.uniqueId === viewModalData.uniqueId ? { ...item, status: newStatus } : item
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
           )
         );
         toast.success("Approval status updated successfully");
@@ -128,7 +133,8 @@ function StorageChamber() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");``
+      toast.error("Error updating Approval status");
+      ``;
     }
   };
 
@@ -147,7 +153,7 @@ function StorageChamber() {
         );
       })
     : [];
-  
+
   const onViewDetails = (rowData) => {
     if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
       setIsViewModalOpen(false);
@@ -157,7 +163,7 @@ function StorageChamber() {
       setIsViewModalOpen(true);
     }
   };
-  
+
   const handleCheckboxChange = (index) => {
     const newData = [...data];
     newData[index].checkbox = !newData[index].checkbox;
@@ -165,7 +171,10 @@ function StorageChamber() {
   };
 
   const columns = [
-    { header: <input type="checkbox" onChange={handleSelectAll} />, accessor: "checkbox" },
+    {
+      header: <input type="checkbox" onChange={handleSelectAll} />,
+      accessor: "checkbox",
+    },
     { header: "SrNo.", accessor: "sno" },
     { header: "Chamber ID", accessor: "chamberID" },
     { header: "Description", accessor: "description" },
@@ -178,30 +187,40 @@ function StorageChamber() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
-          <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
+          <FontAwesomeIcon
+            icon={faEye}
+            className="mr-2 cursor-pointer"
+            onClick={() => onViewDetails(row)}
+          />
+          <FontAwesomeIcon
+            icon={faPenToSquare}
+            onClick={() => openEditModal(row.original)}
+            className="mr-2 cursor-pointer"
+          />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
   ];
 
-
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  
+
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  
+
   const closeViewModal = () => {
     setIsViewModalOpen(false);
   };
   const openModal = () => {
     setIsModalOpen(true);
   };
-
 
   const handleDelete = async (item) => {
     try {
@@ -222,7 +241,6 @@ function StorageChamber() {
       toast.error("Error deleting storage chamber");
     }
   };
- 
 
   const handleAdd = async (newStorageChamber) => {
     try {
@@ -243,7 +261,8 @@ function StorageChamber() {
       }
     } catch (error) {
       toast.error(
-        "Error adding storage chamber: " + (error.response?.data || error.message)
+        "Error adding storage chamber: " +
+          (error.response?.data || error.message)
       );
     }
   };
@@ -262,10 +281,12 @@ function StorageChamber() {
         toast.error("Failed to upload data");
       }
     } catch (error) {
-      toast.error("Error uploading data: " + (error.response?.data || error.message));
+      toast.error(
+        "Error uploading data: " + (error.response?.data || error.message)
+      );
     }
   };
-  
+
   const StatusModal = ({ visible, closeModal, onAdd }) => {
     const [chamberID, setChamberID] = useState("");
     const [description, setDescription] = useState("");
@@ -284,7 +305,7 @@ function StorageChamber() {
       };
       onAdd(newChamber);
     };
-    
+
     return (
       <>
         <CModal alignment="center" visible={visible} onClose={closeModal}>
@@ -418,7 +439,6 @@ function StorageChamber() {
     );
   };
 
-
   return (
     <>
       <LaunchQMS />
@@ -481,11 +501,13 @@ function StorageChamber() {
           updateStatus={handleStatusUpdate}
         />
       )}
- {isModalOpen && 
-      <StatusModal
-       visible={isModalOpen}
-       closeModal={closeModal} 
-       onAdd={handleAdd} />}
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={handleAdd}
+        />
+      )}
 
       {isModalsOpen && (
         <ImportModal
