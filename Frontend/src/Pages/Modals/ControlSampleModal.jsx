@@ -21,6 +21,7 @@ import Barcode from "react-barcode";
 import { ProgressBar3 } from "../../components/Workflow/ProgressBar2";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
 import toast from "react-hot-toast";
+// import toast from "react-hot-toast"; 
 
 const ControlSampleModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Control Sample");
