@@ -26,7 +26,8 @@
     "nodemon": "^3.1.4",
     "puppeteer": "^22.15.0",
     "puppeteer-core": "^22.13.1",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

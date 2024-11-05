@@ -114,6 +114,11 @@ export const ControlSample = sequelize.define("ControlSample", {
     allowNull: true,
     defaultValue: "Under Initiation",
   },
+  comments: {
+    type: DataTypes.JSON, // Use JSON for storing multiple comments
+    allowNull: true,
+    defaultValue: [], // Initialize as an empty array
+  },
   initiatorName: {
     type: DataTypes.TEXT,
     allowNull: true,
