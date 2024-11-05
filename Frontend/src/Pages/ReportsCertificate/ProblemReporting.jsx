@@ -67,17 +67,7 @@ const ProblemReporting = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    Active: 0,
-    Inactive: 0,
-  });
-
-  // *********************Edit ****************************
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  // const [editModalData, setEditModalData] = useState(null);
-
-  // *********************Edit ****************************
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
