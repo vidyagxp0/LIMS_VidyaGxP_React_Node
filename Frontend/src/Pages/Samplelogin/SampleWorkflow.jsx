@@ -125,7 +125,9 @@ const SampleWorkFlow = ({ instrumentData }) => {
     console.log("Generating PDF for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
-      const response = await fetch(`https://limsapi.vidyagxp.com/generate-report/${sampleId}`);
+      const response = await fetch(
+        `http://localhost:9000/generate-report/${sampleId}`
+      );
       console.log("Response", response);
 
       if (!response.ok) {
@@ -281,9 +283,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-Sample/${item.id}`
-      );
+      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -524,7 +524,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `http://localhost:9000/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);

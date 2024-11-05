@@ -56,6 +56,8 @@ const StabilityWorkflowModal = ({ onClose }) => {
         idx === index ? { ...row, [name]: value } : row
       );
       setTestParameters(updatedRows);
+      console.log(updatedRows,"Updadadadada");
+      
     } else {
       console.error("testParameters is not an array:", testParameters);
     }
@@ -259,7 +261,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/stability`
+        `http://localhost:9000/get-Sample/${id}/stability`
       );
       console.log(response.data);
 
@@ -285,24 +287,29 @@ const StabilityWorkflowModal = ({ onClose }) => {
     fetchData();
   }, [id]);
 
-  const handleEdit = async () => {
+  const handleEdit = async (formDataToSend) => {
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/edit-sample/${id}/stability`,
-        formData
+        `http://localhost:9000/edit-sample/${id}/stability`,
+        formDataToSend,
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
+
       if (response.status === 200) {
         toast.success("Sample Workflow updated successfully.");
         setIsModalOpen(false);
         navigate("/stabilityWorkflow");
+        return response.data; // Return updated data
       } else {
         toast.error("Failed to update Sample Workflow.");
+        return null;
       }
     } catch (error) {
       toast.error(
         "Error updating Sample Workflow: " +
           (error.response?.data || error.message)
       );
+      return null;
     }
   };
 
@@ -320,35 +327,29 @@ const StabilityWorkflowModal = ({ onClose }) => {
 
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
-      formDataToSend.append("testParameters", JSON.stringify(testParameters));
+      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Convert testParameters to JSON
       console.log("Test Parameters being sent:", testParameters);
     }
 
     try {
-      const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      let updatedData;
 
       if (id) {
-        await handleEdit(formDataToSend); // Pass FormData to handleEdit
+        updatedData = await handleEdit(formDataToSend); // Pass FormData to handleEdit and get updated data
       } else {
-        await toast.promise(
-          Promise.all([
-            axios.post(
-              `https://limsapi.vidyagxp.com/create-sample`,
-              formDataToSend,
-              { headers: { "Content-Type": "multipart/form-data" } }
-            ),
-            delay(1300),
-          ]).then(([response]) => response),
-          {
-            loading: "Saving Data...",
-            success: <b>Data added successfully.</b>,
-            error: <b>Failed to add Sample Workflow.</b>,
-          }
+        const response = await axios.post(
+          `http://localhost:9000/create-sample`,
+          formDataToSend,
+          { headers: { "Content-Type": "multipart/form-data" } }
         );
-
-        setIsModalOpen(false);
-        navigate("/stabilityWorkflow");
+        updatedData = response.data; // Store response data for newly created item
+        toast.success("Stability Workflow added successfully.");
       }
+
+      // Update formData with the latest data from the server response
+      setFormData(updatedData);
+      setIsModalOpen(false);
+      navigate("/stabilityWorkflow");
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error(
