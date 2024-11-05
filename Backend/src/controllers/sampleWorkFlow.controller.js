@@ -939,7 +939,6 @@ export const ReviewToOpen = async (req, res) => {
 export const  getSampleAuditTrail = async (req, res) => {
   try {
     const auditTrail = await FormAuditTrail.findAll({
-      where: { auditTrail_id: req.params.auditTrail_id },
       include: {
         model: User,
         attributes: ["user_id", "name"],

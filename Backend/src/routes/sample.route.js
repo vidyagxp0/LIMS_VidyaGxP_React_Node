@@ -109,7 +109,7 @@ sampleRouter.get("/stability-generate-report/:id", generatePdfbyIdStability);
 sampleRouter.get("/generate-report/:type/:id", generatePdfIMRegistration);
 
 sampleRouter.get(
-  "/get-audit-trail/sample/:auditTrail_id",
+  "/get-audit-trail/sample/",
   getSampleAuditTrail
 );
 
