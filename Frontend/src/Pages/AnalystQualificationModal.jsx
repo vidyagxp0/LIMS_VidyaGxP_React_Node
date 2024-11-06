@@ -165,7 +165,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/admin/get-user/${userId}`,
+          `http://localhost:9000/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -261,7 +261,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
+        `http://localhost:9000/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -287,7 +287,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       await toast.promise(
         Promise.all([
           axios.put(
-            `https://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
+            `http://localhost:9000/analyst/edit-analyst/${id}`,
             formData
           ),
           delay(1300),
@@ -321,7 +321,7 @@ const AnalystQualificationModal = ({ onClose }) => {
         await toast.promise(
           Promise.all([
             axios.post(
-              `https://limsapi.vidyagxp.com/analyst/create-analyst`,
+              `http://localhost:9000/analyst/create-analyst`,
               updatedFormData
             ),
             delay(1300), // Optional delay for smoother loading effect

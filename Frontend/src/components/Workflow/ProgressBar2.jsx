@@ -64,7 +64,7 @@ export const ProgressBar2 = (props) => {
       }
 
       const response = await axios.post(
-        "https://limsapi.vidyagxp.com/e-signature",
+        "http://localhost:9000/e-signature",
         { email, password },
         {
           headers: {
@@ -75,7 +75,7 @@ export const ProgressBar2 = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `https://limsapi.vidyagxp.com/analyst/${url}`,
+          `http://localhost:9000/analyst/${url}`,
           { analystId, comment },
           {
             headers: {
@@ -148,7 +148,9 @@ export const ProgressBar2 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-review", "Review submission initiated.")}
+                onClick={() =>
+                  handleOpen("send-review", "Review submission initiated.")
+                }
               >
                 Submit
               </button>
@@ -164,7 +166,9 @@ export const ProgressBar2 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-reviewer", "Qualification complete.")}
+                onClick={() =>
+                  handleOpen("send-to-reviewer", "Qualification complete.")
+                }
               >
                 Qualification Complete
               </button>
@@ -244,7 +248,7 @@ export const ProgressBar3 = (props) => {
       }
 
       const response = await axios.post(
-        "https://limsapi.vidyagxp.com/e-signature",
+        "http://localhost:9000/e-signature",
         { email, password },
         {
           headers: {
@@ -255,7 +259,7 @@ export const ProgressBar3 = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `https://limsapi.vidyagxp.com/controlSample/${url}`,
+          `http://localhost:9000/controlSample/${url}`,
           { controlSampleId, comment },
           {
             headers: {
@@ -324,7 +328,9 @@ export const ProgressBar3 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-review", "Review submission initiated.")}
+                onClick={() =>
+                  handleOpen("send-review", "Review submission initiated.")
+                }
               >
                 Submit
               </button>
@@ -340,7 +346,9 @@ export const ProgressBar3 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-reviewer", "Inspection complete.")}
+                onClick={() =>
+                  handleOpen("send-to-reviewer", "Inspection complete.")
+                }
               >
                 Inspection Complete
               </button>

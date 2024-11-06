@@ -35,6 +35,7 @@ import Barcode from "react-barcode";
 import BarcodeExportButton from "./BarcodeExportButton";
 // import toast from "react-hot-toast";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 const SampleWorkFlow = ({ instrumentData }) => {
   const [data, setData] = useState([]);
   const [barcodeID, setBarcodeID] = useState([]);
@@ -126,7 +127,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `https://limsapi.vidyagxp.com/generate-report/${sampleId}`
+        `http://localhost:9000/generate-report/${sampleId}`
       );
       console.log("Response", response);
 
@@ -147,28 +148,41 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
   };
   const generateAuditTrail = async (sampleId) => {
-    console.log("Generating PDF for Sample ID:", sampleId);
+    console.log("Fetching Audit Trail for Sample ID:", sampleId);
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
+
     try {
-      const response = await fetch(
-        `https://limsapi.vidyagxp.com/generate-report/${sampleId}`
+      const response = await axios.get(
+        `http://localhost:9000/get-audit-trail/sample`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ sampleId }),
+        }
       );
-      console.log("Response", response);
+
+      console.log("Response:", response);
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
+
+      const data = await response.json();
+      console.log("Audit Trail Data:", data);
+      const blob = new Blob([data.pdfBlob], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `Sample_Report_${sampleId}.pdf`);
+      link.setAttribute("download", `Audit_Trail_${sampleId}.pdf`);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
     } catch (error) {
-      console.error("Error downloading PDF:", error);
+      console.error("Error fetching audit trail:", error);
     }
+
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
   };
 
@@ -308,9 +322,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-Sample/${item.id}`
-      );
+      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -553,7 +565,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `http://localhost:9000/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);

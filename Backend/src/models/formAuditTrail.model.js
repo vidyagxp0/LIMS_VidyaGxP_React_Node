@@ -17,7 +17,7 @@ export const FormAuditTrail = sequelize.define("FormAuditTrail", {
     },
   },
   previous_value: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSON,
     allowNull: true,
   },
   new_value: {

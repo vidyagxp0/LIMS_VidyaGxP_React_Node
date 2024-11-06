@@ -23,6 +23,7 @@ import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
+import { toast } from "react-toastify";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -246,13 +247,13 @@ const SampleWorkflowModal = ({ onClose }) => {
   //     setTestParameters(storedTestParameters);
   //     console.log(storedTestParameters, "testParameters from localStorage");
   //   }
-  // }, []);  
+  // }, []);
 
   const fetchData = async () => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
+        `http://localhost:9000/get-Sample/${id}/sample`
       );
       // console.log(response.data);
 
@@ -282,7 +283,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     try {
       const response = await toast.promise(
         axios.put(
-          `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
+          `http://localhost:9000/edit-sample/${id}/sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         ),
@@ -331,13 +332,9 @@ const SampleWorkflowModal = ({ onClose }) => {
       } else {
         // Add new data with a toast notification
         const response = await toast.promise(
-          axios.post(
-            `https://limsapi.vidyagxp.com/create-sample`,
-            formDataToSend,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }
-          ),
+          axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
           {
             loading: "Saving Sample Workflow...",
             success: <b>Data added successfully.</b>,
@@ -366,7 +363,7 @@ const SampleWorkflowModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/admin/get-user/${userId}`,
+          `http://localhost:9000/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
