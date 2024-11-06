@@ -43,7 +43,6 @@ export const ProgressBar2 = (props) => {
       onStageClick();
     } else {
       setIsModalOpen(true);
-      toast.error("Submission failed. Please try again.");
     }
   };
 
@@ -223,7 +222,6 @@ export const ProgressBar3 = (props) => {
       onStageClick(); // Notify parent to update the stage
     } else {
       setIsModalOpen(true);
-      toast.error("Submission failed. Please try again."); // General error message
     }
   };
 
