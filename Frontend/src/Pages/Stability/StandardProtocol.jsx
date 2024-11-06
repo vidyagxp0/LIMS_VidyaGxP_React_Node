@@ -49,7 +49,7 @@ function StandardProtocol() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMStandardProtocol`
+        `http://localhost:9000/get-all-lims/sMStandardProtocol`
       );
       console.log(response.data); // Debugging to check if data is coming
 
@@ -94,7 +94,7 @@ function StandardProtocol() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -158,7 +158,7 @@ function StandardProtocol() {
     try {
       const { sno, ...dataToSend } = updatedData;
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`,
         dataToSend
       );
       if (response.status === 200) {
@@ -310,7 +310,7 @@ function StandardProtocol() {
   const handleAdd = async (newStandardProtocol) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMStandardProtocol`,
+        `http://localhost:9000/manage-lims/add/sMStandardProtocol`,
         {
           ...newStandardProtocol,
           addDate: new Date().toISOString().split("T")[0],

@@ -87,7 +87,7 @@ function SampleStorage() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleStorage/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMSampleStorage/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
