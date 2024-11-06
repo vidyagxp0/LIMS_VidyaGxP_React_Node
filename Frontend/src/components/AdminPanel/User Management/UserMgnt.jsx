@@ -18,8 +18,9 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import { BASE_URL } from "../../../config.json";
-import { toast } from "react-toastify";
 import Select from "react-select";
+import {toast} from "react-hot-toast";
+import ToastContainer from "../../HotToaster/ToastContainer";
 
 const UserMgnt = () => {
   const [addModal, setAddModal] = useState(false);
@@ -178,6 +179,8 @@ const UserMgnt = () => {
   };
 
   return (
+    <>
+    <ToastContainer/>
     <div className="mx-5">
       <div className="row my-2">
         <div className="main-head d-flex justify-content-between">
@@ -320,7 +323,7 @@ const UserMgnt = () => {
         <nav aria-label="...">
           <ul className="pagination">
             <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-              <span className="page-link" onClick={handlePrevPage}>
+              <span className="page-link cursor-pointer" onClick={handlePrevPage}>
                 Previous
               </span>
             </li>
@@ -387,6 +390,7 @@ const UserMgnt = () => {
         />
       )}
     </div>
+    </>
   );
 };
 
@@ -510,7 +514,7 @@ const EditModal = (props) => {
   };
 
   const handleSubmit = async () => {
-    await props.handleAddUser(formData, props.fetchUsers); // Pass fetchUsers to handleAddUser
+    await props.handleUpdateUser(formData, props.fetchUsers); // Pass fetchUsers to handleAddUser
     props.closeModal(); // Close modal after updating user
   };
 

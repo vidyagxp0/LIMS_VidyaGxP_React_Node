@@ -402,6 +402,7 @@ const AnalystQualification = () => {
           onViewDetails={onViewDetails}
           // openEditModal={openEditModal}
           onPdfGenerate={handlePdfGenerate}
+          loading={loading}
           onEdit={handleEdit}
         />
       </div>

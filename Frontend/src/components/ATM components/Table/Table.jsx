@@ -17,6 +17,7 @@ const Table = ({
   onDelete,
   openEditModal,
   onPdfGenerate,
+  loading
 }) => {
   const pageSize = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +28,7 @@ const Table = ({
   const currentData = data?.slice(startIndex, startIndex + pageSize);
   const attachmentInput = useRef([]);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState({});
+  // const [loading, setLoading] = useState({});
 
   const getStatusColor = (status) => {
     switch (status) {
