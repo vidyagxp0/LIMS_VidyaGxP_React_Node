@@ -44,6 +44,9 @@ function StandardProtocol() {
     { label: "Status", key: "status" },
   ];
   
+  useEffect(() => {
+    fetchData();
+  }, []);
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -61,10 +64,6 @@ function StandardProtocol() {
       console.error("Error fetching data:", error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
   
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -306,7 +305,7 @@ function StandardProtocol() {
       );
       if (response.status === 200) {
         toast.success("Standard protocol added successfully.");
-        fetchData(); // Refresh data after adding
+        fetchData();
         setIsModalOpen(false);
       } else {
         toast.error("Failed to add standard protocol.");

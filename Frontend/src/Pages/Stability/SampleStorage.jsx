@@ -600,14 +600,14 @@ const StatusModal = ({ visible, closeModal, onAdd }) => {
             <CModalTitle>Edit Sample Storage</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <CFormInput
+            {/* <CFormInput
               className="mb-3"
               type="text"
               label="Sample ID"
               name="sampleID"
               value={formData?.sampleID || ""}
               onChange={handleChange}
-            />
+            /> */}
             <CFormInput
               className="mb-3"
               type="text"

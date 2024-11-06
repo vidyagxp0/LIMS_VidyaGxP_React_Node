@@ -93,7 +93,9 @@ function CoaTemplate() {
       });
 
       if (response.status === 200 || response.status === 201) {
-        setData((prevData) => [...prevData, newChamber]); // Use newChamber instead of addNewCoaTemplate
+        setData((prevData) => [...prevData, newChamber]);
+        fetchData();
+        toast.success("Data added successfully");
       } else {
         console.error("Failed to add condition:", response.status);
       }
@@ -299,10 +301,9 @@ function CoaTemplate() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
 
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`, {
-        ...dataToSend,
-        status: newStatus,
-      });
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`,
+         { status: newStatus,}
+        );
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>

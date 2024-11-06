@@ -196,17 +196,10 @@ function StorageCondition() {
       })
     : [];
 
-  const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      // If the modal is already open for the same item, close it
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
-      // Otherwise, open it with the new data
+
+    const onViewDetails = (rowData) => {
       setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
-  };
+    };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -296,7 +289,7 @@ function StorageCondition() {
         );
         toast.success("Status updated successfully");
         closeViewModal();
-        fetchStorageCondition(); // Refresh the data after update
+        // fetchStorageCondition(); // Refresh the data after update
       }
     } catch (error) {
       console.error("Error updating status:", error);

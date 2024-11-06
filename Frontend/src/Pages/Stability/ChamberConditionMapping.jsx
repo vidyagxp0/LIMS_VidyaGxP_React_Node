@@ -118,15 +118,13 @@ function ChamberConditionMapping() {
       })
     : [];
   
-  const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
+    const onViewDetails = (rowData) => {
       setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
-  };
+    };
+    const closeViewModal = () => {
+      setViewModalData(null);
+    };
+  
   
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -147,7 +145,7 @@ function ChamberConditionMapping() {
       accessor: "action",
       Cell: ({ row }) => (
         <>
-          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row)} />
+          <FontAwesomeIcon icon={faEye} className="mr-2 cursor-pointer" onClick={() => onViewDetails(row.original)} />
           <FontAwesomeIcon icon={faPenToSquare} onClick={() => openEditModal(row.original)} className="mr-2 cursor-pointer" />
           <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" onClick={() => handleDelete(row.original)} />
         </>
@@ -171,9 +169,9 @@ function ChamberConditionMapping() {
     setEditModalData(null);
   };
   
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
+  // const closeViewModal = () => {
+  //   setIsViewModalOpen(false);
+  // };
 
   const handleDelete = async (item) => {
     try {
@@ -458,15 +456,14 @@ function ChamberConditionMapping() {
           onAdd={handleAdd}
         />
       )}
-      {viewModalData && (
+       {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}
-          onClose={closeViewModal}
           title="Chamber Condition Mapping Details"
-          updateStatus={handleStatusUpdate}
+         updateStatus={handleStatusUpdate}
         />
       )}
       {isModalsOpen && (

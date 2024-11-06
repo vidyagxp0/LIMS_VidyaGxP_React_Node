@@ -46,6 +46,10 @@ function Storage_Condition() {
     { label: "Description", key: "description" },
     { label: "Status", key: "status" },
   ];
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
   const fetchData = async () => {
     try {
       const response = await axios.get(
@@ -63,10 +67,6 @@ function Storage_Condition() {
       console.error("Error fetching data:", error);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
 
   const handleOpenModals = () => {
@@ -136,13 +136,7 @@ function Storage_Condition() {
     })
   : [];
   const onViewDetails = (rowData) => {
-    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
-      setIsViewModalOpen(false);
-      setViewModalData(null);
-    } else {
-      setViewModalData(rowData);
-      setIsViewModalOpen(true);
-    }
+    setViewModalData(rowData);
   };
 
   const handleCheckboxChange = (index) => {
@@ -246,8 +240,8 @@ function Storage_Condition() {
         }
       );
       if (response.status === 200) {
+        fetchData();
         toast.success("Sample added successfully.");
-        fetchData(); // Refresh data after adding
         setIsModalOpen(false);
       } else {
         toast.error("Failed to add Sample.");
@@ -393,6 +387,7 @@ function Storage_Condition() {
               className="mb-3"
               type="text"
               label="Condition Code"
+              name="conditionCode"
               placeholder=" "
               value={formData?.conditionCode}
               onChange={handleChange}

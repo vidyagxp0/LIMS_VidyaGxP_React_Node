@@ -752,6 +752,8 @@ function StabilityProtocol() {
     useEffect(() => {
       setFormData(data);
     }, [data]);
+    
+
 
     const handleChange = (e) => {
       const { name, value } = e.target;
@@ -773,8 +775,8 @@ function StabilityProtocol() {
               className="mb-3"
               type="text"
               label="Protocol ID"
-              name="protocolId"
-              value={formData?.protocolId || ""}
+              name="protocolID"
+              value={formData?.protocolID || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -797,8 +799,8 @@ function StabilityProtocol() {
               className="mb-3"
               type="text"
               label="Specification ID"
-              name="specificationId"
-              value={formData?.specificationId || ""}
+              name="specificationID"
+              value={formData?.specificationID || ""}
               onChange={handleChange}
             />
             <CFormInput

@@ -15,6 +15,7 @@ import {
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
@@ -58,6 +59,31 @@ function SampleAcceptanceTemplate() {
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [lastStatus, setLastStatus] = useState("Active");
   const [editModalData, setEditModalData] = useState(null)
+  
+  
+  
+  const fetchData =  async()=>{
+      try{
+       const response = await axios.get(`http://localhost:9000/get-all-lims/sMSampleAcceptanceTemplate`); 
+       const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
+
+       const updatedData = fetchedData.map((item, index) => ({  
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+      setData(updatedData);
+      }catch(error){
+        console.log(error);
+      }
+  }
+  
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
+  
+  
   const handleOpenModals = () => {
     setIsModalsOpen(true);
   };
@@ -240,6 +266,25 @@ function SampleAcceptanceTemplate() {
     setData(concatenateData); // Update data state with parsed Excel data
     setIsModalsOpen(false); // Close the import modal after data upload
   };
+  
+  const handleModalsubmit = async (newproduct) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/manage-lims/bulk-add/sMSampleAcceptanceTemplate`, {
+        ...newproduct,
+        status: newproduct.status || "INITIATED",
+      });
+      if (response.status === 200) {
+        toast.success("Sample Acceptance Template added successfully");
+        setIsModalsOpen(false);
+        // fetchSampleAcceptanceTemplateData();
+      } else {
+        toast.error("Failed to add Sample Acceptance Template");
+      }
+    } catch (error) {
+      toast.error("Error adding Sample Acceptance Template: " + (error.response?.data || error.message));
+    }
+  };
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -439,5 +484,8 @@ function SampleAcceptanceTemplate() {
     </>
   );
 }
-
 export default SampleAcceptanceTemplate;
+
+
+
+
