@@ -15,6 +15,7 @@ import {
   faPenToSquare,
   faTrashCan,
 } from "@fortawesome/free-regular-svg-icons";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
@@ -67,11 +68,14 @@ function Testregistration() {
         `${BASE_URL}/get-all-lims/mTestRegistration`
       );
       if (response.data && Array.isArray(response.data)) {
+       let Index =1;
         const formattedData = response.data.flatMap(
           (item) =>
-            item?.mTestRegistration?.map((condition) => ({
+            item?.mTestRegistration?.map((condition,) => ({
               checkbox: false,
-              sno: condition.uniqueId,
+              // sno: condition.uniqueId,
+              sno: Index++,
+              uniqueId: condition.uniqueId,
               productName: condition.productName || "No Name",
               SpecificationID: condition.SpecificationID || "-",
               testName: condition.testName || "-",
@@ -138,7 +142,7 @@ function Testregistration() {
       header: <input type="checkbox" onChange={handleSelectAll} />,
       accessor: "checkbox",
     },
-    { header: "Sr.no.", accessor: "uniqueId" },
+    { header: "Sr.no.", accessor: "sno" },
     { header: "Specification ID", accessor: "SpecificationID" },
     { header: "Product Name", accessor: "productName" },
     { header: "Test Name", accessor: "testName" },
@@ -169,7 +173,7 @@ function Testregistration() {
   const handleExcelDataUpload = (excelData) => {
     const updatedData = excelData.map((item, index) => ({
       checkbox: false,
-      uniqueId: index + 1,
+      sno: index + 1,
       uniqueCode: item["Unique Code"] || "",
       productName: item["Product Name"] || "",
       genericName: item["Generic Name"] || "",
@@ -194,20 +198,45 @@ function Testregistration() {
     setIsViewModalOpen(false);
   };
 
+  // const handleDelete = async (item) => {
+  //   try {
+  //     const response = await axios.delete(
+  //       `${BASE_URL}/delete-lims/mTestRegistration/${item.uniqueId}`
+  //     );
+  //     if (response.status === 200) {
+  //       setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
+  //       toast.success("Product deleted successfully.");
+  //     } else {
+  //       toast.error("Failed to delete Product.");
+  //     }
+  //   } catch (error) {
+  //     toast.error(
+  //       "Error deleting Product: " + (error.response?.data || error.message)
+  //     );
+  //   }
+  // };
+  
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/mTestRegistration/${item.sno}`
+        `${BASE_URL}/delete-lims/mTestRegistration/${item.uniqueId}`
       );
       if (response.status === 200) {
-        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
-        toast.success("Product deleted successfully.");
+        setData((prevData) => {
+          const filteredData = prevData.filter((d) => d.uniqueId !== item.uniqueId);
+          // Re-index the remaining items
+          return filteredData.map((d, index) => ({
+            ...d,
+            sno: index + 1
+          }));
+        });
+        toast.success("Test Registration deleted successfully.");
       } else {
-        toast.error("Failed to delete Product.");
+        toast.error("Failed to delete Test Registration.");
       }
     } catch (error) {
       toast.error(
-        "Error deleting Product: " + (error.response?.data || error.message)
+        "Error deleting Test Registration: " + (error.response?.data || error.message)
       );
     }
   };
@@ -532,6 +561,15 @@ function Testregistration() {
         />
       </div>
 
+{isModalsOpen && (
+        <ImportModal
+          initialData={initialData}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
       {isModalOpen && (
         <StatusModal
           visible={isModalOpen}

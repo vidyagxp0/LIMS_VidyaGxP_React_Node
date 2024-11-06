@@ -6,6 +6,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import toast from "react-hot-toast";
 import {
   faEye,
   faPenToSquare,
@@ -26,7 +27,7 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../Modals/ResusableModal";
 
@@ -184,6 +185,7 @@ const ControlSample = () => {
     { header: "Neutralizing Agent", accessor: "neutralizingAgent" },
     { header: "Destruction Date", accessor: "destructionDate" },
     { header: "Remarks", accessor: "remarks" },
+    { header: "Generate Audit Trail", accessor: "audit" },
     { header: "Generate PDF", accessor: "report" },
     { header: "Status", accessor: "status" },
     {

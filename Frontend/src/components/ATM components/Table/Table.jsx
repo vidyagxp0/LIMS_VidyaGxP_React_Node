@@ -8,6 +8,7 @@ import {
 import DeleteConfirmationModal from "../../../Pages/Modals/DeleteConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import { FaFilePdf } from "react-icons/fa6";
+import { FaFileAlt } from "react-icons/fa";
 
 const Table = ({
   columns,

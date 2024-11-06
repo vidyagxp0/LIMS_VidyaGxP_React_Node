@@ -15,7 +15,7 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-import { toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
@@ -23,6 +23,7 @@ import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -254,26 +255,35 @@ const SampleWorkflowModal = ({ onClose }) => {
       const response = await axios.get(
         `http://localhost:9000/get-Sample/${id}/sample`
       );
-      // console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
 
-      const testParamterResponse = responseData.testParameters[1];
-      const fetchedData = JSON.parse(testParamterResponse);
+      const testParamterResponse = responseData.testParameters?.[1] || null;
+
+      let fetchedData = [];
+      if (testParamterResponse) {
+        try {
+          fetchedData = JSON.parse(testParamterResponse);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          fetchedData = [];
+        }
+      }
 
       setTestParameters(fetchedData.length > 0 ? fetchedData : []);
       setFormData((prevData) => ({
         ...prevData,
         ...responseData,
-        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+        testParameters: responseData.testParameters || [],
       }));
     } catch (error) {
-      console.error("Error fetching ", error);
-      toast.error("Failed to fetch ");
+      console.error("Error fetching data", error);
+      toast.error("Failed to fetch data");
     }
   };
+
   useEffect(() => {
     fetchData();
   }, [id]);
@@ -975,10 +985,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-            {/* {console.log(testParameters, "TESTPARAMETER")} */}
-            {/* Use the TestParametersTable component */}
+
             <TestParametersTable
-              testParameters={testParameters}
+              testParameters={testParameters || []}
               handleRowChange={handleRowChange}
               value={formData?.testParameters || ""}
               onChange={handleInputChange}

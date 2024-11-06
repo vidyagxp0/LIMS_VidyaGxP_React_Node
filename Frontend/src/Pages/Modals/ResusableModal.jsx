@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
 import {
   CButton,
   CFormSelect,
@@ -88,12 +90,13 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   };
 
   const handleUpdate = () => {
-    onUpdateStatus(selectedStatus); // Call parent function to update the status
-    closeModal(); // Close the modal
+    onUpdateStatus(selectedStatus); 
+    closeModal(); 
     if (selectedStatus) {
       console.log("Updating status to:", selectedStatus);
       onUpdateStatus(selectedStatus);
       closeModal();
+      
     } else {
       console.error("No status selected");
     }
