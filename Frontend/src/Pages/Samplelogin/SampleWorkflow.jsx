@@ -146,6 +146,31 @@ const SampleWorkFlow = ({ instrumentData }) => {
     }
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
   };
+  const generateAuditTrail = async (sampleId) => {
+    console.log("Generating PDF for Sample ID:", sampleId);
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
+    try {
+      const response = await fetch(
+        `https://limsapi.vidyagxp.com/generate-report/${sampleId}`
+      );
+      console.log("Response", response);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `Sample_Report_${sampleId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+    setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: false }));
+  };
 
   const columns = [
     {
@@ -412,6 +437,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
       QaReviewerApprover: item["QA Reviewer/Approver"] || "",
       QaReviewerComment: item["QA Reviewer Comment"] || "",
       QaReviewDate: item["QA Review Date"] || "",
+      auditTrail: item["Audit Trail"] || "",
 
       actions: item["Actions"] || "",
     }));
@@ -500,6 +526,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     "reviewerApprover",
     "reviewerComment",
     "QaReviewerApprover",
+    "auditTrail",
     "QaReviewerComment",
     "QaReviewDate",
     // "copyRow",
@@ -620,7 +647,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <th colSpan="4" className="px-4 py-2 bg-red-600">
                 QA Review
               </th>
-              <th colSpan="5" className="px-4 py-2 bg-blue-600">
+              <th colSpan="6" className="px-4 py-2 bg-blue-600">
                 Actions
               </th>
               {/* <th colSpan="4" className="px-4 py-2 bg-orange-600">
@@ -724,6 +751,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
               <td className="border px-4 py-2">QA Review Date </td>
               <td className="border px-4 py-2">Status </td>
               <td className="border px-4 py-2">Sample Barcode</td>
+              <td className="border px-4 py-2">Generate Audit Trail </td>
               <td className="border px-4 py-2">Generate PDF </td>
               <td className="border px-4 py-2">Copy Row </td>
               <td className="border px-4 py-2">Actions</td>
@@ -903,6 +931,19 @@ const SampleWorkFlow = ({ instrumentData }) => {
                   ) : (
                     "No Barcode"
                   )}
+                </td>
+                <td className="border px-4 py-2">
+                  {data.auditTrail}
+                  <td className="flex justify-center items-center px-4 py-2">
+                    <FaFilePdf
+                      size={20}
+                      className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                      onClick={() => generateAuditTrail(data.id)}
+                    />
+                    {loading[data.id] && (
+                      <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                    )}
+                  </td>
                 </td>
                 <td className="border px-4 py-2">
                   {data.generatePDF}
