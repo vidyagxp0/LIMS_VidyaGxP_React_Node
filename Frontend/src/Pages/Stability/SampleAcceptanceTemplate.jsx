@@ -28,14 +28,13 @@ import ATMButton from "../../components/ATM components/Button/ATMButton";
 import Table from "../../components/ATM components/Table/Table";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
-import PDFDownload from "../PDFComponent/PDFDownload ";
+import PDFDownload from "../PDFComponent/PsDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 
 
 const fields = [
-  { label: "Standard Protocol Name", key: "StandardProtocolName" },
-  { label: "Standard Protocol Id", key: "StandardProtocolId" },
-  { label: "Standard Protocol Description", key: "StandardProtocolDescription" },
+  { label: "Name", key: "name" },
+  { label: "Unique Code", key: "uniqueCode" },
   { label: "Status", key: "status" },
 ];
 
@@ -73,7 +72,7 @@ function SampleAcceptanceTemplate() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMSampleAcceptanceTemplate`
+        `http://localhost:9000/get-all-lims/sMSampleAcceptanceTemplate`
       );
       const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
 
@@ -106,7 +105,7 @@ function SampleAcceptanceTemplate() {
       const { sno, ...dataToSend } = viewModalData;
   
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -160,22 +159,22 @@ function SampleAcceptanceTemplate() {
     setData(newData);
   };
 
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
-    setData((prevData)=>[
-      ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
-    setIsModalOpen(false);
-  }
+  // const addNewStorageCondition = (newCondition) => {
+  //   const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+  //   setData((prevData)=>[
+  //     ...prevData,
+  //     {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+  //   ])
+  //   setLastStatus(nextStatus)
+  //   setIsModalOpen(false);
+  // }
 
   const handleDelete = async (item) => {
     console.log(item);
 
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -192,31 +191,33 @@ function SampleAcceptanceTemplate() {
 
   const handleAdd = async (newProduct) => {
     try {
+      console.log("Product to add:", newProduct); 
+  
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMSampleAcceptanceTemplate`,
+        `http://localhost:9000/manage-lims/add/sMSampleAcceptanceTemplate`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
           status: newProduct.status || "Active",
         }
       );
+  
       if (response.status === 200) {
         toast.success("Product added successfully.");
         fetchData();
         setIsModalOpen(false);
       } else {
-        toast.error("Failed to adsd Product.");
+        toast.error("Failed to add Product.");
       }
     } catch (error) {
-      toast.error(
-        "Error adding product: " + (error.response?.data || error.message)
-      );
+      toast.error("Error adding product: " + (error.response?.data || error.message));
     }
   };
+  
   const handleEditSave = async (updatedData) => {
     try {
       const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`, dataToSend);
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`, dataToSend);
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))

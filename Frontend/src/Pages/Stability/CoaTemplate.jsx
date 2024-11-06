@@ -56,12 +56,8 @@ function CoaTemplate() {
   const fields = [
     { label: "S.No", key: "sno" },
     { label: "Product Name", key: "productName" },
-    { label: "Unique Code", key: "uniqueCode" },
-    { label: "Chamber ID,", key: "chamberId" },
     { label: "Actual Quantity", key: "actualQuantity" },
     { label: "Protocol Type", key: "protocolType" },
-    { label: "Generic Name", key: "genericName" },
-    { label: "Re-Testing Period ", key: "reTestingPeriod" },
     { label: "Status", key: "status" },
   ];
 
@@ -84,7 +80,7 @@ function CoaTemplate() {
 
   const addCoaChamber = async (newChamber) => {
     try {
-      const response = await axios.post(`https://limsapi.vidyagxp.com/manage-lims/add/sMCOATemplate`, {
+      const response = await axios.post(`http://localhost:9000/manage-lims/add/sMCOATemplate`, {
         ...newChamber,
         addDate: new Date().toISOString().split("T")[0],
         status: newChamber.status || "Active",
@@ -193,11 +189,12 @@ function CoaTemplate() {
       ),
     },
   ];
-
-
   const closeViewModal = () => {
-    setIsViewModalOpen(false);
+    setViewModalData(null);
   };
+
+
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -237,7 +234,7 @@ function CoaTemplate() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sMCOATemplate/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMCOATemplate/${item.uniqueId}`
       );
       console.log(response);
       if (response.status === 200 || response.status === 201) {
@@ -268,7 +265,7 @@ function CoaTemplate() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMCOATemplate`
+        `http://localhost:9000/get-all-lims/sMCOATemplate`
       );
       const fetchedData = response?.data[0]?.sMCOATemplate || [];
 
@@ -292,7 +289,7 @@ function CoaTemplate() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
 
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -316,7 +313,7 @@ function CoaTemplate() {
   const handleEditSave = async (updatedData) => {
     try {
       const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`, dataToSend);
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`, dataToSend);
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))

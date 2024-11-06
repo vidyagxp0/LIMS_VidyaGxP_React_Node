@@ -71,7 +71,7 @@ function Storage_Condition() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMStorageCondition`
+        `http://localhost:9000/get-all-lims/sMStorageCondition`
       );
       const fetchedData = response?.data[0]?.sMStorageCondition || [];
 
@@ -104,9 +104,7 @@ function Storage_Condition() {
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
   };
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
+  
 
 
   // const closeViewModal = () => {
@@ -127,7 +125,7 @@ function Storage_Condition() {
     const { sno, checkbox, ...dataToSend } = updatedData;
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
         dataToSend
       );
       if (response.status === 200) {
@@ -165,7 +163,7 @@ function Storage_Condition() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -212,6 +210,9 @@ function Storage_Condition() {
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
   };
+  const closeViewModal = () => {
+    setViewModalData(null);
+  };
 
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -248,7 +249,7 @@ function Storage_Condition() {
 
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sMStorageCondition/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMStorageCondition/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -295,7 +296,7 @@ function Storage_Condition() {
   const handleAdd = async (newSampleType) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMStorageCondition`,
+        `http://localhost:9000/manage-lims/add/sMStorageCondition`,
         {
           ...newSampleType,
           addDate: new Date().toISOString().split("T")[0],
@@ -492,17 +493,18 @@ function Storage_Condition() {
           onAdd={handleAdd}
         />
       )}
-      {viewModalData && (
+     
+     {viewModalData && (
         <ReusableModal
           visible={viewModalData !== null}
           closeModal={closeViewModal}
           data={viewModalData}
           fields={fields}
-          onClose={handleCloseModals}
           title="Test Plan Details"
-          updateStatus={handleStatusUpdate}
+         updateStatus={handleStatusUpdate}
         />
       )}
+    
       {isModalsOpen && (
         <ImportModal
           initialData={initialData}
@@ -510,17 +512,6 @@ function Storage_Condition() {
           onClose={handleCloseModals}
           columns={columns}
           onDataUpload={handleExcelDataUpload}
-        />
-      )}
-       {viewModalData && (
-        <ReusableModal
-        visible={viewModalData !== null}
-        closeModal={closeViewModal}
-        data={viewModalData}
-        fields={fields}
-        onClose={handleCloseModals}
-        title="Test Plan Details"
-        updateStatus={handleStatusUpdate}
         />
       )}
       {editModalData && (

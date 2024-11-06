@@ -47,7 +47,7 @@ function ChamberConditionMapping() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMChamberConditionMapping`
+        `http://localhost:9000/get-all-lims/sMChamberConditionMapping`
       );
       const fetchedData = response?.data[0]?.sMChamberConditionMapping || [];
 
@@ -80,7 +80,7 @@ function ChamberConditionMapping() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMChamberConditionMapping/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMChamberConditionMapping/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -104,7 +104,7 @@ function ChamberConditionMapping() {
   const handleEditSave = async (updatedData) => {
     try {
       const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMChamberConditionMapping/${updatedData.uniqueId}`, dataToSend);
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMChamberConditionMapping/${updatedData.uniqueId}`, dataToSend);
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
@@ -146,6 +146,9 @@ function ChamberConditionMapping() {
       setViewModalData(rowData);
       setIsViewModalOpen(true);
     }
+  };
+  const closeViewModal = () => {
+    setViewModalData(null);
   };
   
   const handleCheckboxChange = (index) => {
@@ -191,14 +194,12 @@ function ChamberConditionMapping() {
     setEditModalData(null);
   };
   
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
+
 
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sMChamberConditionMapping/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMChamberConditionMapping/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -218,7 +219,7 @@ function ChamberConditionMapping() {
   const handleAdd = async (newChamberConditionMapping) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMChamberConditionMapping`,
+        `http://localhost:9000/manage-lims/add/sMChamberConditionMapping`,
         {
           ...newChamberConditionMapping,
           initiatedOn: new Date().toISOString().split("T")[0],
@@ -243,7 +244,7 @@ function ChamberConditionMapping() {
   const handleExcelDataUpload = async (excelData) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/bulk-add/sMChamberConditionMapping`,
+        `http://localhost:9000/manage-lims/bulk-add/sMChamberConditionMapping`,
         excelData
       );
       if (response.status === 200) {

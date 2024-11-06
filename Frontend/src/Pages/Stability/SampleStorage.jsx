@@ -86,7 +86,7 @@ function SampleStorage() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
 
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMSampleStorage/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleStorage/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -160,6 +160,9 @@ function SampleStorage() {
       setIsViewModalOpen(true);
     }
   };
+  const closeViewModal = () => {
+    setViewModalData(null);
+  };
   
   const handleCheckboxChange = (index) => {
     const newData = [...data];
@@ -213,9 +216,6 @@ function SampleStorage() {
     setEditModalData(null);
   };
   
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
 
   const handleDelete = async (item) => {
     try {

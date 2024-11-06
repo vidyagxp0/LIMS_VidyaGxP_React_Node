@@ -238,7 +238,7 @@ function StorageCondition() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/storageCondition/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });

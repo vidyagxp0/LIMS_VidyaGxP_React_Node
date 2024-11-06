@@ -115,7 +115,7 @@ function StabilityProtocol() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -160,6 +160,9 @@ function StabilityProtocol() {
       setViewModalData(rowData);
       setIsViewModalOpen(true);
     }
+  };
+  const closeViewModal = () => {
+    setViewModalData(null);
   };
   
   const handleCheckboxChange = (index) => {
@@ -207,9 +210,7 @@ function StabilityProtocol() {
     setEditModalData(null);
   };
   
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
+
 
   const handleDelete = async (item) => {
     try {
@@ -239,8 +240,12 @@ function StabilityProtocol() {
           ...newStabilityProtocol,
           initiatedOn: new Date().toISOString().split("T")[0],
           status: newStabilityProtocol.status || "INITIATED",
+        },
+        {
+          timeout: 10000, // 10 seconds timeout
         }
       );
+  
       if (response.status === 200) {
         toast.success("Stability protocol added successfully");
         fetchData();
@@ -249,12 +254,17 @@ function StabilityProtocol() {
         toast.error("Failed to add stability protocol");
       }
     } catch (error) {
-      toast.error(
-        "Error adding stability protocol: " + (error.response?.data || error.message)
-      );
+      // Handle timeout error separately
+      if (error.code === 'ECONNABORTED') {
+        toast.error("Request timed out after 10 seconds");
+      } else {
+        toast.error(
+          "Error adding stability protocol: " + (error.response?.data || error.message)
+        );
+      }
     }
   };
-
+  
   const handleExcelDataUpload = async (excelData) => {
     try {
       const response = await axios.post(

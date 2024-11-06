@@ -48,7 +48,7 @@ function StandardProtocol() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMStandardProtocol`
+        `http://localhost:9000/get-all-lims/sMStandardProtocol`
       );
       console.log(response.data); // Debugging to check if data is coming
 
@@ -79,9 +79,7 @@ function StandardProtocol() {
     setEditModalData(null);
   };
   
-  const closeViewModal = () => {
-    setIsViewModalOpen(false);
-  };
+
 
   const handleCloseModals = () => {
     setIsModalsOpen(false);
@@ -93,7 +91,7 @@ function StandardProtocol() {
       const { sno, ...dataToSend } = viewModalData;
       console.log(viewModalData);
       
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -139,6 +137,9 @@ function StandardProtocol() {
       setIsViewModalOpen(true);
     }
   };
+  const closeViewModal = () => {
+    setViewModalData(null);
+  };
   
   // ... (keep other functions like handleSelectAll, filteredData, onViewDetails, etc.)
 
@@ -151,7 +152,7 @@ function StandardProtocol() {
   const handleEditSave = async (updatedData) => {
     try {
       const {sno,...dataToSend}=updatedData;
-      const response = await axios.put(`https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`, dataToSend);
+      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMStandardProtocol/${updatedData.uniqueId}`, dataToSend);
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
@@ -278,7 +279,7 @@ function StandardProtocol() {
   const handleAdd = async (newStandardProtocol) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMStandardProtocol`,
+        `http://localhost:9000/manage-lims/add/sMStandardProtocol`,
         {
           ...newStandardProtocol,
           addDate: new Date().toISOString().split("T")[0],
