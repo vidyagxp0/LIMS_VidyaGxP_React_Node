@@ -109,7 +109,7 @@ function Approval() {
       }
     } catch (error) {
       console.error("Error updating Approval status:", error);
-      toast.error("Error updating Approval status");
+      toast.error("Error updating Approval status");``
     }
   };
 

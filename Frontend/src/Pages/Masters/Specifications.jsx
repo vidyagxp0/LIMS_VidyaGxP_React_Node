@@ -63,6 +63,7 @@ function Specifications() {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/mSpecifications`
       );
+  
       if (response.data && Array.isArray(response.data)) {
         const formattedData = response.data.flatMap(
           (item) =>
@@ -98,7 +99,7 @@ function Specifications() {
   };
 
   const handleSelectAll = (e) => {
-    const checked = e.target.checked;
+    const checked = e.target.checked;e
     const newData = data.map((row) => ({ ...row, checkbox: checked }));
     setData(newData);
   };
@@ -200,7 +201,9 @@ function Specifications() {
       );
       if (response.status === 200) {
         setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+       
         toast.success("Product deleted successfully.");
+      return updatedData;
       } else {
         toast.error("Failed to delete Product.");
       }

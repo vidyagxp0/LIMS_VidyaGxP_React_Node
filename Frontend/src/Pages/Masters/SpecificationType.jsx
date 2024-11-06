@@ -413,7 +413,7 @@ function specficationtype() {
           <div className="float-right flex gap-4">
             <PDFDownload
               columns={columns}
-              data={filteredData}
+              data={data}
               fileName="Master_Product.pdf"
               title="Master Product Data"
             />
@@ -427,7 +427,8 @@ function specficationtype() {
         </div>
         <Table
           columns={columns}
-          data={filteredData}
+          data={data}
+          // filteredData
           onCheckboxChange={handleCheckboxChange}
           onViewDetails={onViewDetails}
           onDelete={handleDelete}

@@ -13,6 +13,7 @@ import PDFDownload from "../PDFComponent/PDFDownload ";
 import ATMButton from "../../components/ATM components/Button/ATMButton";
 import ImportModal from "../Modals/importModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaFileAlt } from "react-icons/fa";
 import {
   faEye,
   faPenToSquare,
@@ -25,7 +26,7 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import SamplePlanningAndAnalytics from "../Modals/SamplePlanningAndAnalytics";
 import axios from "axios";
 import SamplePlanningAEdit from "../Modals/SamplePlanningAEdit";
-import { toast } from "react-hot-toast";
+// import { toast } from "react-hot-toast";
 import { BASE_URL } from "../../config.json";
 import { FaFilePdf } from "react-icons/fa6";
 import Barcode from "react-barcode"; // Import Barcode component
@@ -217,6 +218,7 @@ const StabilityWorkFlow = () => {
     { header: "Sampling Frequency", accessor: "samplingFrequency" },
     { header: "Sample Disposition", accessor: "sampleDisposition" },
     { header: "Stability Study Type", accessor: "stabilityStudyType" },
+
     { header: "Stability Study Protocol", accessor: "stabilityStudyProtocol" },
     {
       header: "Stability Protocol Approval Date",
@@ -242,6 +244,8 @@ const StabilityWorkFlow = () => {
     { header: "QA Reviewer/Approver", accessor: "QaReviewerApprover" },
     { header: "QA Reviewer Comment", accessor: " QaReviewerComment" },
     { header: "QA Review Date", accessor: "QaReviewDate" },
+    { header: "QA Review Date", accessor: "QaReviewDate" },
+
     {
       header: "Actions",
       accessor: "action",
@@ -691,6 +695,7 @@ const StabilityWorkFlow = () => {
             <td className="border px-4 py-2">QA Review Date </td>
             <td className="border px-4 py-2">Status </td>
             <td className="border px-4 py-2">Sample Barcode</td>
+            <td className="border px-4 py-2">Generate Audit Trail </td>
             <td className="border px-4 py-2">Generate PDF </td>
             <td className="border px-4 py-2">Actions</td>
           </tr>
@@ -815,6 +820,19 @@ const StabilityWorkFlow = () => {
                   "No Barcode"
                 )}
               </td>
+              <td className="border px-4 py-2">
+                {data.generateAuditTrail}
+                <td className="flex justify-center items-center px-4 py-2">
+                  <FaFileAlt
+                    size={20}
+                    className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                    onClick={() => generateAuditTrail(data.id)}
+                  />
+                  {loading[data.id] && (
+                    <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                  )}
+                </td>
+              </td>{" "}
               <td className="border px-4 py-2">
                 {data.generatePDF}
                 <td className="flex justify-center items-center px-4 py-2">

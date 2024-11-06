@@ -80,9 +80,9 @@ function TestPlan() {
       if (response.data && Array.isArray(response.data)) {
         const formattedData = response.data.flatMap(
           (item) =>
-            item?.mTestPlan?.map((condition) => ({
+            item?.mTestPlan?.map((condition,index) => ({
               checkbox: false,
-              sno: condition.uniqueId,
+              sno:index+1 ,
               specificationId: condition.specificationId || "-",
               productName: condition.productName || "-",
               tests: condition.tests || "-",
@@ -306,6 +306,7 @@ function TestPlan() {
       if (response.status === 200) {
         setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
         toast.success("Test Plan deleted successfully.");
+        fetchProductData()
       } else {
         toast.error("Failed to delete Test Plan.");
       }

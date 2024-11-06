@@ -22,6 +22,7 @@ import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
 import { BASE_URL } from "../config.json";
 import ToastContainer from "../components/HotToaster/ToastContainer";
 import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
 const AnalystQualificationModal = ({ onClose }) => {
