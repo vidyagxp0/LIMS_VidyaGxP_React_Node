@@ -65,7 +65,7 @@ const ControlSampleModal = ({ onClose }) => {
 
   // console.log(formData, "L<>?L<>?L<>?L<>?L<>?L<>?L<>?L");
 
-  const FetchUserrole = async () => {
+  const FetchUserRoles = async () => {
     if (id) {
       const userId = localStorage.getItem("user_id");
 
@@ -79,7 +79,7 @@ const ControlSampleModal = ({ onClose }) => {
             },
           }
         );
-        console.log(response, "dsaadesz");
+        // console.log(response, "dsaadesz");
 
         // Set user roles
         const roles = response.data.response.UserRoles;
@@ -123,14 +123,12 @@ const ControlSampleModal = ({ onClose }) => {
             case "Approver":
               setFormData((prevData) => ({
                 ...prevData,
-                approver: username, // Assuming you have a field for approver
+                approver: username,
               }));
               break;
             case "Viewonly":
-              // Handle view-only role, if needed (perhaps a message or log)
               break;
             case "Fullpermission":
-              // If user has full permission, set all fields to the username
               setFormData((prevData) => ({
                 ...prevData,
                 initiator: username,
@@ -151,7 +149,7 @@ const ControlSampleModal = ({ onClose }) => {
   };
 
   useEffect(() => {
-    FetchUserrole();
+    FetchUserRoles();
   }, []);
 
   const handleTabClick = (tabName) => {
@@ -670,6 +668,7 @@ const ControlSampleModal = ({ onClose }) => {
                   label="Initiator Name"
                   value={formData?.initiator || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
@@ -689,6 +688,7 @@ const ControlSampleModal = ({ onClose }) => {
                   label="Lab Technician Name"
                   value={formData?.labTechnician || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
@@ -708,6 +708,7 @@ const ControlSampleModal = ({ onClose }) => {
                   label="Supervisor Name"
                   value={formData?.supervisor || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
@@ -727,6 +728,7 @@ const ControlSampleModal = ({ onClose }) => {
                   label="QA Review"
                   value={formData?.qaReview || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
@@ -746,6 +748,7 @@ const ControlSampleModal = ({ onClose }) => {
                   label="Approver Name"
                   value={formData?.approver || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               {/* Add additional fields if necessary for other roles */}
@@ -759,7 +762,7 @@ const ControlSampleModal = ({ onClose }) => {
 
   const handleStageChange = () => {
     fetchData();
-    FetchUserrole();
+    FetchUserRoles();
   };
   return (
     <>

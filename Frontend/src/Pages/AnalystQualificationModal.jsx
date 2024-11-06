@@ -28,6 +28,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Analyst Qualification");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [users, setUserRoles] = useState();
 
   const { id } = useParams();
 
@@ -155,6 +156,93 @@ const AnalystQualificationModal = ({ onClose }) => {
       }));
     }
   };
+
+  const FetchUserRoles = async () => {
+    if (id) {
+      const userId = localStorage.getItem("user_id");
+
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          `http://localhost:9000/admin/get-user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        // console.log(response, "dsaadesz");
+
+        // Set user roles
+        const roles = response.data.response.UserRoles;
+        setUserRoles(roles);
+
+        // Extract the username
+        const username = response.data.response.name;
+
+        // Check if the user has the Fullpermission role
+        const hasFullPermission = roles.some(
+          (role) => role.role === "Fullpermission"
+        );
+
+        // Set form data based on roles
+        roles.forEach((role) => {
+          switch (role.role) {
+            case "Initiator":
+              setFormData((prevData) => ({
+                ...prevData,
+                initiator: username,
+              }));
+              break;
+            case "Lab Technician":
+              setFormData((prevData) => ({
+                ...prevData,
+                labTechnician: username,
+              }));
+              break;
+            case "Supervisor":
+              setFormData((prevData) => ({
+                ...prevData,
+                supervisor: username,
+              }));
+              break;
+            case "Reviewer":
+              setFormData((prevData) => ({
+                ...prevData,
+                qaReview: username,
+              }));
+              break;
+            case "Approver":
+              setFormData((prevData) => ({
+                ...prevData,
+                approver: username,
+              }));
+              break;
+            case "Viewonly":
+              break;
+            case "Fullpermission":
+              setFormData((prevData) => ({
+                ...prevData,
+                initiator: username,
+                labTechnician: username,
+                supervisor: username,
+                qaReview: username,
+                approver: username,
+              }));
+              break;
+            default:
+              break;
+          }
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    FetchUserRoles();
+  }, []);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -924,7 +1012,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                   type="text"
                   name="initiator"
                   label="Initiator Name"
-                  value={user || ""}
+                  value={formData?.initiator || ""}
                   // onChange={handleInputChange}
                   disabled
                 />
@@ -946,6 +1034,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                   label="Lab Technician Name"
                   value={formData?.labTechnician || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
@@ -965,6 +1054,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                   label="Supervisor Name"
                   value={formData?.supervisor || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>{" "}
               <CCol md={6} className="mb-3">
@@ -984,6 +1074,7 @@ const AnalystQualificationModal = ({ onClose }) => {
                   label="QA Review"
                   value={formData?.qaReview || ""}
                   onChange={handleInputChange}
+                  disabled
                 />
               </CCol>
               <CCol md={6} className="mb-3">
@@ -1006,6 +1097,7 @@ const AnalystQualificationModal = ({ onClose }) => {
 
   const handleStageChange = () => {
     fetchData();
+    FetchUserRoles();
   };
   return (
     <>
