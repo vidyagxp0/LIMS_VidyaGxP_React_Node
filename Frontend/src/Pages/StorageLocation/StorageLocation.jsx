@@ -27,7 +27,8 @@ import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import axios from "axios";
 import { BASE_URL } from "../../config.json";
 import ReusableModal from "../Modals/ResusableModal";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
+import ToastContainer from "../../components/HotToaster/ToastContainer";
 
 const fields = [
   { label: "Storage Code", key: "storageCode" },
@@ -98,13 +99,14 @@ function StorageLocation() {
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
         setData(newData);
-        toast.success(" deleted successfully");
+        toast.success("Data deleted successfully");
 
-        console.log("Deleted item:", item);
+        // console.log("Deleted item:", item);
       }
       fetchData();
     } catch (error) {
-      console.error("Error deleting :", error);
+      // console.error("Error deleting :", error);
+      toast.error("Error deleting:",error);
     }
   };
 
@@ -186,40 +188,48 @@ function StorageLocation() {
   };
 
   const addNewStorageLocation = async (newCondition) => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
     try {
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/storageLocation`,
+      const response = await toast.promise(
+        Promise.all([
+          axios.post(`${BASE_URL}/manage-lims/add/storageLocation`, {
+            storageName: newCondition.storageName,
+            storageCode: newCondition.storageCode,
+            attachment: "Attachment",
+            status: newCondition.status || "Active",
+          }),
+          delay(1300), // Add delay here
+        ]).then(([response]) => response),
         {
-          storageName: newCondition.storageName,
-          storageCode: newCondition.storageCode,
-          attachment: "Attachment",
-          status: newCondition.status || "Active",
+          loading: "Adding Storage Location...",
+          success: <b>Data added successfully!</b>,
+          error: <b>Failed to add Data.</b>,
         }
       );
-
+  
       if (response.status === 200) {
-        const addedStorageLocation = response.data.addLIMS; // Accessing the added item from the response
-
+        const addedStorageLocation = response.data.addLIMS;
+  
         setData((prevData) => [
           ...prevData,
           {
             ...addedStorageLocation,
-            sno: addedStorageLocation.uniqueId, // Using uniqueId as sno
+            sno: addedStorageLocation.uniqueId,
             checkbox: false,
           },
         ]);
         closeModal();
         fetchData();
-
-        toast.success(" added successfully");
       }
     } catch (error) {
-      console.error("Error adding :", error);
-      toast.error("Failed to add ");
+      console.error("Error adding Storage Location:", error);
+      toast.error("Failed to add Storage Location.");
+    } finally {
+      setIsModalOpen(false);
     }
-
-    setIsModalOpen(false);
   };
+  
 
   const handleStatusUpdate = async (newStatus) => {
     if (!newStatus) {
@@ -282,6 +292,7 @@ function StorageLocation() {
         </CModalHeader>
         <CModalBody>
           <CFormInput
+          className="mb-3"
             type="text"
             label="Storage Name"
             placeholder="Storage Name"
@@ -290,7 +301,7 @@ function StorageLocation() {
           />
 
           <CFormInput
-            type="text"
+            type="number"
             label="Storage Code"
             placeholder="Storage Code"
             value={storageCode}
@@ -326,29 +337,41 @@ function StorageLocation() {
   };
 
   const handleEditSave = async (updatedData) => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
     try {
-      const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/storageLocation/${updatedData.uniqueId}`,
-        updatedData // Sending the updated data
+      const response = await toast.promise(
+        Promise.all([
+          axios.put(
+            `${BASE_URL}/manage-lims/update/storageLocation/${updatedData.uniqueId}`,
+            updatedData // Sending the updated data
+          ),
+          delay(1300), // Add 1300 ms delay
+        ]).then(([response]) => response),
+        {
+          loading: "Updating...",
+          success: <b>Data updated successfully.</b>,
+          error: <b>Failed to update Data.</b>,
+        }
       );
-
+  
       if (response.status === 200) {
         const newData = data.map((item) =>
           item.uniqueId === updatedData.uniqueId
             ? { ...item, ...updatedData }
             : item
         );
-
+  
         setData(newData);
-        toast.success(" updated successfully");
       }
     } catch (error) {
-      console.error("Error updating ", error);
+      console.error("Error updating:", error);
       toast.error("Failed to update");
     } finally {
       setEditModalData(null);
     }
   };
+  
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
@@ -418,6 +441,7 @@ function StorageLocation() {
   return (
     <>
       <LaunchQMS />
+      <ToastContainer/>
       <div className="m-5 mt-3">
         <div className="main-head">
           <h4 className="fw-bold">Storage Conditions</h4>

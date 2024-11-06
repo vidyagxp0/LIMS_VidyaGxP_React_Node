@@ -48,6 +48,7 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
       occurredOn: "",
       reportedOn: "",
       problemInDetails: "",
+    
     });
   };
 
@@ -88,7 +89,6 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Instrument Category"
             placeholder="weighing balance "
             name="InstrumentCategory"
             value={problemData.InstrumentCategory}
@@ -99,7 +99,6 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Supplied By"
             placeholder="Supplied By "
             name="SuppliedBy"
             value={problemData.suppliedBy}
@@ -108,7 +107,6 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Problem ID"
             placeholder="Problem ID"
             name="ProblemID"
             value={problemData.problemId}
@@ -137,7 +135,6 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           <CFormInput
             type="text"
             className="mb-3"
-            label="Problem In Brief"
             placeholder=" Problem In Brief"
             name="ProblemInBrief"
             value={problemData.problemInBrief}
@@ -178,14 +175,25 @@ const ProblemReportingModal = ({ visible, closeModal, handleSubmit }) => {
           />
           <CFormInput
             type="text"
+            placeholder=" Problem In Details"
             className="mb-3"
             label="Problem In Details"
-            placeholder=" Problem In Details"
             name="ProblemInDetails"
             value={problemData.problemInDetails}
             onChange={(e) =>
               handleInputChange("problemInDetails", e.target.value)
             }
+          />
+       <CFormSelect
+            className="mb-3"
+            label="Status"
+            name="status"
+            value={problemData.status}
+            onChange={(e) => handleInputChange("status", e.target.value)}
+            options={[
+              { label: "Active", value: "Active" },
+              { label: "Inactive", value: "Inactive" }
+            ]}
           />
         </CModalBody>
         <CModalFooter>

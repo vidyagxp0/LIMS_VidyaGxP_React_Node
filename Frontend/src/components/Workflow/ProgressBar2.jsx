@@ -23,6 +23,7 @@ export const ProgressBar2 = (props) => {
   const [stages, setStages] = useState(baseStages);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState("");
+  const [submitMessage, setSubmitMessage] = useState("");
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -38,14 +39,18 @@ export const ProgressBar2 = (props) => {
     const isSuccess = await callApis(formData, sampleId);
     if (isSuccess) {
       setIsModalOpen(false);
+      toast.success(submitMessage);
+      onStageClick();
     } else {
       setIsModalOpen(true);
+      toast.error("Submission failed. Please try again.");
     }
   };
 
-  const handleOpen = (url) => {
+  const handleOpen = (url, message) => {
     setUrl(url);
     setIsModalOpen(true);
+    setSubmitMessage(message); // Set the message based on the button clicked
   };
 
   const callApis = async (formData, analystId) => {
@@ -80,8 +85,6 @@ export const ProgressBar2 = (props) => {
           }
         );
 
-        toast.success("Review Submitted!");
-        onStageClick();
         return true;
       } else {
         toast.error("Incorrect email or password. Please try again.");
@@ -109,19 +112,25 @@ export const ProgressBar2 = (props) => {
             <div
               key={index}
               className={`flex-1 text-center p-2 cursor-pointer border rounded 
-              ${index < currentStage ? "bg-green-500 text-white" : ""} 
-              ${
-                index === currentStage && index !== stages.length - 1
-                  ? "bg-orange-500 text-white"
-                  : ""
-              } 
-              ${
-                index === stages.length - 1 && currentStage === index
-                  ? "bg-red-500 text-white"
-                  : ""
-              } 
-              ${index > currentStage ? "bg-gray-200" : ""} 
-              ${index < stages.length - 1 ? "mr-1" : ""}`}
+                          ${
+                            index < currentStage
+                              ? "bg-green-500 text-white"
+                              : ""
+                          } 
+                          ${
+                            index === currentStage &&
+                            index !== stages.length - 1
+                              ? "bg-orange-500 text-white"
+                              : ""
+                          } 
+                          ${
+                            index === stages.length - 1 &&
+                            currentStage === index
+                              ? "bg-red-500 text-white"
+                              : ""
+                          } 
+                          ${index > currentStage ? "bg-gray-200" : ""} 
+                          ${index < stages.length - 1 ? "mr-1" : ""}`}
             >
               {stageName}
             </div>
@@ -140,7 +149,7 @@ export const ProgressBar2 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-review")}
+                onClick={() => handleOpen("send-review", "Review submission initiated.")}
               >
                 Submit
               </button>
@@ -156,13 +165,13 @@ export const ProgressBar2 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-reviewer")}
+                onClick={() => handleOpen("send-to-reviewer", "Qualification complete.")}
               >
                 Qualification Complete
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-open")}
+                onClick={() => handleOpen("send-to-open", "Action Done.")}
               >
                 More Info Required
               </button>
@@ -196,6 +205,7 @@ export const ProgressBar3 = (props) => {
   const [stages, setStages] = useState(baseStages2);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState("");
+  const [submitMessage, setSubmitMessage] = useState(""); // State to hold the submit message
 
   useEffect(() => {
     setCurrentStage(stage - 1);
@@ -209,14 +219,18 @@ export const ProgressBar3 = (props) => {
     const isSuccess = await callApis(formData, sampleId);
     if (isSuccess) {
       setIsModalOpen(false);
+      toast.success(submitMessage); // Show the specific success message
+      onStageClick(); // Notify parent to update the stage
     } else {
       setIsModalOpen(true);
+      toast.error("Submission failed. Please try again."); // General error message
     }
   };
 
-  const handleOpen = (url) => {
+  const handleOpen = (url, message) => {
     setUrl(url);
     setIsModalOpen(true);
+    setSubmitMessage(message); // Set the message based on the button clicked
   };
 
   const token = localStorage.getItem("token");
@@ -251,8 +265,6 @@ export const ProgressBar3 = (props) => {
             },
           }
         );
-        toast.success("Review Submitted!");
-        onStageClick();
         return true;
       } else {
         toast.error("Incorrect email or password. Please try again.");
@@ -285,7 +297,7 @@ export const ProgressBar3 = (props) => {
                 index === currentStage && index !== 4
                   ? "bg-orange-500 text-white"
                   : ""
-              } 
+              }
               ${
                 index === 2 && currentStage === 2
                   ? "bg-orange-500 text-white"
@@ -293,8 +305,8 @@ export const ProgressBar3 = (props) => {
               }
               ${
                 index === 3 && currentStage === 3 ? "bg-red-500 text-white" : ""
-              } 
-              ${index > currentStage ? "bg-gray-200" : ""} 
+              }
+              ${index > currentStage ? "bg-gray-200" : ""}
               ${index < stages.length - 1 ? "mr-1" : ""}`}
             >
               {stageName}
@@ -314,7 +326,7 @@ export const ProgressBar3 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-review")}
+                onClick={() => handleOpen("send-review", "Review submission initiated.")}
               >
                 Submit
               </button>
@@ -330,19 +342,37 @@ export const ProgressBar3 = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-reviewer")}
+                onClick={() => handleOpen("send-to-reviewer", "Inspection complete.")}
               >
                 Inspection Complete
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-open")}
+                onClick={() => handleOpen("send-to-open", "Action Done.")}
               >
                 More Info Required
               </button>
             </>
           )}
           {showAuditTrail && <AuditTrail />}
+          {stage === 3 && (
+            <>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
+                onClick={() =>
+                  handleOpen("send-to-closed", "Destruction complete.")
+                }
+              >
+                Destruction Complete
+              </button>
+              <button
+                className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
+                onClick={() => handleOpen("send-to-open", "Action Done.")}
+              >
+                More Info Required
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>

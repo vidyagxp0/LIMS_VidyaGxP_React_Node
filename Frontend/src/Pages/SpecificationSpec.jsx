@@ -28,8 +28,9 @@ import {
   CFormInput,
   CForm,
 } from "@coreui/react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import SpecificationviewModel from "./SpecificationviewModel";
+import ToastContainer from "../components/HotToaster/ToastContainer";
 
 const SpecificationSpec = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -270,49 +271,68 @@ const SpecificationSpec = () => {
   // POST API - Add new Specification
   const handleAddSpecification = async (newSpecData) => {
     setIsLoading(true);
+    
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
     try {
-      const response = await axios.post(
-        `${BASE_URL}/manage-lims/add/specification`,
-        newSpecData
+      const response = await toast.promise(
+        Promise.all([
+          axios.post(`${BASE_URL}/manage-lims/add/specification`, newSpecData),
+          delay(1300), // Add delay here
+        ]).then(([response]) => response),
+        {
+          loading: "Adding new Specification...",
+          success: <b>Data added successfully!</b>,
+          error: <b>Failed to add Data.</b>,
+        }
       );
+  
       if (response.status === 200 || response.status === 201) {
         setDataChanged(true); // Trigger a re-fetch of data
-        toast.success("New Specification added successfully!");
         closeAddModal();
-      } else {
-        toast.error("Failed to add new Specification. Please try again.");
       }
     } catch (error) {
-      console.error("Error adding new Specification:", error);
-      toast.error("Error adding new Specification: " + error.message);
+      // console.error("Error adding new Specification:", error);
+      toast.error("Error adding Data: " + error.message);
     } finally {
       setIsLoading(false);
     }
   };
+  
+  
 
   // PUT API - Edit Specification
   const handleEditSave = async (updatedData) => {
     const { sno, ...dataToSend } = updatedData;
     setIsLoading(true);
+  
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  
     try {
-      const response = await axios.put(
-        `${BASE_URL}/manage-lims/update/specification/${sno}`,
-        dataToSend
+      const response = await toast.promise(
+        Promise.all([
+          axios.put(`${BASE_URL}/manage-lims/update/specification/${sno}`, dataToSend),
+          delay(1300), // Add delay here
+        ]).then(([response]) => response),
+        {
+          loading: "Updating Specification...",
+          success: <b>Data updated successfully!</b>,
+          error: <b>Failed to update Data.</b>,
+        }
       );
+  
       if (response.status === 200) {
         setDataChanged(true); // Trigger a re-fetch of data
-        toast.success("Specification updated successfully");
         setEditModalData(null);
-      } else {
-        toast.error("Failed to update Specification");
       }
     } catch (error) {
       console.error("Error updating Specification:", error);
-      toast.error("Failed to update Specification");
+      toast.error("Failed to update Specification: " + error.message);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   // DELETE API - Delete Specification
   const handleDelete = async (item) => {
@@ -326,14 +346,14 @@ const SpecificationSpec = () => {
         );
         setData(updatedData);
         setDataChanged(true);
-        toast.success("Specification deleted successfully");
+        toast.success("Data deleted successfully");
       } else {
-        toast.error("Failed to delete Specification");
+        toast.error("Failed to delete Data");
       }
     } catch (error) {
-      console.error("Error deleting Specification:", error);
+      // console.error("Error deleting Data:", error);
       toast.error(
-        "Error deleting Specification: " +
+        "Error deleting data: " +
           (error.response?.data?.message || error.message)
       );
     }
@@ -447,6 +467,7 @@ const SpecificationSpec = () => {
   return (
     <div>
       <LaunchQMS />
+      <ToastContainer/>
       <div className="m-5 mt-3 fixed top-20 w-[82%]">
         <div className="main-head mb-6">
           <h4 className="font-bold text-xl">Specification</h4>

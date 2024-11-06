@@ -1,85 +1,77 @@
-import React, { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEye,
-  faPenToSquare,
-  faTrashCan,
-} from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 import {
   CButton,
-  CContainer,
   CFormInput,
   CModal,
   CModalBody,
   CModalFooter,
   CModalHeader,
   CModalTitle,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-  CRow,
-  CCol,
   CFormSelect,
   CFormCheck,
+  CRow,
+  CCol,
 } from "@coreui/react";
-import Card from "../../components/ATM components/Card/Card";
-import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
-import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
-import ATMButton from "../../components/ATM components/Button/ATMButton";
+import {
+  faEye,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Table from "../../components/ATM components/Table/Table";
-import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import ATMButton from "../../components/ATM components/Button/ATMButton";
+import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
+import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
-
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    productMaterial: "Product 1",
-    specificationID: "Spec-001",
-    genericName: "Generic Name 1",
-    sampleType: "Type A",
-    protocolType: "Type X",
-    protocolID: "PID-001",
-    addedOn: "2024-01-01",
-    status: "DROPPED",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    productMaterial: "Product 2",
-    specificationID: "Spec-002",
-    genericName: "Generic Name 2",
-    sampleType: "Type B",
-    protocolType: "Type Y",
-    protocolID: "PID-002",
-    addedOn: "2024-01-02",
-    status: "INITIATED",
-  },
-];
+import ReusableModal from "../Modals/ResusableModal";
+import { BASE_URL } from "../../config.json";
 
 function StabilityProtocol() {
-  const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewModalData, setViewModalData] = useState(null);
-  const [cardCounts, setCardCounts] = useState({
-    DROPPED: 0,
-    INITIATED: 0,
-    REINITIATED: 0,
-    APPROVED: 0,
-    REJECTED: 0,
-  });
-  const [lastStatus, setLastStatus] = useState("INITIATED");
-  const [editModalData, setEditModalData] = useState(null);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
+  const [editModalData, setEditModalData] = useState(null);
+  const [data, setData] = useState([]);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+  const fields = [
+    { label: "Protocol ID", key: "protocolID" },
+    { label: "Description", key: "description" },
+    { label: "Product/Material", key: "productMaterial" },
+    { label: "Specification ID", key: "specificationID" },
+    { label: "Sample Type", key: "sampleType" },
+    { label: "Initiated On", key: "initiatedOn" },
+    { label: "Status", key: "status" },
+  ];
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/get-all-lims/sMStabilityProtocol`
+      );
+      const fetchedData = response?.data[0]?.sMStabilityProtocol || [];
+
+      const updatedData = fetchedData.map((item, index) => ({
+        sno: index + 1,
+        ...item,
+      }));
+
+      setData(updatedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to fetch stability protocol data");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleOpenModals = () => {
     setIsModalsOpen(true);
@@ -89,30 +81,66 @@ function StabilityProtocol() {
     setIsModalsOpen(false);
   };
 
-  useEffect(() => {
-    const counts = {
-      DROPPED: 0,
-      INITIATED: 0,
-      REINITIATED: 0,
-      APPROVED: 0,
-      REJECTED: 0,
-    };
+  const handleEditSave = async (updatedData) => {
+    const { sno, checkbox, ...dataToSend } = updatedData;
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sMStabilityProtocol/${updatedData.uniqueId}`,
+        dataToSend
+      );
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...response.data }
+            : item
+        );
+        setData(newData);
+        closeEditModal();
+        toast.success("Stability protocol updated successfully");
+        fetchData();
+      } else {
+        console.error(
+          "Failed to update stability protocol:",
+          response.statusText
+        );
+        toast.error("Failed to update stability protocol");
+      }
+    } catch (error) {
+      console.error("Error updating stability protocol:", error);
+      toast.error("Error updating stability protocol");
+    }
+  };
 
-    data.forEach((item) => {
-      if (item.status === "DROPPED") counts.DROPPED++;
-      else if (item.status === "INITIATED") counts.INITIATED++;
-      else if (item.status === "REINITIATED") counts.REINITIATED++;
-      else if (item.status === "APPROVED") counts.APPROVED++;
-      else if (item.status === "REJECTED") counts.REJECTED++;
-    });
+  const handleStatusUpdate = async (newStatus) => {
+    try {
+      const { sno, ...dataToSend } = viewModalData;
+      console.log(viewModalData);
 
-    setCardCounts(counts);
-  }, [data]);
-
-  const handleCheckboxChange = (index) => {
-    const newData = [...data];
-    newData[index].checkbox = !newData[index].checkbox;
-    setData(newData);
+      const response = await axios.put(
+        `https://limsapi.vidyagxp.com/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`,
+        {
+          ...dataToSend,
+          status: newStatus,
+        }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Approval status updated successfully");
+        closeViewModal();
+      } else {
+        toast.error("Failed to update Approval status");
+      }
+    } catch (error) {
+      console.error("Error updating Approval status:", error);
+      toast.error("Error updating Approval status");
+      ``;
+    }
   };
 
   const handleSelectAll = (e) => {
@@ -121,16 +149,30 @@ function StabilityProtocol() {
     setData(newData);
   };
 
-  const filteredData = data.filter((row) => {
-    return (
-      row.protocolID.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (statusFilter === "All" || row.status === statusFilter)
-    );
-  });
+  const filteredData = Array.isArray(data)
+    ? data.filter((row) => {
+        const protocolId = row.protocolId || "";
+        return (
+          protocolId.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          (statusFilter === "All" || row.status === statusFilter)
+        );
+      })
+    : [];
 
   const onViewDetails = (rowData) => {
-    setViewModalData(rowData); // Set the data for ViewModal
-    setIsViewModalOpen(true); // Open the ViewModal
+    if (isViewModalOpen && viewModalData?.sno === rowData.sno) {
+      setIsViewModalOpen(false);
+      setViewModalData(null);
+    } else {
+      setViewModalData(rowData);
+      setIsViewModalOpen(true);
+    }
+  };
+
+  const handleCheckboxChange = (index) => {
+    const newData = [...data];
+    newData[index].checkbox = !newData[index].checkbox;
+    setData(newData);
   };
 
   const columns = [
@@ -139,14 +181,12 @@ function StabilityProtocol() {
       accessor: "checkbox",
     },
     { header: "SrNo.", accessor: "sno" },
+    { header: "Protocol ID", accessor: "protocolID" },
+    { header: "Description", accessor: "description" },
     { header: "Product/Material", accessor: "productMaterial" },
     { header: "Specification ID", accessor: "specificationID" },
-    { header: "Generic Name", accessor: "genericName" },
     { header: "Sample Type", accessor: "sampleType" },
-    { header: "Protocol Type", accessor: "protocolType" },
-    { header: "Protocol ID", accessor: "protocolID" },
-    { header: "Added on", accessor: "addedOn" },
-    { header: "Attachment", accessor: "attachment" },
+    { header: "Initiated On", accessor: "initiatedOn" },
     { header: "Status", accessor: "status" },
     {
       header: "Actions",
@@ -160,10 +200,14 @@ function StabilityProtocol() {
           />
           <FontAwesomeIcon
             icon={faPenToSquare}
-            className="mr-2 cursor-pointer"
             onClick={() => openEditModal(row.original)}
+            className="mr-2 cursor-pointer"
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon
+            icon={faTrashCan}
+            className="cursor-pointer"
+            onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
@@ -177,48 +221,84 @@ function StabilityProtocol() {
     setIsModalOpen(false);
   };
 
-  const handleCardClick = (status) => {
-    setStatusFilter(status);
+  const openEditModal = (rowData) => {
+    setEditModalData(rowData);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const closeEditModal = () => {
+    setEditModalData(null);
   };
 
-  const handleExcelDataUpload = (excelData) => {
-    const updatedData = excelData.map((item, index) => ({
-      checkbox: false,
-      sno: index + 1,
-      productMaterial: item["Product/Material"] || "",
-      specificationID: item["Specification ID"] || "",
-      genericName: item["Generic Name"] || "",
-      sampleType: item["Sample Type"] || "",
-      protocolType: item["Protocol Type"] || "",
-      protocolID: item["Protocol ID"] || "",
-      addedOn: item["Added on"] || "",
-      status: item["Status"] || "",
-    }));
-
-    const concatenateData = [...updatedData];
-    setData(concatenateData); // Update data state with parsed Excel data
-    setIsModalsOpen(false); // Close the import modal after data upload
+  const closeViewModal = () => {
+    setIsViewModalOpen(false);
   };
 
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "DROPPED" ? "INITIATED" : "DROPPED";
-    setData((prevData) => [
-      ...prevData,
-      {
-        ...newCondition,
-        sno: prevData.length + 1,
-        checkbox: false,
-        status: nextStatus,
-      },
-    ]);
-    setLastStatus(nextStatus);
-    setIsModalOpen(false);
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sMStabilityProtocol/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success("Stability protocol deleted successfully");
+        fetchData();
+      } else {
+        console.error(
+          "Failed to delete stability protocol:",
+          response.statusText
+        );
+        toast.error("Failed to delete stability protocol");
+      }
+    } catch (error) {
+      console.error("Error deleting stability protocol:", error);
+      toast.error("Error deleting stability protocol");
+    }
+  };
+
+  const handleAdd = async (newStabilityProtocol) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/add/sMStabilityProtocol`,
+        {
+          ...newStabilityProtocol,
+          initiatedOn: new Date().toISOString().split("T")[0],
+          status: newStabilityProtocol.status || "INITIATED",
+        }
+      );
+      if (response.status === 200) {
+        toast.success("Stability protocol added successfully");
+        fetchData();
+        setIsModalOpen(false);
+      } else {
+        toast.error("Failed to add stability protocol");
+      }
+    } catch (error) {
+      toast.error(
+        "Error adding stability protocol: " +
+          (error.response?.data || error.message)
+      );
+    }
+  };
+
+  const handleExcelDataUpload = async (excelData) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/manage-lims/bulk-add/sMStabilityProtocol`,
+        excelData
+      );
+      if (response.status === 200) {
+        toast.success("Bulk upload successful");
+        fetchData();
+        handleCloseModals();
+      } else {
+        toast.error("Failed to upload data");
+      }
+    } catch (error) {
+      toast.error(
+        "Error uploading data: " + (error.response?.data || error.message)
+      );
+    }
   };
 
   const StatusModal = ({ visible, closeModal, onAdd }) => {
@@ -228,6 +308,7 @@ function StabilityProtocol() {
     const [newProtocolType, setNewProtocolType] = useState("");
     const [oldProtocolType, setOldProtocolType] = useState("");
     const [protocolID, setProtocolID] = useState("");
+    const [description, setDescription] = useState("");
     const [sampleLoginTemplet, setSampleLoginTemplet] = useState("");
     const [manufacturingDate, setManufacturingDate] = useState("");
     const [shortDate, setShortDate] = useState("");
@@ -273,10 +354,20 @@ function StabilityProtocol() {
         sampleType: sampleType,
         protocolType: [newProtocolType, oldProtocolType],
         protocolID: protocolID,
+        description: description,
         addedOn: "2022-01-01",
         action: [],
       };
       onAdd(newCondition);
+    };
+
+    const handleStatusUpdate = (samplingConfiguration, newStatus) => {
+      const updatedData = data.map((item) =>
+        item.samplingID === samplingConfiguration.samplingID
+          ? { ...item, status: newStatus }
+          : item
+      );
+      setData(updatedData);
     };
 
     return (
@@ -361,6 +452,16 @@ function StabilityProtocol() {
               value={protocolID}
               onChange={(e) => setProtocolID(e.target.value)}
             />
+
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              placeholder="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+
             <CFormInput
               className="mb-3"
               type="select"
@@ -653,6 +754,40 @@ function StabilityProtocol() {
               value={packageConfiguration}
               onChange={(e) => setPackageConfiguration(e.target.value)}
             />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Instructions"
+              placeholder="Instructions"
+              name="instructions"
+              value={specificationID}
+              onChange={(e) => setSpecificationID(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Package Configuration"
+              placeholder="Package Configuration"
+              value={sampleType}
+              onChange={(e) => setSampleType(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Instructions"
+              placeholder="Instructions"
+              name="instructions"
+              value={instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Package Configuration"
+              placeholder="Package Configuration"
+              value={packageConfiguration}
+              onChange={(e) => setPackageConfiguration(e.target.value)}
+            />
           </CModalBody>
           <CModalFooter>
             <CButton color="light" onClick={closeModal}>
@@ -667,33 +802,15 @@ function StabilityProtocol() {
     );
   };
 
-  const openEditModal = (rowData) => {
-    setEditModalData(rowData);
-  };
-
-  const closeEditModal = () => {
-    setEditModalData(null);
-  };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
-  };
-
   const EditModal = ({ visible, closeModal, data, onSave }) => {
-    const [conditions, setConditions] = useState([]);
     const [formData, setFormData] = useState(data);
 
     useEffect(() => {
-      if (data) {
-        setFormData(data);
-      }
+      setFormData(data);
     }, [data]);
-
     const handleChange = (e) => {
-      const { name, value } = e.target;
+      const { name, type, value, files } = e.target;
+      const val = type === "file" ? files[0] : value;
       setFormData({ ...formData, [name]: value });
     };
 
@@ -701,99 +818,51 @@ function StabilityProtocol() {
       onSave(formData);
     };
 
-    const handleInputChange = (e) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 0) {
-        setInputValue(value);
-      }
-    };
-    const handleAddConditions = () => {
-      const numberOfConditions = parseInt(
-        document.getElementById("numberOfConditions").value
-      );
-      if (!isNaN(numberOfConditions) && numberOfConditions > 0) {
-        const newConditions = Array.from(
-          { length: numberOfConditions },
-          (_, index) => ({
-            id: index + 1,
-          })
-        );
-        setConditions(newConditions);
-      }
-    };
-
     return (
       <>
-        <CModal
-          alignment="center"
-          visible={visible}
-          onClose={closeModal}
-          size="lg"
-        >
+        <CModal alignment="center" visible={visible} onClose={closeModal}>
           <CModalHeader>
-            <CModalTitle>Stability Protocol</CModalTitle>
+            <CModalTitle>Edit Stability Protocol</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <CFormSelect
+            <CFormInput
               className="mb-3"
-              type="select"
+              type="text"
+              label="Protocol ID"
+              name="protocolId"
+              value={formData?.protocolId || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Description"
+              name="description"
+              value={formData?.description || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
+              label="Product/Material"
+              name="productMaterial"
+              value={formData?.productMaterial || ""}
+              onChange={handleChange}
+            />
+            <CFormInput
+              className="mb-3"
+              type="text"
               label="Specification ID"
-              placeholder="Select..."
-              options={[
-                "",
-                { label: "HCL10132%" },
-                { label: "HOS234" },
-                { label: "CHPOIL001" },
-                { label: "rest0001" },
-              ]}
-              value={formData?.specificationID || ""}
+              name="specificationId"
+              value={formData?.specificationId || ""}
               onChange={handleChange}
             />
             <CFormInput
               className="mb-3"
               type="text"
-              label="Product"
-              placeholder="testamine"
-              disabled
-            />
-            <CFormInput
-              className="mb-3"
-              type="text"
-              label="Generic Name"
-              placeholder="Testamine"
-              disabled
-            />
-            <CFormSelect
-              className="mb-3"
-              type="select"
               label="Sample Type"
-              placeholder="Select Sample Type"
-              options={[
-                "Select Sample Type",
-                { label: "HCL" },
-                { label: "Hydrochloric Acid" },
-                { label: "Petrochemical" },
-                { label: "Initiated Product" },
-              ]}
+              name="sampleType"
               value={formData?.sampleType || ""}
-              onChange={handleChange}
-            />
-            <label className="mb-3">Protocol Type</label>
-            <CFormCheck
-              className="mb-3"
-              type="radio"
-              id="protocolTypeNew"
-              name="protocolType"
-              label="New"
-              value={formData?.newProtocolType || ""}
-              onChange={handleChange}
-            />
-            <CFormCheck
-              type="radio"
-              id="protocolTypeExisting"
-              name="protocolType"
-              label="Existing"
-              value={formData?.oldProtocolType || ""}
               onChange={handleChange}
             />
             <CFormInput
@@ -932,7 +1001,6 @@ function StabilityProtocol() {
                   onChange={handleChange}
                 />
               </CCol>
-
               <CCol sm={2}>
                 <CButton
                   className="bg-info text-white mb-3 mt-4"
@@ -1102,7 +1170,7 @@ function StabilityProtocol() {
               Back
             </CButton>
             <CButton className="bg-info text-white" onClick={handleSave}>
-              Add Protocol
+              Update
             </CButton>
           </CModalFooter>
         </CModal>
@@ -1115,7 +1183,7 @@ function StabilityProtocol() {
       <LaunchQMS />
       <div className="p-4">
         <h1 className="text-2xl font-bold mb-4">Stability Protocol</h1>
-        <div className="grid grid-cols-5 gap-4 mb-4">
+        {/* <div className="grid grid-cols-5 gap-4 mb-4">
           <Card
             title="DROPPED"
             count={cardCounts.DROPPED}
@@ -1146,18 +1214,18 @@ function StabilityProtocol() {
             color="red"
             onClick={() => handleCardClick("REJECTED")}
           />
-        </div>
+        </div> */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
             <Dropdown
               options={[
                 { value: "All", label: "All" },
-                { value: "DROPPED", label: "DROPPED" },
                 { value: "INITIATED", label: "INITIATED" },
-                { value: "REINITIATED", label: "REINITIATED" },
                 { value: "APPROVED", label: "APPROVED" },
                 { value: "REJECTED", label: "REJECTED" },
+                { value: "REINITIATED", label: "REINITIATED" },
+                { value: "DROPPED", label: "DROPPED" },
               ]}
               value={statusFilter}
               onChange={setStatusFilter}
@@ -1171,7 +1239,11 @@ function StabilityProtocol() {
               title="Stability Protocol Data"
             />
             <ATMButton text="Import" color="pink" onClick={handleOpenModals} />
-            <ATMButton text="Add Protocol" color="blue" onClick={openModal} />
+            <ATMButton
+              text="Add Stability Protocol"
+              color="blue"
+              onClick={openModal}
+            />
           </div>
         </div>
         <Table
@@ -1182,33 +1254,42 @@ function StabilityProtocol() {
           onViewDetails={onViewDetails}
           openEditModal={openEditModal}
         />
-
-        {isModalOpen && (
-          <StatusModal
-            onAdd={addNewStorageCondition}
-            visible={isModalOpen}
-            closeModal={closeModal}
-          />
-        )}
-        {isModalsOpen && (
-          <ImportModal
-            initialData={initialData}
-            isOpen={isModalsOpen}
-            onClose={handleCloseModals}
-            columns={columns}
-            onDataUpload={handleExcelDataUpload}
-          />
-        )}
-
-        {editModalData && (
-          <EditModal
-            visible={Boolean(editModalData)}
-            closeModal={closeEditModal}
-            data={editModalData}
-            onSave={handleEditSave}
-          />
-        )}
       </div>
+      {isModalOpen && (
+        <StatusModal
+          visible={isModalOpen}
+          closeModal={closeModal}
+          onAdd={handleAdd}
+        />
+      )}
+      {viewModalData && (
+        <ReusableModal
+          visible={viewModalData !== null}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          onClose={closeViewModal}
+          title="Stability Protocol Details"
+          updateStatus={handleStatusUpdate}
+        />
+      )}
+      {isModalsOpen && (
+        <ImportModal
+          initialData={data}
+          isOpen={isModalsOpen}
+          onClose={handleCloseModals}
+          columns={columns}
+          onDataUpload={handleExcelDataUpload}
+        />
+      )}
+      {editModalData && (
+        <EditModal
+          visible={Boolean(editModalData)}
+          closeModal={closeEditModal}
+          data={editModalData}
+          onSave={handleEditSave}
+        />
+      )}
     </>
   );
 }

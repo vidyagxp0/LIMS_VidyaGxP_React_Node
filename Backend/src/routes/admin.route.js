@@ -8,6 +8,7 @@ import {
   getAllUsers,
   getAllRoles,
   getUserPermissions,
+  getUserByid,
 } from "../controllers/admin.controller.js";
 import { upload } from "../utils/multer.js";
 import { checkJwtToken } from "../middleware/authentication.js";
@@ -39,5 +40,7 @@ adminRouter.get("/get-all-users", checkJwtToken, getAllUsers);
 adminRouter.get("/get-all-roles", checkJwtToken, getAllRoles);
 
 adminRouter.get("/get-user-permissions/:id", checkJwtToken, getUserPermissions);
+
+adminRouter.get("/get-user/:id", checkJwtToken, getUserByid);
 
 export default adminRouter;

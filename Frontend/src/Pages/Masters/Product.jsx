@@ -57,7 +57,7 @@ function Product() {
     try {
       const response = await axios.get(
         `${BASE_URL}/get-all-lims/mmasterProduct`
-      );
+      );
       const fetchedData = response?.data[0]?.mmasterProduct || [];
 
       const updatedData = fetchedData.map((item, index) => ({
@@ -250,7 +250,7 @@ function Product() {
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
           />
-          <CFormInput
+          <CFormInput 
             className="mb-3"
             type="text"
             label="Unique Code"
@@ -490,4 +490,4 @@ function Product() {
   );
 }
 
-export default Product;
+export default Product;

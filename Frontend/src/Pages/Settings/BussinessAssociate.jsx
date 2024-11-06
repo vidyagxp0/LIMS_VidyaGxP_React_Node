@@ -14,6 +14,9 @@ import BUsinessAssociateModal from "../Modals/BUsinessAssociateModal";
 import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
+import ReusableModal from "../Modals/ResusableModal";
+import axios from "axios";
+import {BASE_URL} from "../../config.json" 
 
 
 const initialData = [
@@ -67,6 +70,7 @@ const BussinessAssociate = () => {
       APPROVED: 0,
       REJECTED: 0,
     };
+   
 
  
 
@@ -212,11 +216,28 @@ const BussinessAssociate = () => {
   const handleCardClick = (status) => {
     setStatusFilter(status);
   };
+ 
+  
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
+  const handleDelete = async (item) => {
+    console.log(item);
+    
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sBusinessAssociate/${item.uniqueId}`
+      );
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        console.log(newData,"popopopopopop")
+        setData(newData);
+        toast.success("Data deleted successfully");
+        fetchData();
+      } else {
+        console.error("Failed to delete investigation:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting investigation:", error);
+    }
   };
 
 
@@ -317,16 +338,27 @@ const BussinessAssociate = () => {
         onViewDetails={onViewDetails}
         onDelete={handleDelete}
         openEditModal={openEditModal}
+        handleSubmit={handleModalSubmit}
       />
       <BUsinessAssociateModal visible={isModalOpen} closeModal={closeModal}
        handleSubmit={handleModalSubmit} />
-      {isViewModalOpen && (
+      {/* {isViewModalOpen && (
         <ViewModal
           visible={isViewModalOpen}
           closeModal={closeViewModal}
           data={viewModalData}
         />
-      )}
+      )} */}
+
+
+       <ReusableModal
+       visible={isViewModalOpen}
+       closeModal={closeViewModal}
+       fields={columns.map(col=>({key:col.accessor,label:col.header})).filter(field=>field.key!=="action" && field.key!=="checkbox")}
+       data={viewModalData}
+       title="Bussiness Associate Details"
+/>
+
       {isModalsOpen && (
         <ImportModal
           isOpen={isModalsOpen}

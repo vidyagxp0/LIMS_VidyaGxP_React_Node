@@ -19,7 +19,7 @@ import AnalystQualificationModal from "../Pages/AnalystQualificationModal.jsx";
 import { useNavigate } from "react-router-dom";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS.jsx";
 import ToastContainer from "../components/HotToaster/ToastContainer.jsx";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const AnalystQualification = () => {
   const [data, setData] = useState([]);

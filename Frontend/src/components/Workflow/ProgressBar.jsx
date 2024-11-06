@@ -3,12 +3,12 @@ import axios from "axios";
 import ESignatureModal from "./ESignature/ESignatureModal";
 import { useNavigate } from "react-router-dom";
 import ToastContainer from "../HotToaster/ToastContainer";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 
 const baseStages = [
   "Opened",
   "Pending Analysis",
-  "Pending Supervisor Review ",
+  "Pending Supervisor Review",
   "Pending QA Review",
   "Closed Done",
 ];
@@ -28,6 +28,8 @@ const ProgressBar = (props) => {
   const [stages, setStages] = useState(baseStages);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [url, setUrl] = useState("");
+  const [submitMessage, setSubmitMessage] = useState("");
+
   useEffect(() => {
     setCurrentStage(stage - 1);
     // console.log(stage);
@@ -42,20 +44,26 @@ const ProgressBar = (props) => {
   const handleClose = () => {
     setIsModalOpen(false);
   };
+
   const handleSubmit = async (formData) => {
     const isSuccess = await callApis(formData, sampleId);
     if (isSuccess) {
       setIsModalOpen(false);
+      toast.success(submitMessage);
+      onStageClick();
     } else {
       setIsModalOpen(true);
+      toast.error("Submission failed. Please try again.");
     }
   };
-  const handleOpen = (url) => {
+
+  const handleOpen = (url, message) => {
     setUrl(url);
     setIsModalOpen(true);
+    setSubmitMessage(message);
   };
+
   const token = localStorage.getItem("token");
-  // console.log(token,"ttttttttt");
 
   const callApis = async (formData, sampleId) => {
     try {
@@ -87,19 +95,17 @@ const ProgressBar = (props) => {
             },
           }
         );
-        toast.success("Review Submitted!");
-        onStageClick();
         return true;
       } else {
         toast.error("Incorrect email or password. Please try again.");
         return false;
       }
     } catch (error) {
-      // console.error("API error:", error);
       toast.error(error.response?.data?.message || "Error during request");
       return false;
     }
   };
+
   return (
     <>
       <div>
@@ -122,7 +128,7 @@ const ProgressBar = (props) => {
                 index === currentStage && index !== 4
                   ? "bg-orange-500 text-white"
                   : ""
-              } 
+              }
               ${
                 index === 3 && currentStage === 3
                   ? "bg-orange-500 text-white"
@@ -130,8 +136,8 @@ const ProgressBar = (props) => {
               }
               ${
                 index === 4 && currentStage === 4 ? "bg-red-500 text-white" : ""
-              } 
-              ${index > currentStage ? "bg-gray-200" : ""} 
+              }
+              ${index > currentStage ? "bg-gray-200" : ""}
               ${index < stages.length - 1 ? "mr-1" : ""}`}
             >
               {stageName}
@@ -151,7 +157,7 @@ const ProgressBar = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-review")}
+                onClick={() => handleOpen("send-review", "Sample registration initiated.")}
               >
                 Sample Registration
               </button>
@@ -167,40 +173,26 @@ const ProgressBar = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-supervisor")}
+                onClick={() =>
+                  handleOpen("send-supervisor", "Analysis complete.")
+                }
               >
                 Analysis Complete
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-open")}
+                onClick={() => handleOpen("send-to-open", "Action Done.")}
               >
                 More Info Required
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-open")}
+                onClick={() =>
+                  handleOpen("send-to-open", "Create child initiated.")
+                }
               >
                 Create Child
               </button>
-              {/* <button className="bg-white text-black px-4 py-2 rounded hover:bg-teal-500">
-                  Create 00S
-                </button>
-                <button className="bg-white text-black px-4 py-2 rounded hover:bg-teal-500">
-                  Create 00T
-                </button>
-                <button className="bg-white text-black px-4 py-2 rounded hover:bg-teal-500">
-                  Create Lab Incident
-                </button>
-                <button className="bg-white text-black px-4 py-2 rounded hover:bg-teal-500">
-                  Create Action Item
-                </button>
-                <button className="bg-white text-black px-4 py-2 rounded hover:bg-teal-500">
-                  Create RCA
-                </button>
-                <button className="bg-white text-black px-4 py-2 rounded hover:bg-teal-500">
-                  Create CAPA
-                </button> */}
             </>
           )}
           {stage == "3" && (
@@ -213,13 +205,15 @@ const ProgressBar = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
-                onClick={() => handleOpen("send-qa")}
+                onClick={() =>
+                  handleOpen("send-qa", "Supervisor review complete.")
+                }
               >
-                Superwiser Review Complete
+                Supervisor Review Complete
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200"
-                onClick={() => handleOpen("send-to-open")}
+                onClick={() => handleOpen("send-to-open", "Action Done.")}
               >
                 More Info Required
               </button>
@@ -235,13 +229,15 @@ const ProgressBar = (props) => {
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-qa-review")}
+                onClick={() =>
+                  handleOpen("send-qa-review", "QA review complete.")
+                }
               >
                 QA Review Complete
               </button>
               <button
                 className="bg-white text-black px-4 py-2 rounded hover:scale-95 duration-200 hover:bg-teal-500"
-                onClick={() => handleOpen("send-to-open")}
+                onClick={() => handleOpen("send-to-open", "Action Done.")}
               >
                 More Info Required
               </button>
