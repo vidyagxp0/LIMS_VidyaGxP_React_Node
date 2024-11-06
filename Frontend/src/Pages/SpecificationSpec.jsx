@@ -468,11 +468,11 @@ const SpecificationSpec = () => {
     <div>
       <LaunchQMS />
       <ToastContainer/>
-      <div className="m-5 mt-3 fixed top-20 w-[82%]">
-        <div className="main-head mb-6">
+      <div className="ml-3 mt-3 fixed top-20 w-[83%]">
+        <div className="main-head mb-3">
           <h4 className="font-bold text-xl">Specification</h4>
         </div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 ">
+        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-3 md:space-y-0 ">
           <div className="flex flex-grow space-x-10">
             <SearchBar
               value={""}
@@ -514,9 +514,9 @@ const SpecificationSpec = () => {
         </div>
       </div>
 
-      <div className="relative top-24">
-        <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-10">
-          <thead className="sticky top-[86px]">
+      <div className="relative top-16">
+        <table className=" min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-5 mb-5">
+          <thead className=" top-[86px]">
             <tr className="text-white text-left">
               <th colSpan="12" className="px-4 py-2 bg-cyan-500">
                 General Information
@@ -543,7 +543,7 @@ const SpecificationSpec = () => {
             </tr>
             <tr className="bg-slate-800 text-white sticky top-[126px]">
               {headers.map((header, index) => (
-                <td key={index} className="border px-4 py-2">
+                <td key={index} className="border px-4 py-3 text-nowrap">
                   {header}
                 </td>
               ))}
@@ -558,7 +558,7 @@ const SpecificationSpec = () => {
                 {fields.map((field, fieldIndex) => (
                   <td
                     key={fieldIndex}
-                    className="border px-4 py-2 min-w-[100px]"
+                    className="border px-4 py-2 min-w-[145px]"
                   >
                     {item[field]}
                   </td>
@@ -588,7 +588,7 @@ const SpecificationSpec = () => {
         </table>
 
         {/* Pagination */}
-        <div className="mt-6 flex justify-end fixed right-2">
+        <div className="mt-2 flex justify-end fixed bottom-0 left-0 right-2">
           <nav
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
             aria-label="Pagination"

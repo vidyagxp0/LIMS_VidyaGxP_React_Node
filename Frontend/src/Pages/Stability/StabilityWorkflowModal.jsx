@@ -230,7 +230,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/admin/get-user/${userId}`,
+          `http://localhost:9000/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -348,7 +348,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/stability`
+        `http://localhost:9000/get-Sample/${id}/stability`
       );
       console.log(response.data);
 
@@ -378,7 +378,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     try {
       const response = await toast.promise(
         axios.put(
-          `https://limsapi.vidyagxp.com/edit-sample/${id}/stability`,
+          `http://localhost:9000/edit-sample/${id}/stability`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         ),
@@ -435,13 +435,9 @@ const StabilityWorkflowModal = ({ onClose }) => {
       } else {
         // Add new data with a toast notification
         const response = await toast.promise(
-          axios.post(
-            `https://limsapi.vidyagxp.com/create-sample`,
-            formDataToSend,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }
-          ),
+          axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
           {
             loading: "Saving data...",
             success: <b>Data added successfully.</b>,

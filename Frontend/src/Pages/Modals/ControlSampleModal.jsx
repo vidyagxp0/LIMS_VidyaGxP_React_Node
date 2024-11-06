@@ -72,7 +72,7 @@ const ControlSampleModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/admin/get-user/${userId}`,
+          `http://localhost:9000/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -194,7 +194,7 @@ const ControlSampleModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/controlSample/get-control-sample/${id}`
+        `http://localhost:9000/controlSample/get-control-sample/${id}`
       );
       // console.log(response.data);
 
@@ -220,7 +220,7 @@ const ControlSampleModal = ({ onClose }) => {
       await toast.promise(
         Promise.all([
           axios.put(
-            `https://limsapi.vidyagxp.com/controlSample/edit-control-sample/${id}`,
+            `http://localhost:9000/controlSample/edit-control-sample/${id}`,
             formData
           ),
           delay(1300),
@@ -255,7 +255,7 @@ const ControlSampleModal = ({ onClose }) => {
         await toast.promise(
           Promise.all([
             axios.post(
-              `https://limsapi.vidyagxp.com/controlSample/create-control-sample`,
+              `http://localhost:9000/controlSample/create-control-sample`,
               updatedFormData
             ),
             delay(1300),
