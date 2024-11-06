@@ -33,6 +33,7 @@ import TestParametersTable from "./TestParametersTable";
 
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 
 const StabilityWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -350,24 +351,32 @@ const StabilityWorkflowModal = ({ onClose }) => {
       const response = await axios.get(
         `http://localhost:9000/get-Sample/${id}/stability`
       );
-      console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
 
-      const testParamterResponse = responseData.testParameters[1];
-      const fetchedData = JSON.parse(testParamterResponse);
+      const testParamterResponse = responseData.testParameters?.[1] || null;
+
+      let fetchedData = [];
+      if (testParamterResponse) {
+        try {
+          fetchedData = JSON.parse(testParamterResponse);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          fetchedData = [];
+        }
+      }
 
       setTestParameters(fetchedData.length > 0 ? fetchedData : []);
       setFormData((prevData) => ({
         ...prevData,
         ...responseData,
-        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+        testParameters: responseData.testParameters || [],
       }));
     } catch (error) {
-      console.error("Error fetching ", error);
-      toast.error("Failed to fetch ");
+      console.error("Error fetching data", error);
+      toast.error("Failed to fetch data");
     }
   };
   useEffect(() => {
