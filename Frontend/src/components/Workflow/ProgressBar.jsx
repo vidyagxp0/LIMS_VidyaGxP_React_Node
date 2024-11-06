@@ -39,7 +39,6 @@ const ProgressBar = (props) => {
       onStageClick();
     } else {
       setIsModalOpen(true);
-      toast.error("Submission failed. Please try again.");
     }
   };
 
