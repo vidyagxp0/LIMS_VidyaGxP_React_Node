@@ -28,7 +28,7 @@ import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ReusableModal from "../Modals/ResusableModal";
-
+import {BASE_URL} from "../../config.json";
 function SampleLoginTemplate() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,13 +91,7 @@ function SampleLoginTemplate() {
     setData(newData);
   };
 
-  // const filteredData = data.filter((row) => {
-  //   return (
-  //     row.templateTitle.toLowerCase().includes(searchQuery.toLowerCase()) &&
-  //     (statusFilter === "All" || row.status === statusFilter)
-  //   );
-  // });
-  
+
   
   const filteredData = data.filter((row) => {
     const titleMatch = row.templateTitle && row.templateTitle.toLowerCase().includes(searchQuery.toLowerCase());
@@ -113,52 +107,8 @@ function SampleLoginTemplate() {
   };
 
   
-  
-  // const columns = [
-  //   {
-  //     header: <input type="checkbox" onChange={handleSelectAll} />,
-  //     accessor: "checkbox",
-  //     Cell: ({ row }) => (
-  //       <input
-  //         type="checkbox"
-  //         checked={row.original.checkbox || false}
-  //         onChange={() => handleCheckboxChange(row.index)}
-  //       />
-  //     ),
-  //   },
-  //   { header: "SrNo.", accessor: "sno" },
-  //   { header: "Template Title", accessor: "templateTitle" },
-  //   { header: "Added On", accessor: "addedOn" },
-  //   { header: "Status", accessor: "status" },
-  //   {
-  //     header: "Actions",
-  //     accessor: "action",
-  //     Cell: ({ row }) => (
-  //       <>
-  //         <FontAwesomeIcon
-  //           icon={faEye}
-  //           className="mr-2 cursor-pointer"
-  //           onClick={() => onViewDetails(row.original)}
-  //         />
-  //         <FontAwesomeIcon
-  //           icon={faPenToSquare}
-  //           className="mr-2 cursor-pointer"
-  //           onClick={() => openEditModal(row.original)}
-  //         />
-  //         <FontAwesomeIcon
-  //           icon={faTrashCan}
-  //           className="cursor-pointer"
-  //           onClick={() => handleDelete(row.original)}
-  //         />
-  //       </>
-  //     ),
-  //   },
-  // ];
-  
-  
-  
-  // ... existing code ...
 
+  
 const columns = [
   {
     header: <input type="checkbox" onChange={handleSelectAll} />,
@@ -263,7 +213,7 @@ const columns = [
 
   const addNewSampleLoginTemplate = async (newTemplate) => {
     try {
-      const response = await axios.post(`http://localhost:9000/manage-lims/add/sMSampleLoginTemplate`, {
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/sMSampleLoginTemplate`, {
         ...newTemplate,
         addedOn: new Date().toISOString().split("T")[0],
         status: "INITIATED",
@@ -281,10 +231,13 @@ const columns = [
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/get-all-lims/sMSampleLoginTemplate`
+        `${BASE_URL}/get-all-lims/sMSampleLoginTemplate`
       );
       const fetchedData = response?.data[0]?.sMSampleLoginTemplate || [];
 
@@ -298,14 +251,12 @@ const columns = [
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
 
   const handleStatusUpdate = async (newStatus) => {
     try {
       const { sno, ...dataToSend } = viewModalData;
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
@@ -329,7 +280,7 @@ const columns = [
   const handleEditSave = async (updatedData) => {
     try {
       const { sno, ...dataToSend } = updatedData;
-      const response = await axios.put(`http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`, dataToSend);
+      const response = await axios.put(`${BASE_URL}/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`, dataToSend);
       
       if (response.status === 200) {
         setData((prevData) =>

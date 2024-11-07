@@ -376,14 +376,21 @@ function StorageCondition() {
         );
 
         setData(newData);
+        closeEditModal();
+        fetchStorageCondition();
         toast.success(" updated successfully");
+      }
+      else {
+        console.error("Failed to update storage condition:", response.statusText);
+        toast.error("Failed to update storage condition");
       }
     } catch (error) {
       console.error("Error updating ", error);
       toast.error("Failed to update");
-    } finally {
-      setEditModalData(null);
-    }
+    } 
+    // finally {
+    //   setEditModalData(null);
+    // }
   };
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [numRows, setNumRows] = useState(0);
@@ -548,27 +555,3 @@ function StorageCondition() {
 
 export default StorageCondition;
 
-//   // {
-//   //   header: "Actions",
-//   //   accessor: "action",
-//   //   Cell: ({ row }) => (
-//   //     <>
-//   //       <FontAwesomeIcon
-//   //         icon={faEye}
-//   //         className="mr-2 cursor-pointer"
-//   //         onClick={() => onViewDetails(row)}
-//   //       />
-//   //       <FontAwesomeIcon
-//   //         icon={faPenToSquare}
-//   //         className="mr-2 cursor-pointer"
-//   //         onClick={() => openEditModal(row.original)}
-//   //       />
-//   //       <FontAwesomeIcon
-//   //         icon={faTrashCan}
-//   //         className="cursor-pointer"
-//   //         onClick={() => handleDelete(row.original)}
-//   //       />
-//   //     </>
-//   //   ),
-//   // },
-// ];

@@ -89,7 +89,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
 
   const handleUpdate = () => {
     onUpdateStatus(selectedStatus); // Call parent function to update the status
-    closeModal(); // Close the modal
+    closeModal(); 
     if (selectedStatus) {
       console.log("Updating status to:", selectedStatus);
       onUpdateStatus(selectedStatus);

@@ -236,7 +236,7 @@ function SampleStorage() {
   const handleExcelDataUpload = async (excelData) => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/manage-lims/bulk-add/sMSampleStorage`,
+        `${BASE_URL}/manage-lims/add/sMSampleStorage`,
         excelData
       );
       if (response.status === 200) {

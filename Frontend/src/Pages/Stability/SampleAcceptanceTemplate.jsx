@@ -17,8 +17,8 @@ import {
 } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import { FaArrowRight } from "react-icons/fa";
+// import { Link } from "react-router-dom";
+// import { FaArrowRight } from "react-icons/fa";
 import "../../Pages/StorageCondition/StorageCondition.css";
 import Dropdown from "../../components/ATM components/Dropdown/Dropdown";
 import SearchBar from "../../components/ATM components/SearchBar/SearchBar";
@@ -28,30 +28,42 @@ import ViewModal from "../Modals/ViewModal";
 import ImportModal from "../Modals/importModal";
 import PDFDownload from "../PDFComponent/PDFDownload ";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
+import {toast} from "react-toastify"
+import { BASE_URL } from "../../config.json";
+import ReusableModal from "../Modals/ResusableModal";
 
-const initialData = [
-  {
-    checkbox: false,
-    sno: 1,
-    name: "Name 1",
-    uniqueCode: "UC001",
-    NoOfCheckItems: 10,
-    updatedAt: "2024-01-01",
-    status: "Active",
-  },
-  {
-    checkbox: false,
-    sno: 2,
-    name: "Name 2",
-    uniqueCode: "UC002",
-    NoOfCheckItems: 15,
-    updatedAt: "2024-01-02",
-    status: "Inactive",
-  },
+// const initialData = [
+//   {
+//     checkbox: false,
+//     sno: 1,
+//     name: "Name 1",
+//     uniqueCode: "UC001",
+//     NoOfCheckItems: 10,
+//     updatedAt: "2024-01-01",
+//     status: "Active",
+//   },
+//   {
+//     checkbox: false,
+//     sno: 2,
+//     name: "Name 2",
+//     uniqueCode: "UC002",
+//     NoOfCheckItems: 15,
+//     updatedAt: "2024-01-02",
+//     status: "Inactive",
+//   },
+// ];
+
+
+
+const fields = [
+  { label: "Condition Name", key: "name" }, // Updated to match your format
+  { label: "Unique Code", key: "uniqueCode" }, // Updated to match your format
+  { label: "Number of Check Items", key: "NoOfCheckItems" }, // Updated to match your format
+  { label: "Updated At", key: "updatedAt" }, // Updated to match your format
+  { label: "Actions", key: "action" }, // Updated to match your format
 ];
-
 function SampleAcceptanceTemplate() {
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -62,25 +74,7 @@ function SampleAcceptanceTemplate() {
   
   
   
-  const fetchData =  async()=>{
-      try{
-       const response = await axios.get(`http://localhost:9000/get-all-lims/sMSampleAcceptanceTemplate`); 
-       const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
-
-       const updatedData = fetchedData.map((item, index) => ({  
-        ...item,
-        sno: index + 1,
-        checkbox: false,
-      }));
-      setData(updatedData);
-      }catch(error){
-        console.log(error);
-      }
-  }
-  
-  useEffect(() => {
-    fetchData();
-  }, []);
+ 
   
   
   
@@ -100,10 +94,10 @@ function SampleAcceptanceTemplate() {
 
   const filteredData = data.filter((row) => {
     return (
-      row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (row.uniqueCode && row.uniqueCode.toLowerCase().includes(searchQuery.toLowerCase())) && // Check if uniqueCode is defined
       (statusFilter === "All" || row.status === statusFilter)
     );
-  });
+});
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData);
@@ -115,15 +109,15 @@ function SampleAcceptanceTemplate() {
     setData(newData);
   };
 
-  const addNewStorageCondition = (newCondition) => {
-    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
-    setData((prevData)=>[
-      ...prevData,
-      {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
-    ])
-    setLastStatus(nextStatus)
-    setIsModalOpen(false);
-  }
+  // const addNewStorageCondition = (newCondition) => {
+  //   const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
+  //   setData((prevData)=>[
+  //     ...prevData,
+  //     {...newCondition, sno: prevData.length + 1, checkbox: false,status:nextStatus},
+  //   ])
+  //   setLastStatus(nextStatus)
+  //   setIsModalOpen(false);
+  // }
 
   const StatusModal = ({visible , closeModal,onAdd}) => {
     const [numOfCheckItems, setNumOfCheckItems] = useState(0);
@@ -214,7 +208,9 @@ function SampleAcceptanceTemplate() {
           <CButton color="light" onClick={closeModal}>
             Back
           </CButton>
-          <CButton color="primary" onClick={handleAdd}>Submit</CButton>
+          <CButton color="primary" onClick={handleAdd}>
+            Submit
+          </CButton>
         </CModalFooter>
       </CModal>
     );
@@ -267,23 +263,111 @@ function SampleAcceptanceTemplate() {
     setIsModalsOpen(false); // Close the import modal after data upload
   };
   
-  const handleModalsubmit = async (newproduct) => {
+
+
+  const addNewStorageCondition = async (newCondition) => {
+    const nextStatus = lastStatus === "Active" ? "Inactive" : "Active";
     try {
-      const response = await axios.post(`${BASE_URL}/manage-lims/bulk-add/sMSampleAcceptanceTemplate`, {
-        ...newproduct,
-        status: newproduct.status || "INITIATED",
+      const response = await axios.post(`${BASE_URL}/manage-lims/add/sMSampleAcceptanceTemplate`, {
+        ...newCondition,
+        status: nextStatus,
       });
       if (response.status === 200) {
-        toast.success("Sample Acceptance Template added successfully");
-        setIsModalsOpen(false);
-        // fetchSampleAcceptanceTemplateData();
+        toast.success("Condition added successfully");
+        fetchData(); // Refresh data after adding
+        setIsModalOpen(false);
       } else {
-        toast.error("Failed to add Sample Acceptance Template");
+        toast.error("Failed to add condition");
       }
     } catch (error) {
-      toast.error("Error adding Sample Acceptance Template: " + (error.response?.data || error.message));
+      console.error("Error adding new condition:", error.response ? error.response.data : error.message);
+      toast.error("Error adding condition: " );
     }
   };
+  
+
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData || !viewModalData.uniqueId) {
+      console.error("No valid admin data selected for update");
+      toast.error("No valid data selected for update");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`,
+        { status: newStatus }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Status updated successfully");
+        closeViewModal();
+        // fetchStorageCondition(); // Refresh the data after update
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };  
+  
+  
+    // Call fetchData when the component mounts
+    useEffect(() => {
+      fetchData();
+    }, []);
+    
+  
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/get-all-lims/sMSampleAcceptanceTemplate`);
+      const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
+  
+      const updatedData = fetchedData.map((item, index) => ({
+        ...item,
+        sno: index + 1,
+        checkbox: false,
+      }));
+      setData(updatedData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+
+  
+  
+  
+  const handleDelete = async (item) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
+      );
+
+      if (response.status === 200) {
+        const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
+        setData(newData);
+        toast.success(" deleted successfully");
+
+        console.log("Deleted item:", item);
+      }
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting storage condition:", error);
+    }
+  };
+
+
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -297,11 +381,8 @@ function SampleAcceptanceTemplate() {
     setViewModalData(false);
   };
 
-  const handleDelete = (item) => {
-    const newData = data.filter((d) => d !== item);
-    setData(newData);
-    console.log("Deleted item:", item);
-  };
+
+  
 
   const openEditModal = (rowData) => {
     setEditModalData(rowData);
@@ -310,12 +391,36 @@ function SampleAcceptanceTemplate() {
   const closeEditModal = () => {
     setEditModalData(null);
   };
-  const handleEditSave = (updatedData) => {
-    const newData = data.map((item) =>
-      item.sno === updatedData.sno ? updatedData : item
-    );
-    setData(newData);
-    setEditModalData(null);
+  const handleEditSave = async (updatedData) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`,
+        updatedData // Sending the updated data
+      );
+
+      if (response.status === 200) {
+        const newData = data.map((item) =>
+          item.uniqueId === updatedData.uniqueId
+            ? { ...item, ...updatedData }
+            : item
+        );
+
+        setData(newData);
+        closeEditModal();
+        fetchData();
+        toast.success(" updated successfully");
+      }
+      else {
+        console.error("Failed to update storage condition:", response.statusText);
+        toast.error("Failed to update storage condition");
+      }
+    } catch (error) {
+      console.error("Error updating ", error);
+      toast.error("Failed to update");
+    } 
+    // finally {
+    //   setEditModalData(null);
+    // }
   };
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
@@ -471,7 +576,15 @@ function SampleAcceptanceTemplate() {
         <StatusModal visible={isModalOpen} closeModal={closeModal} onAdd={addNewStorageCondition}/>
       )}
       {viewModalData && (
-        <ViewModal visible={viewModalData} closeModal={closeViewModal} />
+       
+       <ReusableModal
+          visible={Boolean(viewModalData)}
+          closeModal={closeViewModal}
+          data={viewModalData}
+          fields={fields}
+          title="Test Plan Details"
+          updateStatus={handleStatusUpdate}
+        />
       )}
       {editModalData && (
         <EditModal
