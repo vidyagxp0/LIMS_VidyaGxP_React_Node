@@ -47,7 +47,7 @@ function Header({ toggleSidebarClass }) {
   return (
     <header
       id="head"
-      className=" text-gray-900 w-[100%] text-[16px] gap-10 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[86px] flex items-baseline  justify-center "
+      className=" text-gray-900 w-[100%] text-[16px] gap-10 bg-gradient-to-r from-[#091C3F] via-[#3b8d99] to-[#091C3F] h-[81px] flex items-baseline  justify-center "
     >
       <div className="menuIconContainer  w-[10%] text-center text-blue font-extrabold text-xl  rounded-full">
         <button className="hidden xm:block" onClick={toggleSidebarClass}>

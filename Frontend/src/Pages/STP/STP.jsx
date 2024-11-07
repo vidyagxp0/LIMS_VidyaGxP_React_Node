@@ -107,8 +107,7 @@ const STP = () => {
         approvedBy: item.approvedBy || "-",
         department: item.department || "-",
         objective: item.objective || "-",
-        testProcedureDescription:
-          item.testProcedureDescription || "-",
+        testProcedureDescription: item.testProcedureDescription || "-",
         testType: item.testType || "-",
         testMethodReference: item.testMethodReference || "-",
         samplePreparation: item.samplePreparation || "-",
@@ -119,19 +118,16 @@ const STP = () => {
         controlSample: item.controlSample || "-",
         testParameters: item.testParameters || "-",
         safetyPrecautions: item.safetyPrecautions || "-",
-        validationRequirements:
-          item.validationRequirements || "-",
+        validationRequirements: item.validationRequirements || "-",
         calculationFormula: item.calculationFormula || "-",
         lsl: item.lsl || "-",
         usl: item.usl || "-",
-        resultInterpretation:
-          item.resultInterpretation || "-",
+        resultInterpretation: item.resultInterpretation || "-",
         expectedResults: item.expectedResults || "-",
         reportTemplate: item.reportTemplate || "-",
         dataRecording: item.dataRecording || "-",
         testFrequency: item.testFrequency || "-",
-        testReportSubmission:
-          item.testReportSubmission || "-",
+        testReportSubmission: item.testReportSubmission || "-",
         deviationHandling: item.deviationHandling || "-",
         auditTrail: item.auditTrail || "-",
         revisionHistory: item.revisionHistory || "-",
@@ -263,8 +259,8 @@ const STP = () => {
     // };
 
     const handleAdd = () => {
-        onAdd(formData);
-        closeModal();
+      onAdd(formData);
+      closeModal();
     };
 
     return (
@@ -413,7 +409,7 @@ const STP = () => {
 
     const handleSave = async (e) => {
       e.preventDefault();
-    
+
       setIsLoading(true);
       try {
         await onSave({ ...formData, sno: formData.sno });
@@ -425,7 +421,6 @@ const STP = () => {
         setIsLoading(false);
       }
     };
-    
 
     if (!visible) return null;
 
@@ -660,11 +655,11 @@ const STP = () => {
   return (
     <div>
       <LaunchQMS />
-      <div className="m-5 mt-3 fixed top-20 w-[82%]">
-        <div className="main-head mb-6">
+      <div className="m-3 mt-3 fixed top-20 w-[83%]">
+        <div className="main-head mb-3">
           <h4 className="font-bold text-xl">STP</h4>
         </div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
+        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-3 md:space-y-0">
           <div className="flex flex-grow space-x-10">
             <SearchBar
               value={""}
@@ -773,7 +768,7 @@ const STP = () => {
           </tbody>
         </table>
 
-        <div className="mt-6 flex justify-end fixed right-2">
+        <div className="mt-6 flex justify-end fixed right-2 bottom-0 left-0">
           <nav
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
             aria-label="Pagination"
@@ -793,10 +788,10 @@ const STP = () => {
               <button
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
-                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium ${
                   currentPage === index + 1
                     ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                    : "hover:text-blue-500"
+                    : "bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-500"
                 }`}
               >
                 {index + 1}

@@ -218,14 +218,14 @@ const Table = ({
             </tbody>
           )}
         </table>
-        {currentData.length > 0 && totalPageCount > 1 && ( // Check if there's more than one page
-  <div className="mt-2 flex justify-end fixed right-10">
+        {currentData.length > 0 &&  ( // Check if there's more than one page
+  <div className="mt-2 flex justify-end fixed right-6">
     <nav
       className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
       aria-label="Pagination"
     >
       {/* Previous Button */}
-      {totalPageCount > 1 && (
+      {totalPageCount > 0 && (
         <button
           onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
           className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
@@ -318,7 +318,7 @@ const Table = ({
       )}
 
       {/* Next Button */}
-      {totalPageCount > 1 && (
+      {totalPageCount > 0 && (
         <button
           onClick={() =>
             handlePageChange(Math.min(currentPage + 1, totalPageCount))

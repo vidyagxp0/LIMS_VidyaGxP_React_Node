@@ -271,9 +271,9 @@ const SpecificationSpec = () => {
   // POST API - Add new Specification
   const handleAddSpecification = async (newSpecData) => {
     setIsLoading(true);
-    
+
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
     try {
       const response = await toast.promise(
         Promise.all([
@@ -286,7 +286,7 @@ const SpecificationSpec = () => {
           error: <b>Failed to add Data.</b>,
         }
       );
-  
+
       if (response.status === 200 || response.status === 201) {
         setDataChanged(true); // Trigger a re-fetch of data
         closeAddModal();
@@ -298,20 +298,21 @@ const SpecificationSpec = () => {
       setIsLoading(false);
     }
   };
-  
-  
 
   // PUT API - Edit Specification
   const handleEditSave = async (updatedData) => {
     const { sno, ...dataToSend } = updatedData;
     setIsLoading(true);
-  
+
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
     try {
       const response = await toast.promise(
         Promise.all([
-          axios.put(`${BASE_URL}/manage-lims/update/specification/${sno}`, dataToSend),
+          axios.put(
+            `${BASE_URL}/manage-lims/update/specification/${sno}`,
+            dataToSend
+          ),
           delay(1300), // Add delay here
         ]).then(([response]) => response),
         {
@@ -320,7 +321,7 @@ const SpecificationSpec = () => {
           error: <b>Failed to update Data.</b>,
         }
       );
-  
+
       if (response.status === 200) {
         setDataChanged(true); // Trigger a re-fetch of data
         setEditModalData(null);
@@ -332,7 +333,6 @@ const SpecificationSpec = () => {
       setIsLoading(false);
     }
   };
-  
 
   // DELETE API - Delete Specification
   const handleDelete = async (item) => {
@@ -467,7 +467,7 @@ const SpecificationSpec = () => {
   return (
     <div>
       <LaunchQMS />
-      <ToastContainer/>
+      <ToastContainer />
       <div className="ml-3 mt-3 fixed top-20 w-[83%]">
         <div className="main-head mb-3">
           <h4 className="font-bold text-xl">Specification</h4>
@@ -558,11 +558,12 @@ const SpecificationSpec = () => {
                 {fields.map((field, fieldIndex) => (
                   <td
                     key={fieldIndex}
-                    className="border px-4 py-2 min-w-[145px]"
+                    className="border px-4 py-2 min-w-[141px] whitespace-normal break-words"
                   >
                     {item[field]}
                   </td>
                 ))}
+
                 <td className="border px-4 py-2">
                   <div className="flex gap-2">
                     <FontAwesomeIcon
@@ -608,10 +609,10 @@ const SpecificationSpec = () => {
               <button
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
-                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
                   currentPage === index + 1
                     ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                    : "hover:text-blue-500"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-blue-500"
                 }`}
               >
                 {index + 1}

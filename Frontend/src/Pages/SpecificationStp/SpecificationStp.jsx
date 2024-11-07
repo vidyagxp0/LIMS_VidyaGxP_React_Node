@@ -767,18 +767,17 @@ function SpecificationStp() {
   return (
     <>
       <LaunchQMS />
-
-      <div className="m-5 mt-3">
+      <div className="m-4 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Specification STP</h4>
+          <h4 className="fw-bold text-xl mb-3">Specification STP</h4>
         </div>
 
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-3">
           {/* Left Section: All input fields */}
           <div className="flex items-center space-x-6">
             {/* Division Dropdown */}
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Status</label>
+              {/* <label className="text-sm font-semibold">Status</label> */}
               <Dropdown
                 options={[
                   { value: "All", label: "All" },
@@ -796,7 +795,7 @@ function SpecificationStp() {
 
             {/* Date From Input */}
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Date From</label>
+              {/* <label className="text-sm font-semibold">Date From</label> */}
               <div className="relative">
                 <input
                   type="date"
@@ -804,14 +803,14 @@ function SpecificationStp() {
 
                   value={dateFrom}
                   onChange={handleDateFromChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
+                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-white"
                 />
               </div>
             </div>
 
             {/* Date To Input */}
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Date To</label>
+              <label className="text-sm font-bold text-center mr-3">To</label>
               <div className="relative">
                 <input
                   type="date"
@@ -819,7 +818,7 @@ function SpecificationStp() {
 
                   value={dateTo}
                   onChange={handleDateToChange}
-                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
+                  className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-white"
                 />
               </div>
             </div>

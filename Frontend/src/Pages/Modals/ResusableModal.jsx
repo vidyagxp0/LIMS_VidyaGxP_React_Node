@@ -103,7 +103,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
   };
 
   return (
-    <CModal alignment="center" visible={visible} onClose={closeModal} size="lg">
+    <CModal alignment="center" visible={visible} onClose={closeModal} size="lg" className="mt-2">
       <CModalHeader>
         <CModalTitle>Update Status</CModalTitle>
       </CModalHeader>
@@ -118,7 +118,7 @@ const StatusModal = ({ visible, closeModal, onUpdateStatus }) => {
             { label: "Drop", value: "DROPPED" },
             { label: "Reject", value: "REJECTED" },
             // { label: "Active", value: "ACTIVE" },
-            // { label: "Inactive", value: "INATCIVE" },
+            // { label: "Inactive", value: "INACTIVE" },
           ]}
         />
       </CModalBody>
