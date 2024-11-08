@@ -208,7 +208,11 @@ function SummaryReportHeader() {
             className="mr-2 cursor-pointer"
             onClick={() => openEditModal(row.original)}
           />
-          <FontAwesomeIcon icon={faTrashCan} className="cursor-pointer" />
+          <FontAwesomeIcon 
+          icon={faTrashCan} 
+          className="cursor-pointer"
+          onClick={() => handleDelete(row.original)}
+          />
         </>
       ),
     },
