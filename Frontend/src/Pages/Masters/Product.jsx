@@ -324,14 +324,41 @@ function Product() {
       toast.error("Error updating investigation");
     }
   };
-  const handleStatusUpdate = (samplingConfiguration, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.samplingID === samplingConfiguration.samplingID
-        ? { ...item, status: newStatus }
-        : item
-    );
-    setData(updatedData);
-  };
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData || !viewModalData.uniqueId) {
+      console.error("No valid admin data selected for update");
+      toast.error("No valid data selected for update");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/mmasterProduct/${viewModalData.uniqueId}`,
+        { status: newStatus }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Status updated successfully");
+        closeViewModal();
+        fetchData();
+        // fetchStorageCondition(); // Refresh the data after update
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };  
 
   const EditModal = ({ visible, closeModal, data, onSave }) => {
     const [formData, setFormData] = useState(data);

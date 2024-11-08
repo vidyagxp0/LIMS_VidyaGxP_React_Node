@@ -128,8 +128,7 @@ function StabilitySampleLogin() {
 
   const onViewDetails = (rowData) => {
     setViewModalData(rowData); 
-    setIsViewModalOpen(true); 
-    
+    setIsViewModalOpen(true);     
   };
 
   

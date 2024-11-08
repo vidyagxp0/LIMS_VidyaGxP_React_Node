@@ -196,10 +196,10 @@ function Specifications() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `${BASE_URL}/delete-lims/mSpecifications/${item.sno}`
+        `${BASE_URL}/delete-lims/mSpecifications/${item.uniqueId}`
       );
       if (response.status === 200) {
-        setData((prevData) => prevData.filter((d) => d.sno !== item.sno));
+        setData((prevData) => prevData.filter((d) => d.uniqueId !== item.uniqueId));
        
         toast.success("Product deleted successfully.");
       return updatedData;
@@ -232,12 +232,40 @@ function Specifications() {
     setIsModalOpen(false);
   };
 
-  const handleStatusUpdate = (testPlan, newStatus) => {
-    const updatedData = data.map((item) =>
-      item.testPlan === testPlan ? { ...item, status: newStatus } : item
-    );
-    setData(updatedData);
-  };
+  const handleStatusUpdate = async (newStatus) => {
+    if (!newStatus) {
+      console.error("New status is undefined");
+      toast.error("Invalid Status update");
+      return;
+    }
+    if (!viewModalData || !viewModalData.uniqueId) {
+      console.error("No valid admin data selected for update");
+      toast.error("No valid data selected for update");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${BASE_URL}/manage-lims/update/mSpecifications/${viewModalData.uniqueId}`,
+        { status: newStatus }
+      );
+      if (response.status === 200) {
+        setData((prevData) =>
+          prevData.map((item) =>
+            item.uniqueId === viewModalData.uniqueId
+              ? { ...item, status: newStatus }
+              : item
+          )
+        );
+        toast.success("Status updated successfully");
+        closeViewModal();
+        
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };  
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
