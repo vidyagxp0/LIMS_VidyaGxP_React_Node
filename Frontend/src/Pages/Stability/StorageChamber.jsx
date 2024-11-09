@@ -491,7 +491,8 @@ function StorageChamber() {
           fields={fields}
           onClose={closeViewModal}
           title="Storage Chamber Details"
-          updateStatus={handleStatusUpdate}
+          updateactiveStatus={handleStatusUpdate}
+          isApprovalPage={true}
         />
       )}
       {isModalsOpen && (

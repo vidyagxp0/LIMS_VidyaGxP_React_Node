@@ -808,7 +808,8 @@ function SummaryReportHeader() {
             onClose={handleCloseModals}
             fields={fields}
             title="Standard Protocol Details"
-            updateStatus={handleStatusUpdate}
+            updateactiveStatus={handleStatusUpdate}
+            isApprovalPage={true}
           />
         )}
         {isModalsOpen && (

@@ -443,7 +443,8 @@ function StandardProtocol() {
           fields={fields}
           onClose={handleCloseModals}
           title="Standard Protocol Details"
-          updateStatus={handleStatusUpdate}
+          updateactiveStatus={handleStatusUpdate}
+          isApprovalPage={true}
         />
       )}
       {isModalsOpen && (

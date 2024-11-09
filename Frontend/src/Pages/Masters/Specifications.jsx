@@ -44,7 +44,6 @@ const fields = [
 ];
 
 function Specifications() {
-  // const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -232,6 +231,7 @@ function Specifications() {
     setIsModalOpen(false);
   };
 
+
   const handleStatusUpdate = async (newStatus) => {
     if (!newStatus) {
       console.error("New status is undefined");
@@ -259,13 +259,15 @@ function Specifications() {
         );
         toast.success("Status updated successfully");
         closeViewModal();
-        
+        // fetchProductData(); // Refresh the data after update
       }
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status");
     }
   };  
+  
+  
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
@@ -761,3 +763,20 @@ function Specifications() {
 }
 
 export default Specifications;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

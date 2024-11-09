@@ -474,7 +474,8 @@ function Storage_Condition() {
           fields={fields}
           onClose={handleCloseModals}
           title="Test Plan Details"
-          updateStatus={handleStatusUpdate}
+          updateactiveStatus={handleStatusUpdate}
+          isApprovalPage={true}
         />
       )}
       {isModalsOpen && (

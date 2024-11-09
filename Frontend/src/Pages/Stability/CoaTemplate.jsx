@@ -321,25 +321,8 @@ function CoaTemplate() {
     }
   };
 
-  // const handleEditSave = async (updatedData) => {
-  //   try {
-  //     const {sno,...dataToSend}=updatedData;
-  //     const response = await axios.put(`http://localhost:9000/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`, dataToSend);
-  //     if (response.status === 200) {
-  //       setData((prevData) =>
-  //         prevData.map((item) => (item.uniqueId === updatedData.uniqueId ? { ...updatedData, sno: item.sno } : item))
-  //       );
-  //       toast.success("Approval updated successfully");
-  //     } else {
-  //       toast.error("Failed to update Approval");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error updating Approval:", error);
-  //     toast.error("Error updating Approval");
-  //   }
-  //   setEditModalData(null);
-  // };
 
+  
 
   
   const handleEditSave = async (updatedData) => {
@@ -925,7 +908,8 @@ function CoaTemplate() {
             fields={fields}
             onClose={handleCloseModals}
             title="Test Plan Details"
-            updateStatus={handleStatusUpdate}
+            updateactiveStatus={handleStatusUpdate}
+            isApprovalPage={true}
           />
         )}
 

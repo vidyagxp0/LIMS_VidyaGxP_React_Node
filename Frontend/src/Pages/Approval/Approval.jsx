@@ -22,6 +22,8 @@ function Approval() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalsOpen, setIsModalsOpen] = useState(false);
   const [editModalData, setEditModalData] = useState(null);
+  
+ 
 
 
   const fetchApprovalData = async () => {
@@ -73,24 +75,15 @@ function Approval() {
   };
 
   const handleStatusUpdate = async (newStatus) => {
-    if (!newStatus) {
-      console.error("New status is undefined");
-      toast.error("Invalid Status update");
-      return;
-    }
-    if (!viewModalData) {
-      console.error("No data selected for update");
-      toast.error("No data selected for update");
-      return;
-    }
+    
     try {
       const { sno, ...dataToSend } = viewModalData;
-      console.log(viewModalData);
-      
       const response = await axios.put(`${BASE_URL}/manage-lims/update/approval/${viewModalData.uniqueId}`, {
         ...dataToSend,
         status: newStatus,
       });
+   
+      
       if (response.status === 200) {
         setData((prevData) =>
           prevData.map((item) =>
@@ -99,6 +92,7 @@ function Approval() {
         );
         toast.success("Approval status updated successfully");
         closeViewModal();
+     
       } else {
         toast.error("Failed to update Approval status");
       }
@@ -107,6 +101,7 @@ function Approval() {
       toast.error("Error updating Approval status");
     }
   };
+
 
   const addNewApproval = async (newApproval) => {
     try {
@@ -418,7 +413,8 @@ function Approval() {
             .map((col) => ({ key: col.accessor, label: col.header }))
             .filter((field) => field.key !== "action" && field.key !== "checkbox")}
           title="Approval Details"
-         updateStatus={handleStatusUpdate}
+          updateactiveStatus={handleStatusUpdate}
+          isApprovalPage={true}
         />
       )}
 
@@ -435,7 +431,12 @@ function Approval() {
       )}
 
       {editModalData && (
-        <EditModal visible={Boolean(editModalData)} closeModal={closeEditModal} data={editModalData} onSave={handleEditSave} />
+        <EditModal 
+        visible={Boolean(editModalData)}
+         closeModal={closeEditModal} 
+         data={editModalData} 
+         onSave={handleEditSave}
+       />
       )}
     </>
   );
