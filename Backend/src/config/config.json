@@ -2,8 +2,8 @@
   "development": {
     "PORT": 9000,
     "dbName": "lims_vidyagxp",
-    "username": "root",
-    "password": "root",
+    "username": "farhan",
+    "password": "Farhan@121",
     "dialect": "mysql",
     "host": "localhost",
     "JWT_SECRET": "LIMSVidyagxp",
