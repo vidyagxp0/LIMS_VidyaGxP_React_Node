@@ -113,113 +113,119 @@ const Table = ({
               No Data Available!
             </div>
           ) : (
-<tbody className="bg-white divide-y divide-gray-200">
-  {currentData?.map((row, rowIndex) => (
-    <tr key={rowIndex}>
-      {columns?.map((column) => (
-        <td
-          key={column.accessor}
-          className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ${
-            column.accessor === "analystId" || column.accessor === "sampleId"
-              ? "hover:bg-zinc-200 cursor-pointer"
-              : ""
-          }`}
-          onClick={() => {
-            if (column.accessor === "analystId") {
-              navigate(`/analyst-qualification-edit/${row.id}`);
-            } else if (column.accessor === "sampleId") {
-              navigate(`/control-Sample-edit/${row.id}`);
-            }
-          }}
-        >
-          {column.accessor === "checkbox" ? (
-            <input
-              type="checkbox"
-              checked={row.checkbox}
-              onChange={() =>
-                onCheckboxChange(rowIndex + startIndex)
-              }
-            />
-          ) : column.accessor === "status" ? (
-            <span
-              className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-                row.status
-              )}`}
-            >
-              {row.status}
-            </span>
-          ) : column.accessor === "action" || column.accessor === "actionAnalyst" || column.accessor === "actionControl" ? (
-            <div className="flex space-x-2">
-              <FontAwesomeIcon
-                icon={faEye}
-                className="mr-2 cursor-pointer"
-                onClick={() => onViewDetails(row)}
-              />
-              <FontAwesomeIcon
-                icon={faPenToSquare}
-                className="mr-2 cursor-pointer"
-                onClick={() => openEditModal(row)}
-              />
-              <FontAwesomeIcon
-                icon={faTrashCan}
-                className="cursor-pointer"
-                onClick={() => openDeleteModal(row)}
-              />
-            </div>
-          ) : column.accessor === "report" ? (
-            <div className="flex space-x-2">
-              <FaFilePdf
-                size={20}
-                className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
-                onClick={() => onPdfGenerate(row.id)}
-              />
-              {loading[row.id] && (
-                <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
-              )}
-            </div>
-          ) : column.accessor === "audit" ? ( // Yahan par audit trail ke liye FaFilePdf icon add kiya gaya hai
-            <div className="flex space-x-2">
-              <FaFileAlt
-                size={20}
-                className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
-                onClick={() => handleDownloadAuditTrail(row)} // Function call for downloading audit trail
-              />
-            </div>
-          ) : column.accessor === "attachment" ? (
-            <div>
-              <button
-                className="bg-blue-500 text-white px-2 py-1 rounded"
-                onClick={() => handleAttachmentClick(rowIndex)}
-              >
-                Add Attachment
-              </button>
-              <input
-                type="file"
-                style={{ display: "none" }}
-                ref={(el) => (attachmentInput.current[rowIndex] = el)}
-                onChange={(e) => console.log(e.target.files[0])} // Handle file upload logic here
-              />
-            </div>
-          ) : (
-            row[column.accessor]
-          )}
-        </td>
-      ))}
-    </tr>
-  ))}
-</tbody>
-
-
+            <tbody className="bg-white divide-y divide-gray-200">
+              {currentData?.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {columns?.map((column) => (
+                    <td
+                      key={column.accessor}
+                      className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 ${
+                        column.accessor === "analystId" ||
+                        column.accessor === "sampleId"
+                          ? "hover:bg-zinc-200 cursor-pointer"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        if (column.accessor === "analystId") {
+                          navigate(`/analyst-qualification-edit/${row.id}`);
+                        } else if (column.accessor === "sampleId") {
+                          navigate(`/control-Sample-edit/${row.id}`);
+                        }
+                      }}
+                    >
+                      {column.accessor === "checkbox" ? (
+                        <input
+                          type="checkbox"
+                          checked={row.checkbox}
+                          onChange={() =>
+                            onCheckboxChange(rowIndex + startIndex)
+                          }
+                        />
+                      ) : column.accessor === "status" ? (
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
+                            row.status
+                          )}`}
+                        >
+                          {row.status}
+                        </span>
+                      ) : column.accessor === "action" || column.accessor === "actionAnalyst" || column.accessor === "actionControl" ? (
+                        <div className="flex space-x-2">
+                          <FontAwesomeIcon
+                            icon={faEye}
+                            className="mr-2 cursor-pointer"
+                            onClick={
+                              column.accessor === "actionAnalyst"
+                                ? () => navigate(`/analyst-qualification-edit/${row.id}`)
+                                : column.accessor === "actionControl"
+                                ? () => navigate(`/control-Sample-edit/${row.id}`)
+                                : () =>  onViewDetails(row)
+                            }
+                          />
+                          <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            className="mr-2 cursor-pointer"
+                            onClick={
+                              column.accessor === "actionAnalyst"
+                                ? () => navigate(`/analyst-qualification-edit/${row.id}`)
+                                : column.accessor === "actionControl"
+                                ? () => navigate(`/control-Sample-edit/${row.id}`)
+                                : () => openEditModal(row)
+                            }
+                            
+                          />
+                          <FontAwesomeIcon
+                            icon={faTrashCan}
+                            className="cursor-pointer"
+                            onClick={() => openDeleteModal(row)}
+                          />
+                        </div>
+                      ) : column.accessor === "report" ? (
+                        <div className="flex space-x-2">
+                          <FaFilePdf
+                            size={20}
+                            className="text-black cursor-pointer transition duration-200 ease-in-out hover:text-gray-800 focus:outline-none"
+                            onClick={() => onPdfGenerate(row.id)}
+                          />
+                          {loading[row.id] && (
+                            <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
+                          )}
+                        </div>
+                      ) : column.accessor === "attachment" ? (
+                        <div>
+                          <button
+                            className="bg-blue-500 text-white px-2 py-1 rounded"
+                            onClick={() => handleAttachmentClick(rowIndex)}
+                          >
+                            Add Attachment
+                          </button>
+                          <input
+                            type="file"
+                            style={{ display: "none" }}
+                            ref={(el) =>
+                              (attachmentInput.current[rowIndex] = el)
+                            }
+                            onChange={(e) => console.log(e.target.files[0])} // Handle file upload logic here
+                          />
+                        </div>
+                      ) : (
+                        row[column.accessor]
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
           )}
         </table>
-        {currentData.length > 0 && totalPageCount > 1 && ( // Check if there's more than one page
-  <div className="mt-2 flex justify-end fixed right-10">
+        {currentData.length > 0 &&  ( // Check if there's more than one page
+  <div className="mt-2 flex justify-end fixed right-6">
     <nav
       className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
       aria-label="Pagination"
     >
       {/* Previous Button */}
-      {totalPageCount > 1 && (
+      {totalPageCount > 0 && (
         <button
           onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
           className={`relative inline-flex items-center px-3 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 ${
@@ -312,7 +318,7 @@ const Table = ({
       )}
 
       {/* Next Button */}
-      {totalPageCount > 1 && (
+      {totalPageCount > 0 && (
         <button
           onClick={() =>
             handlePageChange(Math.min(currentPage + 1, totalPageCount))

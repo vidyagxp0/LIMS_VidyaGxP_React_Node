@@ -3,6 +3,7 @@ import axios from "axios";
 import ESignatureModal from "./ESignature/ESignatureModal";
 import { useNavigate } from "react-router-dom";
 import ToastContainer from "../HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 // import toast from "react-hot-toast";
 
 const baseStages = [
@@ -61,7 +62,7 @@ const ProgressBar = (props) => {
       }
 
       const response = await axios.post(
-        "https://limsapi.vidyagxp.com/e-signature",
+        "http://localhost:9000/e-signature",
         { email, password },
         {
           headers: {
@@ -72,7 +73,7 @@ const ProgressBar = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `https://limsapi.vidyagxp.com/${url}`,
+          `http://localhost:9000/${url}`,
           { sampleId, comment },
           {
             headers: {

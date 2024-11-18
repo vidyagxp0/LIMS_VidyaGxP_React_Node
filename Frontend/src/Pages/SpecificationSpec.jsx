@@ -271,9 +271,9 @@ const SpecificationSpec = () => {
   // POST API - Add new Specification
   const handleAddSpecification = async (newSpecData) => {
     setIsLoading(true);
-    
+
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
     try {
       const response = await toast.promise(
         Promise.all([
@@ -286,7 +286,7 @@ const SpecificationSpec = () => {
           error: <b>Failed to add Data.</b>,
         }
       );
-  
+
       if (response.status === 200 || response.status === 201) {
         setDataChanged(true); // Trigger a re-fetch of data
         closeAddModal();
@@ -298,20 +298,21 @@ const SpecificationSpec = () => {
       setIsLoading(false);
     }
   };
-  
-  
 
   // PUT API - Edit Specification
   const handleEditSave = async (updatedData) => {
     const { sno, ...dataToSend } = updatedData;
     setIsLoading(true);
-  
+
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  
+
     try {
       const response = await toast.promise(
         Promise.all([
-          axios.put(`${BASE_URL}/manage-lims/update/specification/${sno}`, dataToSend),
+          axios.put(
+            `${BASE_URL}/manage-lims/update/specification/${sno}`,
+            dataToSend
+          ),
           delay(1300), // Add delay here
         ]).then(([response]) => response),
         {
@@ -320,7 +321,7 @@ const SpecificationSpec = () => {
           error: <b>Failed to update Data.</b>,
         }
       );
-  
+
       if (response.status === 200) {
         setDataChanged(true); // Trigger a re-fetch of data
         setEditModalData(null);
@@ -332,7 +333,6 @@ const SpecificationSpec = () => {
       setIsLoading(false);
     }
   };
-  
 
   // DELETE API - Delete Specification
   const handleDelete = async (item) => {
@@ -467,12 +467,12 @@ const SpecificationSpec = () => {
   return (
     <div>
       <LaunchQMS />
-      <ToastContainer/>
-      <div className="m-5 mt-3 fixed top-20 w-[82%]">
-        <div className="main-head mb-6">
+      <ToastContainer />
+      <div className="ml-3 mt-3 fixed top-20 w-[83%]">
+        <div className="main-head mb-3">
           <h4 className="font-bold text-xl">Specification</h4>
         </div>
-        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 ">
+        <div className="flex flex-col md:flex-row md:items-center justify-between space-y-3 md:space-y-0 ">
           <div className="flex flex-grow space-x-10">
             <SearchBar
               value={""}
@@ -514,9 +514,9 @@ const SpecificationSpec = () => {
         </div>
       </div>
 
-      <div className="relative top-24">
-        <table className="min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-10">
-          <thead className="sticky top-[86px]">
+      <div className="relative top-16">
+        <table className=" min-w-full bg-white border border-gray-200 shadow-lg mx-2 mt-5 mb-5">
+          <thead className=" top-[86px]">
             <tr className="text-white text-left">
               <th colSpan="12" className="px-4 py-2 bg-cyan-500">
                 General Information
@@ -543,7 +543,7 @@ const SpecificationSpec = () => {
             </tr>
             <tr className="bg-slate-800 text-white sticky top-[126px]">
               {headers.map((header, index) => (
-                <td key={index} className="border px-4 py-2">
+                <td key={index} className="border px-4 py-3 text-nowrap">
                   {header}
                 </td>
               ))}
@@ -558,11 +558,12 @@ const SpecificationSpec = () => {
                 {fields.map((field, fieldIndex) => (
                   <td
                     key={fieldIndex}
-                    className="border px-4 py-2 min-w-[100px]"
+                    className="border px-4 py-2 min-w-[141px] whitespace-normal break-words"
                   >
                     {item[field]}
                   </td>
                 ))}
+
                 <td className="border px-4 py-2">
                   <div className="flex gap-2">
                     <FontAwesomeIcon
@@ -588,7 +589,7 @@ const SpecificationSpec = () => {
         </table>
 
         {/* Pagination */}
-        <div className="mt-6 flex justify-end fixed right-2">
+        <div className="mt-2 flex justify-end fixed bottom-0 left-0 right-2">
           <nav
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
             aria-label="Pagination"
@@ -608,10 +609,10 @@ const SpecificationSpec = () => {
               <button
                 key={index}
                 onClick={() => handlePageChange(index + 1)}
-                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 ${
+                className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium ${
                   currentPage === index + 1
                     ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
-                    : "hover:text-blue-500"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-blue-500"
                 }`}
               >
                 {index + 1}

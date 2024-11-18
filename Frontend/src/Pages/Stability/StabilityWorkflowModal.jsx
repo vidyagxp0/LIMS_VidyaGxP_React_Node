@@ -33,6 +33,7 @@ import TestParametersTable from "./TestParametersTable";
 
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 
 const StabilityWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -230,7 +231,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/admin/get-user/${userId}`,
+          `http://localhost:9000/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -348,26 +349,34 @@ const StabilityWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/stability`
+        `http://localhost:9000/get-Sample/${id}/stability`
       );
-      console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
 
-      const testParamterResponse = responseData.testParameters[1];
-      const fetchedData = JSON.parse(testParamterResponse);
+      const testParamterResponse = responseData.testParameters?.[1] || null;
+
+      let fetchedData = [];
+      if (testParamterResponse) {
+        try {
+          fetchedData = JSON.parse(testParamterResponse);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          fetchedData = [];
+        }
+      }
 
       setTestParameters(fetchedData.length > 0 ? fetchedData : []);
       setFormData((prevData) => ({
         ...prevData,
         ...responseData,
-        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+        testParameters: responseData.testParameters || [],
       }));
     } catch (error) {
-      console.error("Error fetching ", error);
-      toast.error("Failed to fetch ");
+      console.error("Error fetching data", error);
+      toast.error("Failed to fetch data");
     }
   };
   useEffect(() => {
@@ -378,7 +387,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     try {
       const response = await toast.promise(
         axios.put(
-          `https://limsapi.vidyagxp.com/edit-sample/${id}/stability`,
+          `http://localhost:9000/edit-sample/${id}/stability`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         ),
@@ -435,13 +444,9 @@ const StabilityWorkflowModal = ({ onClose }) => {
       } else {
         // Add new data with a toast notification
         const response = await toast.promise(
-          axios.post(
-            `https://limsapi.vidyagxp.com/create-sample`,
-            formDataToSend,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }
-          ),
+          axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
           {
             loading: "Saving data...",
             success: <b>Data added successfully.</b>,

@@ -23,6 +23,7 @@ import { BASE_URL } from "../../config.json";
 import BarcodeExportButton from "./BarcodeExportButton";
 import TestParametersTable from "./TestParametersTable";
 import ToastContainer from "../../components/HotToaster/ToastContainer";
+import toast from "react-hot-toast";
 
 const SampleWorkflowModal = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState("Sample Registration");
@@ -252,28 +253,37 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
+        `http://localhost:9000/get-Sample/${id}/sample`
       );
-      // console.log(response.data);
 
       const responseData = Array.isArray(response.data)
         ? response.data
         : response.data.data;
 
-      const testParamterResponse = responseData.testParameters[1];
-      const fetchedData = JSON.parse(testParamterResponse);
+      const testParamterResponse = responseData.testParameters?.[1] || null;
+
+      let fetchedData = [];
+      if (testParamterResponse) {
+        try {
+          fetchedData = JSON.parse(testParamterResponse);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          fetchedData = [];
+        }
+      }
 
       setTestParameters(fetchedData.length > 0 ? fetchedData : []);
       setFormData((prevData) => ({
         ...prevData,
         ...responseData,
-        testParameters: responseData.testParameters || [], // Ensure testParameters are set
+        testParameters: responseData.testParameters || [],
       }));
     } catch (error) {
-      console.error("Error fetching ", error);
-      toast.error("Failed to fetch ");
+      console.error("Error fetching data", error);
+      toast.error("Failed to fetch data");
     }
   };
+
   useEffect(() => {
     fetchData();
   }, [id]);
@@ -282,7 +292,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     try {
       const response = await toast.promise(
         axios.put(
-          `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
+          `http://localhost:9000/edit-sample/${id}/sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         ),
@@ -331,13 +341,9 @@ const SampleWorkflowModal = ({ onClose }) => {
       } else {
         // Add new data with a toast notification
         const response = await toast.promise(
-          axios.post(
-            `https://limsapi.vidyagxp.com/create-sample`,
-            formDataToSend,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }
-          ),
+          axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
           {
             loading: "Saving Sample Workflow...",
             success: <b>Data added successfully.</b>,
@@ -366,7 +372,7 @@ const SampleWorkflowModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/admin/get-user/${userId}`,
+          `http://localhost:9000/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -979,10 +985,9 @@ const SampleWorkflowModal = ({ onClose }) => {
             <CButton color="primary" onClick={handleAddRow}>
               Add Test Parameters Row
             </CButton>
-            {/* {console.log(testParameters, "TESTPARAMETER")} */}
-            {/* Use the TestParametersTable component */}
+
             <TestParametersTable
-              testParameters={testParameters}
+              testParameters={testParameters || []}
               handleRowChange={handleRowChange}
               value={formData?.testParameters || ""}
               onChange={handleInputChange}
