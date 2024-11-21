@@ -38,7 +38,7 @@ function AdminPanel(props) {
         }
       );
 
-      const { token, data } = response.data;
+      const { token, data } = response.data; 
       console.log(token, data, "tttttt");
 
       if (token) {
