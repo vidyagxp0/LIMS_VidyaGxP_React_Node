@@ -56,11 +56,11 @@ export const STPSchema = sequelize.define("STP", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  testMethodRefrence: {
+  testMethodReference: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  samplePrepration: {
+  samplePreparation: {
     type: DataTypes.STRING,
     allowNull: true,
   },
@@ -69,6 +69,10 @@ export const STPSchema = sequelize.define("STP", {
     allowNull: true,
   },
   equipmentInstrumentRequired: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  calibrationRequirements: {
     type: DataTypes.STRING,
     allowNull: true,
   },

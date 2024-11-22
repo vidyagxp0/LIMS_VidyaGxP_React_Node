@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db";
 
-export const ProductMaterialMasterSchema = sequelize.define(
-  "productMaterialMaster",
+export const samplingConfigurationSchema = sequelize.define(
+  "samplingConfiguration",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -10,7 +10,15 @@ export const ProductMaterialMasterSchema = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    uniqueCode: {
+    samplingId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    specificationId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    sampleType: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -18,15 +26,15 @@ export const ProductMaterialMasterSchema = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    genericName: {
+    testPlan: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    reTestingPeriod: {
+    sampleTemplate: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    addDate: {
+    sampleRule: {
       type: DataTypes.STRING,
       allowNull: true,
     },

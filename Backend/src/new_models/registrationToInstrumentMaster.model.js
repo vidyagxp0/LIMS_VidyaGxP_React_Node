@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db";
 
-export const standardTestProcedureSchema = sequelize.define(
-  "standardTestProcedure",
+export const registrationToInstrumentMasetrSchema = sequelize.define(
+  "registrationToInstrumentMasetr",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -10,35 +10,51 @@ export const standardTestProcedureSchema = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    productCode: {
+    category: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    productName: {
+    instrumentId: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    specificationId: {
+    instrument: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    specificationName: {
+    made: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    effectForm: {
+    model: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    reviewDate: {
+    menuNo: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    attachment: {
+    installedAt: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    expiryOn: {
       type: DataTypes.STRING,
       allowNull: true,
     },
     status: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    calibrationDate: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    calibrationDueOn: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    calibrationStatus: {
       type: DataTypes.STRING,
       allowNull: true,
     },
