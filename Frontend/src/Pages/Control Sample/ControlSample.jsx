@@ -65,7 +65,7 @@ const ControlSample = () => {
 
   const handleEdit = (controlSample) => {
     setSelectedSample(controlSample); // Set the selected analyst data
-    console.log(controlSample, "CONTROL SAMPLE EDIT");
+    console.log(controlSample, "CONTROL SAMPLE EDIT");s
 
     setIsModalOpen(true); // Open the modal
   };

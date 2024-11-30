@@ -274,7 +274,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   };
 
   const handleCloseModals = () => {
-    setIsModalsOpen(false);
+    setIsModalsOpen(false);s
   };
 
   const openModal = () => {

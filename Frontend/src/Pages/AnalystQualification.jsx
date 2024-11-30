@@ -160,6 +160,8 @@ const AnalystQualification = () => {
     { header: "Training Program Name", accessor: "trainingProgramName" },
     { header: "Training Start Date", accessor: "trainingStartDate" },
     { header: "Training Completion Date", accessor: "trainingCompletionDate" },
+    
+    
     {
       header: "Training Completion Status",
       accessor: "trainingCompletionStatus",
@@ -188,6 +190,8 @@ const AnalystQualification = () => {
     { header: "Instrument Name/ID", accessor: "instrumentNameId" },
     { header: "Method Name/ID", accessor: "methodNameId" },
     { header: "Qualification Level", accessor: "qualificationLevel" },
+    
+    
     // {header: "Qualification Date", accessor: "QualificationDate"},
     // {header: "Calibration Due Date", accessor: "CalibrationDueDate"},
     // { header: "Method Validation Date", accessor: "MethodValidationDate" },

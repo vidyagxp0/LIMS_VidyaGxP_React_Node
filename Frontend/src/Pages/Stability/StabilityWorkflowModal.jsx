@@ -335,15 +335,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  // useEffect(() => {
-  //   const storedTestParameters = JSON.parse(
-  //     localStorage.getItem("testParameters")
-  //   );
-  //   if (storedTestParameters) {
-  //     setTestParameters(storedTestParameters);
-  //     console.log(storedTestParameters, "testParameters from localStorage");
-  //   }
-  // }, []);
 
   const fetchData = async () => {
     if (!id) return;
