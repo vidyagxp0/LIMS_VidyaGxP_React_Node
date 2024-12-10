@@ -204,7 +204,7 @@ function Testcategories() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/mTestCategories/${item.sno}`
+        `https://lims-api.mydemosoftware.com/delete-lims/mTestCategories/${item.sno}`
       );
       if (response?.status === 200) {
         const newData = data.filter((d) => d.sno !== item.sno);
@@ -403,7 +403,7 @@ function Testcategories() {
 
       axios
         .put(
-          `https://limsapi.vidyagxp.com/manage-lims/update/mTestCategories/${formData.uniqueId}`,
+          `https://lims-api.mydemosoftware.com/manage-lims/update/mTestCategories/${formData.uniqueId}`,
           formData
         )
         .then((response) => {

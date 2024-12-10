@@ -43,7 +43,7 @@ const SamplePlanning = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sLSamplePA`
+        `https://lims-api.mydemosoftware.com/get-all-lims/sLSamplePA`
       );
       const fetchedData = response?.data[0]?.sLSamplePA || [];
       setData(fetchedData);
@@ -177,7 +177,9 @@ const SamplePlanning = () => {
   const handleDelete = (item) => {
     // console.log(item);
     axios
-      .delete(`https://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`)
+      .delete(
+        `https://lims-api.mydemosoftware.com/delete-lims/sLSamplePA/${item.uniqueId}`
+      )
       .then((response) => {
         // console.log(response.data.message);
         toast.success("Record deleted successfully");

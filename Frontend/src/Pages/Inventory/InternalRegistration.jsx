@@ -56,7 +56,7 @@ const InternalRegistration = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/get-all-lims/iWSInternalRegistration`
+          `https://lims-api.mydemosoftware.com/get-all-lims/iWSInternalRegistration`
         );
         const fetchData = response?.data[0]?.iWSInternalRegistration || [];
         const updatedData = fetchData?.map((item, index) => ({

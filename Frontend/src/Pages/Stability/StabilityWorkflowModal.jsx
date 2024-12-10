@@ -149,7 +149,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     return randomNumbers;
   };
 
-
   const handleAddRow = () => {
     setTestParameters([
       ...testParameters,
@@ -164,7 +163,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
     );
     setTestParameters(updatedRows);
   };
-
 
   const fetchId = async () => {
     try {
@@ -257,7 +255,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/stability`
+        `https://lims-api.mydemosoftware.com/get-Sample/${id}/stability`
       );
       // console.log(response.data);
 
@@ -279,7 +277,7 @@ const StabilityWorkflowModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/edit-sample/${id}/stability`,
+        `https://lims-api.mydemosoftware.com/edit-sample/${id}/stability`,
         formData
       );
       if (response.status === 200) {
@@ -297,7 +295,9 @@ const StabilityWorkflowModal = ({ onClose }) => {
     }
   };
   useEffect(() => {
-    const storedTestParameters = JSON.parse(localStorage.getItem("testParameterss"));
+    const storedTestParameters = JSON.parse(
+      localStorage.getItem("testParameterss")
+    );
     if (storedTestParameters) {
       setTestParameters(storedTestParameters);
       console.log(storedTestParameters, "testParameters from localStorage");
@@ -309,27 +309,27 @@ const StabilityWorkflowModal = ({ onClose }) => {
 
     // Append all form data to the FormData object
     for (const key in formData) {
-        if (Array.isArray(formData[key])) {
-            formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
-        } else {
-            formDataToSend.append(key, formData[key]);
-        }
+      if (Array.isArray(formData[key])) {
+        formDataToSend.append(key, JSON.stringify(formData[key])); // Convert arrays to JSON strings
+      } else {
+        formDataToSend.append(key, formData[key]);
+      }
     }
 
     // Manually append the test parameters as an array of objects
     if (testParameters && testParameters.length > 0) {
-        formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
-        console.log("Test Parameters being sent:", testParameters);
-        
-        // Save testParameters to local storage
-        localStorage.setItem("testParameterss", JSON.stringify(testParameters));
+      formDataToSend.append("testParameters", JSON.stringify(testParameters)); // Changed key to "testParameters"
+      console.log("Test Parameters being sent:", testParameters);
+
+      // Save testParameters to local storage
+      localStorage.setItem("testParameterss", JSON.stringify(testParameters));
     }
     if (id) {
       await handleEdit();
     } else {
       try {
         const response = await axios.post(
-          `https://limsapi.vidyagxp.com/create-sample`,
+          `https://lims-api.mydemosoftware.com/create-sample`,
           formData
         );
         // console.log(response, "iddddddddddddddddddddddd");
@@ -624,9 +624,9 @@ const StabilityWorkflowModal = ({ onClose }) => {
 
                 {/* Display selected instruments with the option to remove */}
                 <div className="flex flex-wrap gap-2 mb-2 mt-2">
-                  {formData.requiredInstrument &&
+                {Array.isArray(formData.requiredInstrument) &&
                   formData.requiredInstrument.length > 0 ? (
-                    formData.requiredInstrument.map((instrument, index) => (
+                    formData?.requiredInstrument?.map((instrument, index) => (
                       <span
                         key={index}
                         className="bg-blue-200 text-blue-800 px-2 py-1 rounded flex items-center"
@@ -1415,7 +1415,6 @@ const StabilityWorkflowModal = ({ onClose }) => {
       case "QA Review":
         return (
           <CForm>
-
             {/* QA Reviewer/Approver Section */}
             <CRow className="mb-3">
               <CCol md={6} className="mb-3">

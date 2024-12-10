@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import { ProgressBar2 } from "../components/Workflow/ProgressBar2";
-import {BASE_URL} from "../config.json";
+import { BASE_URL } from "../config.json";
 import LaunchQMS from "../components/ReusableButtons/LaunchQMS";
 // import ProgressBar from "../components/Workflow/ProgressBar";
 
@@ -148,7 +148,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/analyst/get-analyst/${id}`
+        `https://lims-api.mydemosoftware.com/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -170,7 +170,7 @@ const AnalystQualificationModal = ({ onClose }) => {
   const handleEdit = async () => {
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/analyst/edit-analyst/${id}`,
+        `https://lims-api.mydemosoftware.com/analyst/edit-analyst/${id}`,
         formData
       );
       if (response.status === 200) {
@@ -193,7 +193,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     } else {
       try {
         const response = await axios.post(
-          `https://limsapi.vidyagxp.com/analyst/create-analyst`,
+          `https://lims-api.mydemosoftware.com/analyst/create-analyst`,
           formData
         );
         // console.log(response, "iddddddddddddddddddddddd");

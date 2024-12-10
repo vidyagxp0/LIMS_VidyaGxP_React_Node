@@ -40,7 +40,7 @@ function Login(props) {
 
     try {
       const response = await axios.post(
-        "https://limsapi.vidyagxp.com/admin/user-login",
+        "https://lims-api.mydemosoftware.com/admin/user-login",
         {
           email,
           password: passwd,

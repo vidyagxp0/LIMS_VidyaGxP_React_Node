@@ -51,7 +51,7 @@ const ProgressBar = (props) => {
       const comment = formData.comment;
 
       const response = await axios.post(
-        "https://limsapi.vidyagxp.com/e-signature",
+        "https://lims-api.mydemosoftware.com/e-signature",
         { email, password },
         {
           headers: {
@@ -62,7 +62,7 @@ const ProgressBar = (props) => {
 
       if (!response.data.error) {
         const response = await axios.post(
-          `https://limsapi.vidyagxp.com/${url}`,
+          `https://lims-api.mydemosoftware.com/${url}`,
           { sampleId, comment },
           {
             headers: {
