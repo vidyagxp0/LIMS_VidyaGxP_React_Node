@@ -31,7 +31,11 @@ import { FaPerson } from "react-icons/fa6";
 import { FaPeopleRoof } from "react-icons/fa6";
 import { TfiLayoutMediaOverlay } from "react-icons/tfi";
 import { FaWater } from "react-icons/fa6";
-import { VscDebugBreakpointConditional, VscDebugBreakpointConditionalUnverified, VscServerEnvironment } from "react-icons/vsc";
+import {
+  VscDebugBreakpointConditional,
+  VscDebugBreakpointConditionalUnverified,
+  VscServerEnvironment,
+} from "react-icons/vsc";
 import { FaNetworkWired } from "react-icons/fa";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -106,143 +110,6 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Dashboard
             </CNavItem>
           </Link>
-          <Link to="/approval">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/approval"), gap: "18px" }}
-              className={isActive("/approval")}
-            >
-            <MdOutlineApproval />
-
-              Approval
-            </CNavItem>
-          </Link>
-          <Link to="/stCondition">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/stCondition"), gap: "18px" }}
-              className={isActive("/stCondition")}
-            >
-             <GrOfflineStorage />
-
-              Storage Condition
-            </CNavItem>
-          </Link>
-          <Link to="/SpecificationStp">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/SpecificationStp"), gap: "18px" }}
-              className={isActive("/SpecificationStp")}
-            >
-             <VscDebugBreakpointConditionalUnverified />
-
-              Specification/STP
-            </CNavItem>
-          </Link>
-
-          <Link to="/specificationSpec">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/specificationSpec"), gap: "18px" }}
-              className={isActive("/specificationSpec")}
-            >
-          <VscDebugBreakpointConditional />
-
-              Specification Spec
-            </CNavItem>
-          </Link>
-          <Link to="/storage-location">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/storage-location"), gap: "18px" }}
-              className={isActive("/storage-location")}
-            >
-              <GrStorage />
-
-              Storage Location
-            </CNavItem>
-          </Link>
-
-          <Link to="/stp">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/stp"), gap: "18px" }}
-              className={isActive("/stp")}
-            >
-              <TbCurrentLocation />
-              STP
-            </CNavItem>
-          </Link>
-
-          <Link to="/analyst-qualification">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/analyst-qualification"), gap: "18px" }}
-              className={isActive("/analyst-qualification")}
-            >
-              <TbCurrentLocation />
-              Analyst Qualification
-            </CNavItem>
-          </Link>
-
-          <Link to="/control-sample">
-            <CNavItem
-              href="#"
-              style={{ ...isActive("/control-sample"), gap: "18px" }}
-              className={isActive("/control-sample")}
-            >
-              <TbCurrentLocation />
-              {/* Control Sample Management. */}
-              Control Sample
-            </CNavItem>
-          </Link>
-
-          <CNavGroup
-            className={isActive("/department")}
-            toggler={
-              <>
-                <FaUsers />
-                <span className="ml-5">User Management</span>
-              </>
-            }
-          >
-            <Link to="/department">
-              <CNavItem
-                href="#"
-                className={isActive("/department")}
-                style={{ ...isActive("/department") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Department
-              </CNavItem>
-            </Link>
-            <Link to="/users">
-              <CNavItem
-                href="#"
-                className={isActive("/users")}
-                style={{ ...isActive("/users") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Users
-              </CNavItem>
-            </Link>
-            <Link to="/roles">
-              <CNavItem
-                href="#"
-                className={isActive("/roles")}
-                style={{ ...isActive("/roles") }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Roles
-              </CNavItem>
-            </Link>
-          </CNavGroup>
           <CNavGroup
             toggler={
               <>
@@ -263,7 +130,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Sample Workflow
               </CNavItem>
             </Link>
-            <Link to="/samplelogin">
+            {/* <Link to="/samplelogin">
               <CNavItem
                 href="#"
                 className={isActive("/samplelogin")}
@@ -274,7 +141,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Sample Login
               </CNavItem>
-            </Link>
+            </Link> */}
             <Link to="/sample-planning">
               <CNavItem
                 href="#"
@@ -284,10 +151,10 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 <span className="nav-icon">
                   <span className="nav-icon-bullet"></span>
                 </span>
-                Sample Planning & Analysis
+                <p className="text-wrap"> Sample Planning & Analysis</p>
               </CNavItem>
             </Link>
-            <Link to="/investigationl1">
+            {/* <Link to="/investigationl1">
               <CNavItem
                 href="#"
                 className={isActive("/investigationl1")}
@@ -298,8 +165,8 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Investigation L1
               </CNavItem>
-            </Link>
-            <Link to="/investigationl2">
+            </Link> */}
+            {/* <Link to="/investigationl2">
               <CNavItem
                 href="#"
                 className={isActive("/investigationl2")}
@@ -310,24 +177,67 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 </span>
                 Investigation L2
               </CNavItem>
-            </Link>
+            </Link> */}
           </CNavGroup>
+          <Link to="/SpecificationStp">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/SpecificationStp"), gap: "18px" }}
+              className={isActive("/SpecificationStp")}
+            >
+              <VscDebugBreakpointConditionalUnverified />
+              Specification/STP
+            </CNavItem>
+          </Link>
+          <Link to="/specificationSpec">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/specificationSpec"), gap: "18px" }}
+              className={isActive("/specificationSpec")}
+            >
+              <VscDebugBreakpointConditional />
 
-          <CNavItem
-            href="https://barcode.mydemosoftware.com/login"
-            target="_blank" 
-            style={{ gap: "18px" }}
-            className={isActive("/barcode")}
-          >
-            <TbCurrentLocation />
-            Barcode
-          </CNavItem>
-
+              <p className="text-wrap">Specification Management</p>
+            </CNavItem>
+          </Link>
+          <Link to="/stp">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/stp"), gap: "18px" }}
+              className={isActive("/stp")}
+            >
+              <TbCurrentLocation />
+              STP
+            </CNavItem>
+          </Link>
+          <Link to="/analyst-qualification">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/analyst-qualification"), gap: "18px" }}
+              className={isActive("/analyst-qualification")}
+            >
+              <TbCurrentLocation />
+              Analyst Qualification
+            </CNavItem>
+          </Link>
+          <Link to="/control-sample">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/control-sample"), gap: "18px" }}
+              className={isActive("/control-sample")}
+            >
+              <TbCurrentLocation />
+              {/* Control Sample Management. */}
+              <p className="text-wrap"> Control Sample Management </p>
+            </CNavItem>
+          </Link>
           <CNavGroup
             toggler={
               <>
                 <MdManageHistory />
-                <span style={{ marginLeft: "18px" }}>Stability Management</span>
+                <span style={{ marginLeft: "18px", textWrap: "wrap" }}>
+                  Stability Management
+                </span>
               </>
             }
           >
@@ -515,6 +425,167 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
           <CNavGroup
             toggler={
               <>
+                <CiPillsBottle1 />
+                <span style={{ marginLeft: "18px" }}>Instrument Master</span>
+              </>
+            }
+          >
+            <Link to="/instrumentMaster/registration">
+              <CNavItem
+                href="#"
+                className={isActive("/ instrumentMaster/registration")}
+                style={{
+                  ...isActive("/instrumentMaster/registration"),
+                  fontSize: "14px",
+                }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Registration
+              </CNavItem>
+            </Link>
+            <Link to="/instrumentMaster/instrumentCategory">
+              <CNavItem
+                href="#"
+                className={isActive("/ instrumentMaster/instrumentCategory")}
+                style={{
+                  ...isActive("/instrumentMaster/instrumentCategory"),
+                  fontSize: "14px",
+                }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Instrument Category
+              </CNavItem>
+            </Link>
+            {/* <Link to="/instrumentMaster/instrumentModule">
+              <CNavItem
+                href="#"
+                className={isActive("/ instrumentMaster/instrumentModule")}
+                style={{
+                  ...isActive("/instrumentMaster/instrumentModule"),
+                  fontSize: "14px",
+                }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Instrument Module
+              </CNavItem>
+            </Link> */}
+            <Link to="/instrumentMaster/instrumentUsage">
+              <CNavItem
+                href="#"
+                className={isActive("/ instrumentMaster/instrumentUsage")}
+                style={{
+                  ...isActive("/instrumentMaster/instrumentUsage"),
+                  fontSize: "14px",
+                }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Instrument Usage
+              </CNavItem>
+            </Link>
+          </CNavGroup>
+
+          {/* <Link to="/approval">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/approval"), gap: "18px" }}
+              className={isActive("/approval")}
+            >
+              <MdOutlineApproval />
+              Approval
+            </CNavItem>
+          </Link> */}
+
+          
+          {/* <Link to="/stCondition">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/stCondition"), gap: "18px" }}
+              className={isActive("/stCondition")}
+            >
+              <GrOfflineStorage />
+              Storage Condition
+            </CNavItem>
+          </Link> */}
+
+          {/* <Link to="/storage-location">
+            <CNavItem
+              href="#"
+              style={{ ...isActive("/storage-location"), gap: "18px" }}
+              className={isActive("/storage-location")}
+            >
+              <GrStorage />
+              Storage Location
+            </CNavItem>
+          </Link> */}
+
+          {/* <CNavGroup
+            className={isActive("/department")}
+            toggler={
+              <>
+                <FaUsers />
+                <span className="ml-5">User Management</span>
+              </>
+            }
+          >
+            <Link to="/department">
+              <CNavItem
+                href="#"
+                className={isActive("/department")}
+                style={{ ...isActive("/department") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Department
+              </CNavItem>
+            </Link>
+            <Link to="/users">
+              <CNavItem
+                href="#"
+                className={isActive("/users")}
+                style={{ ...isActive("/users") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Users
+              </CNavItem>
+            </Link>
+            <Link to="/roles">
+              <CNavItem
+                href="#"
+                className={isActive("/roles")}
+                style={{ ...isActive("/roles") }}
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+                Roles
+              </CNavItem>
+            </Link>
+          </CNavGroup> */}
+
+          {/* <CNavItem
+            href="https://barcode.mydemosoftware.com/login"
+            target="_blank"
+            style={{ gap: "18px" }}
+            className={isActive("/barcode")}
+          >
+            <TbCurrentLocation />
+            Barcode
+          </CNavItem> */}
+
+          {/* <CNavGroup
+            toggler={
+              <>
                 <HiArrowsUpDown />
                 <span style={{ marginLeft: "18px" }}> Masters</span>
               </>
@@ -628,11 +699,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 My Tests
               </CNavItem>
             </Link>
-          </CNavGroup>
+          </CNavGroup> */}
 
           {/*  */}
 
-          <CNavGroup
+          {/* <CNavGroup
             toggler={
               <>
                 <LuListTodo />
@@ -701,7 +772,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Sampling Template
               </CNavItem>
             </Link>
-          </CNavGroup>
+          </CNavGroup> */}
 
           {/* <CNavGroup
             toggler={
@@ -1837,76 +1908,7 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
             </CNavGroup>
           </CNavGroup> */}
 
-          <CNavGroup
-            toggler={
-              <>
-                <CiPillsBottle1 />
-                <span style={{ marginLeft: "18px" }}>Instrument Master</span>
-              </>
-            }
-          >
-            <Link to="/instrumentMaster/registration">
-              <CNavItem
-                href="#"
-                className={isActive("/ instrumentMaster/registration")}
-                style={{
-                  ...isActive("/instrumentMaster/registration"),
-                  fontSize: "14px",
-                }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Registration
-              </CNavItem>
-            </Link>
-            <Link to="/instrumentMaster/instrumentCategory">
-              <CNavItem
-                href="#"
-                className={isActive("/ instrumentMaster/instrumentCategory")}
-                style={{
-                  ...isActive("/instrumentMaster/instrumentCategory"),
-                  fontSize: "14px",
-                }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Instrument Category
-              </CNavItem>
-            </Link>
-            {/* <Link to="/instrumentMaster/instrumentModule">
-              <CNavItem
-                href="#"
-                className={isActive("/ instrumentMaster/instrumentModule")}
-                style={{
-                  ...isActive("/instrumentMaster/instrumentModule"),
-                  fontSize: "14px",
-                }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Instrument Module
-              </CNavItem>
-            </Link> */}
-            <Link to="/instrumentMaster/instrumentUsage">
-              <CNavItem
-                href="#"
-                className={isActive("/ instrumentMaster/instrumentUsage")}
-                style={{
-                  ...isActive("/instrumentMaster/instrumentUsage"),
-                  fontSize: "14px",
-                }}
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>
-                Instrument Usage
-              </CNavItem>
-            </Link>
-          </CNavGroup>
-          <CNavGroup
+          {/* <CNavGroup
             toggler={
               <>
                 <LuWarehouse style={{ width: "15px" }} />
@@ -1974,8 +1976,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Inventory
               </CNavItem>
             </Link>
-          </CNavGroup>
-          <CNavGroup
+          </CNavGroup> */}
+
+          {/* <CNavGroup
             toggler={
               <>
                 <MdOutlineCompassCalibration />
@@ -2103,9 +2106,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Calibration Calendar
               </CNavItem>
             </Link>
-          </CNavGroup>
+          </CNavGroup> */}
 
-          <CNavGroup
+          {/* <CNavGroup
             toggler={
               <>
                 <GrCertificate />
@@ -2190,8 +2193,10 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
                 Investigation Coa
               </CNavItem>
             </Link>
-          </CNavGroup>
-          <Link to="/vender">
+          </CNavGroup> */}
+
+
+          {/* <Link to="/vender">
             <CNavItem
               href="#"
               className={isActive("/vender")}
@@ -2200,8 +2205,10 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <CiShop />
               <span style={{ marginLeft: "21px" }}>Vendor</span>
             </CNavItem>
-          </Link>
-          <Link to="/clients">
+          </Link> */}
+
+
+          {/* <Link to="/clients">
             <CNavItem
               href="#"
               className={isActive("/clients")}
@@ -2210,8 +2217,10 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <FaPeopleLine />
               <span style={{ marginLeft: "21px" }}>Clients</span>
             </CNavItem>
-          </Link>
-          <Link to="/plants">
+          </Link> */}
+
+
+          {/* <Link to="/plants">
             <CNavItem
               href="#"
               className={isActive(" /plants")}
@@ -2220,9 +2229,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <PiNuclearPlant />
               <span style={{ marginLeft: "21px" }}>Plants</span>
             </CNavItem>
-          </Link>
+          </Link> */}
 
-          <Link to="/workFlow">
+          {/* <Link to="/workFlow">
             <CNavItem
               href="#"
               className={isActive("/workFlow")}
@@ -2231,9 +2240,9 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <GoWorkflow />
               <span style={{ marginLeft: "21px" }}>Workflow</span>
             </CNavItem>
-          </Link>
+          </Link> */}
 
-          <Link to="/auditTrail">
+          {/* <Link to="/auditTrail">
             <CNavItem
               href="#"
               className={isActive(" /auditTrail")}
@@ -2242,14 +2251,16 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               <AiOutlineAudit />
               <span style={{ marginLeft: "21px" }}>Audit Trail</span>
             </CNavItem>
-          </Link>
+          </Link> */}
+
+          
           <CNavGroup
-            // toggler={
-            //   <>
-            //     <MdSettingsApplications />
-            //     <span style={{ marginLeft: "18px" }}>Settings</span>
-            //   </>
-            // }
+          // toggler={
+          //   <>
+          //     <MdSettingsApplications />
+          //     <span style={{ marginLeft: "18px" }}>Settings</span>
+          //   </>
+          // }
           >
             {/* <Link to="/settings/businessAssociate">
               <CNavItem

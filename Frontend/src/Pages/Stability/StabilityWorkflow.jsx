@@ -526,12 +526,12 @@ const StabilityWorkFlow = () => {
   // };
 
   return (
-    <div className="m-5 mt-3">
+    <div className="m-2 mt-3 fixed top-20 w-[82%]">
       <LaunchQMS />
       <ToastContainer />
       <div className="">
         <div className="main-head">
-          <h2 className="fw-bold">Stability WorkFlow</h2>
+          <h2 className="font-bold text-xl mb-3">Stability WorkFlow</h2>
         </div>
 
         <div className="flex items-center justify-between mb-4">
@@ -574,7 +574,7 @@ const StabilityWorkFlow = () => {
           </div>
         </div>
       </div>
-
+<div className="relative top-5 overflow-auto">
       <table className="min-w-full bg-white border border-gray-200 shadow-lg">
         <thead>
           <tr className="bg-yellow-600 text-white text-left">
@@ -695,7 +695,7 @@ const StabilityWorkFlow = () => {
             <td className="border px-4 py-2">QA Review Date </td>
             <td className="border px-4 py-2">Status </td>
             <td className="border px-4 py-2">Sample Barcode</td>
-            <td className="border px-4 py-2">Generate Audit Trail </td>
+            {/* <td className="border px-4 py-2">Generate Audit Trail </td> */}
             <td className="border px-4 py-2">Generate PDF </td>
             <td className="border px-4 py-2">Actions</td>
           </tr>
@@ -820,7 +820,7 @@ const StabilityWorkFlow = () => {
                   "No Barcode"
                 )}
               </td>
-              <td className="border px-4 py-2">
+              {/* <td className="border px-4 py-2">
                 {data.generateAuditTrail}
                 <td className="flex justify-center items-center px-4 py-2">
                   <FaFileAlt
@@ -832,7 +832,7 @@ const StabilityWorkFlow = () => {
                     <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
                   )}
                 </td>
-              </td>{" "}
+              </td>{" "} */}
               <td className="border px-4 py-2">
                 {data.generatePDF}
                 <td className="flex justify-center items-center px-4 py-2">
@@ -877,7 +877,7 @@ const StabilityWorkFlow = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>
       {isModalsOpen && (
         <ImportModal
           initialData={filteredData}

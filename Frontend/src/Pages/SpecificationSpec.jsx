@@ -468,7 +468,7 @@ const SpecificationSpec = () => {
     <div>
       <LaunchQMS />
       <ToastContainer/>
-      <div className="m-5 mt-3 fixed top-20 w-[82%]">
+      <div className="m-2 mt-3 fixed top-20 w-[82%]">
         <div className="main-head mb-6">
           <h4 className="font-bold text-xl">Specification</h4>
         </div>

@@ -554,9 +554,9 @@ const SampleWorkFlow = ({ instrumentData }) => {
       <p><strong>Model:</strong> {instrumentData?.Model}</p>
     </div> */}
 
-      <div className="m-5 mt-3 fixed top-20 w-[82%]">
+      <div className="m-2 mt-3 fixed top-20 w-[82%]">
         <div className="main-head">
-          <h2 className="fw-bold">Sample WorkFlow</h2>
+          <h2 className="font-bold text-xl mb-3">Sample WorkFlow</h2>
         </div>
 
         <div className="flex items-center justify-between mb-4">
@@ -599,7 +599,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
           </div>
         </div>
       </div>
-      <div className="relative top-24">
+      <div className="relative top-28 mx-2">
         <table className="min-w-full bg-white border border-gray-200 shadow-lg">
           <thead>
             <tr className="bg-yellow-600 text-white text-left">

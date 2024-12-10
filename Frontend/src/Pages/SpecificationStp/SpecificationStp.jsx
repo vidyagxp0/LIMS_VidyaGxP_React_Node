@@ -262,8 +262,10 @@ function SpecificationStp() {
   // };
 
   const handleClick = () => {
-    window.location.href =
-      "https://ipc.mydemosoftware.com/rcms/qms-logs/document";
+    window.open(
+      "https://ipc.mydemosoftware.com/rcms/qms-logs/document",
+      "_blank"
+    );
   };
 
   const closeModal = () => {
@@ -581,7 +583,7 @@ function SpecificationStp() {
     //       />
     //       <CFormInput
     //         type="date"
-            // onFocus={(e) => e.target.showPicker()}
+    // onFocus={(e) => e.target.showPicker()}
 
     //         label="Due Date"
     //         placeholder="Due Date"
@@ -590,7 +592,7 @@ function SpecificationStp() {
     //       />
     //       <CFormInput
     //         type="date"
-            // onFocus={(e) => e.target.showPicker()}
+    // onFocus={(e) => e.target.showPicker()}
 
     //         label="Effective Date"
     //         placeholder="Effective Date"
@@ -725,7 +727,6 @@ function SpecificationStp() {
           <CFormInput
             type="date"
             onFocus={(e) => e.target.showPicker()}
-
             label="Due Date"
             placeholder="Due Date"
             value={formData?.dueDate || ""}
@@ -735,7 +736,6 @@ function SpecificationStp() {
           <CFormInput
             type="date"
             onFocus={(e) => e.target.showPicker()}
-
             label="Effective Date"
             placeholder="Effective Date"
             value={formData?.effectiveDate || ""}
@@ -768,17 +768,16 @@ function SpecificationStp() {
     <>
       <LaunchQMS />
 
-      <div className="m-5 mt-3">
+      <div className="m-2 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Specification STP</h4>
+          <h4 className="font-bold text-xl mb-3">Specification/STP</h4>
         </div>
-
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-2">
           {/* Left Section: All input fields */}
           <div className="flex items-center space-x-6">
             {/* Division Dropdown */}
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Status</label>
+              {/* <label className="text-sm font-semibold">Status</label> */}
               <Dropdown
                 options={[
                   { value: "All", label: "All" },
@@ -796,12 +795,11 @@ function SpecificationStp() {
 
             {/* Date From Input */}
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Date From</label>
+              {/* <label className="text-sm font-semibold">Date From</label> */}
               <div className="relative">
                 <input
                   type="date"
-            onFocus={(e) => e.target.showPicker()}
-
+                  onFocus={(e) => e.target.showPicker()}
                   value={dateFrom}
                   onChange={handleDateFromChange}
                   className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
@@ -811,12 +809,11 @@ function SpecificationStp() {
 
             {/* Date To Input */}
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-semibold">Date To</label>
+              <label className="text-md font-bold mr-2">To</label>
               <div className="relative">
                 <input
                   type="date"
-            onFocus={(e) => e.target.showPicker()}
-
+                  onFocus={(e) => e.target.showPicker()}
                   value={dateTo}
                   onChange={handleDateToChange}
                   className="border border-black rounded-md pl-3 pr-3 py-2 text-sm bg-gray-100"
