@@ -122,7 +122,7 @@ const StabilityWorkFlow = () => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `https://limsapi.vidyagxp.com/stability-generate-report/${sampleId}`
+        `http://localhost:9000/stability-generate-report/${sampleId}`
       );
       // console.log("Response", response);
 
@@ -283,9 +283,7 @@ const StabilityWorkFlow = () => {
   const handleDelete = (item) => {
     // console.log(item);
     axios
-      .delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`
-      )
+      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.uniqueId}`)
       .then((response) => {
         // console.log(response.data.message);
         toast.success("Record deleted successfully");
@@ -509,7 +507,7 @@ const StabilityWorkFlow = () => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `https://limsapi.vidyagxp.com/edit-sample/${id}`
+  //   //     `http://localhost:9000/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);

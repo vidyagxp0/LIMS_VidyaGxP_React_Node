@@ -15,7 +15,7 @@ import {
   CFormLabel,
 } from "@coreui/react";
 import axios from "axios";
-// import { toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Barcode from "react-barcode";
 import ProgressBar from "../../components/Workflow/ProgressBar";
@@ -252,7 +252,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-Sample/${id}/sample`
+        `http://localhost:9000/get-Sample/${id}/sample`
       );
       // console.log(response.data);
 
@@ -282,7 +282,7 @@ const SampleWorkflowModal = ({ onClose }) => {
     try {
       const response = await toast.promise(
         axios.put(
-          `https://limsapi.vidyagxp.com/edit-sample/${id}/sample`,
+          `http://localhost:9000/edit-sample/${id}/sample`,
           formDataToSend,
           { headers: { "Content-Type": "multipart/form-data" } }
         ),
@@ -331,13 +331,9 @@ const SampleWorkflowModal = ({ onClose }) => {
       } else {
         // Add new data with a toast notification
         const response = await toast.promise(
-          axios.post(
-            `https://limsapi.vidyagxp.com/create-sample`,
-            formDataToSend,
-            {
-              headers: { "Content-Type": "multipart/form-data" },
-            }
-          ),
+          axios.post(`http://localhost:9000/create-sample`, formDataToSend, {
+            headers: { "Content-Type": "multipart/form-data" },
+          }),
           {
             loading: "Saving Sample Workflow...",
             success: <b>Data added successfully.</b>,
@@ -366,7 +362,7 @@ const SampleWorkflowModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `https://limsapi.vidyagxp.com/admin/get-user/${userId}`,
+          `http://localhost:9000/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

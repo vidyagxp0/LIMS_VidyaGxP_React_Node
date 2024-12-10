@@ -74,7 +74,7 @@ function SummaryReportHeader() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMSummaryReportHeader`
+        `http://localhost:9000/get-all-lims/sMSummaryReportHeader`
       );
       const fetchedData = response?.data[0]?.sMSummaryReportHeader || [];
 
@@ -142,7 +142,7 @@ function SummaryReportHeader() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMStandardProtocol/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -266,7 +266,7 @@ function SummaryReportHeader() {
 
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sMSummaryReportHeader/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMSummaryReportHeader/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -284,7 +284,7 @@ function SummaryReportHeader() {
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMSummaryReportHeader`,
+        `http://localhost:9000/manage-lims/add/sMSummaryReportHeader`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
@@ -497,7 +497,7 @@ function SummaryReportHeader() {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMSummaryReportHeader/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMSummaryReportHeader/${updatedData.uniqueId}`,
         dataTosend
       );
       if (response.status === 200) {
