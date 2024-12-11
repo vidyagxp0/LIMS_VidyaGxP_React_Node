@@ -75,7 +75,7 @@ function SampleAcceptanceTemplate() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://lims-api.mydemosoftware.com/get-all-lims/sMSampleAcceptanceTemplate`
+        `http://localhost:9000/get-all-lims/sMSampleAcceptanceTemplate`
       );
       const fetchedData = response?.data[0]?.sMSampleAcceptanceTemplate || [];
 
@@ -107,7 +107,7 @@ function SampleAcceptanceTemplate() {
       const { sno, ...dataToSend } = viewModalData;
 
       const response = await axios.put(
-        `https://lims-api.mydemosoftware.com/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMSampleAcceptanceTemplate/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -179,7 +179,7 @@ function SampleAcceptanceTemplate() {
 
     try {
       const response = await axios.delete(
-        `https://lims-api.mydemosoftware.com/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMSampleAcceptanceTemplate/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -197,7 +197,7 @@ function SampleAcceptanceTemplate() {
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
-        `https://lims-api.mydemosoftware.com/manage-lims/add/sMSampleAcceptanceTemplate`,
+        `http://localhost:9000/manage-lims/add/sMSampleAcceptanceTemplate`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
@@ -221,7 +221,7 @@ function SampleAcceptanceTemplate() {
     try {
       const { sno, ...dataToSend } = updatedData;
       const response = await axios.put(
-        `https://lims-api.mydemosoftware.com/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMSampleAcceptanceTemplate/${updatedData.uniqueId}`,
         dataToSend
       );
       if (response.status === 200) {

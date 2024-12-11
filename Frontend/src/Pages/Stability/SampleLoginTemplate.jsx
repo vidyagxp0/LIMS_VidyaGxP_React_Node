@@ -83,7 +83,7 @@ const SampleLoginTemplate = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://lims-api.mydemosoftware.com/get-all-lims/sMSampleLoginTemplate`
+        `http://localhost:9000/get-all-lims/sMSampleLoginTemplate`
       );
       const fetchedData = response?.data[0]?.sMSampleLoginTemplate || [];
 
@@ -145,7 +145,7 @@ const SampleLoginTemplate = () => {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `https://lims-api.mydemosoftware.com/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -269,7 +269,7 @@ const SampleLoginTemplate = () => {
 
     try {
       const response = await axios.delete(
-        `https://lims-api.mydemosoftware.com/delete-lims/sMSampleLoginTemplate/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMSampleLoginTemplate/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -287,7 +287,7 @@ const SampleLoginTemplate = () => {
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
-        `https://lims-api.mydemosoftware.com/manage-lims/add/sMSampleLoginTemplate`,
+        `http://localhost:9000/manage-lims/add/sMSampleLoginTemplate`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
@@ -598,7 +598,7 @@ const SampleLoginTemplate = () => {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `https://lims-api.mydemosoftware.com/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMSampleLoginTemplate/${updatedData.uniqueId}`,
         dataTosend
       );
       if (response.status === 200) {

@@ -82,7 +82,7 @@ function CoaTemplate() {
   const addCoaChamber = async (newChamber) => {
     try {
       const response = await axios.post(
-        `https://lims-api.mydemosoftware.com/manage-lims/add/sMCOATemplate`,
+        `http://localhost:9000/manage-lims/add/sMCOATemplate`,
         {
           ...newChamber,
           addDate: new Date().toISOString().split("T")[0],
@@ -233,7 +233,7 @@ function CoaTemplate() {
   const handleDelete = async (item) => {
     try {
       const response = await axios.delete(
-        `https://lims-api.mydemosoftware.com/delete-lims/sMCOATemplate/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMCOATemplate/${item.uniqueId}`
       );
       console.log(response);
       if (response.status === 200 || response.status === 201) {
@@ -263,7 +263,7 @@ function CoaTemplate() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://lims-api.mydemosoftware.com/get-all-lims/sMCOATemplate`
+        `http://localhost:9000/get-all-lims/sMCOATemplate`
       );
       const fetchedData = response?.data[0]?.sMCOATemplate || [];
 
@@ -286,7 +286,7 @@ function CoaTemplate() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `https://lims-api.mydemosoftware.com/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMCOATemplate/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -316,7 +316,7 @@ function CoaTemplate() {
     try {
       const { sno, ...dataToSend } = updatedData;
       const response = await axios.put(
-        `https://lims-api.mydemosoftware.com/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMCOATemplate/${updatedData.uniqueId}`,
         dataToSend
       );
       if (response.status === 200) {

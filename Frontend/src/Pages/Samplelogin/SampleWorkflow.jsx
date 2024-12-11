@@ -787,7 +787,24 @@ const SampleWorkFlow = ({ instrumentData }) => {
                 <td className="border px-4 py-2">{data.testParameter}</td>
                 <td className="border px-4 py-2">{data.testingFrequency}</td>
                 <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td className="border px-4 py-2">{data.requiredInstrument}</td>
+                <td className="border px-4 py-2">
+                  {(() => {
+                    try {
+                      const instruments = JSON.parse(data.requiredInstrument);
+
+                      return instruments
+                        .map((instrument) => instrument.label)
+                        .join(", ");
+                    } catch (error) {
+                      // Handle parsing errors gracefully
+                      return (
+                        <span className="text-red-500 italic">
+                          Invalid Data
+                        </span>
+                      );
+                    }
+                  })()}
+                </td>
                 <td className="border px-4 py-2">{data.testGrouping}</td>
                 <td className="border px-4 py-2">{data.lsl}</td>{" "}
                 <td className="border px-4 py-2">{data.usl}</td>{" "}

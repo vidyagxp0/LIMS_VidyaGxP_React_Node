@@ -249,6 +249,64 @@ const SampleWorkflowModal = ({ onClose }) => {
   //   }
   // }, []);
 
+  const handleInstrumentSelect = (instrument) => {
+    setFormData((prevData) => {
+      const currentInstruments = Array.isArray(prevData.requiredInstrument) 
+        ? prevData.requiredInstrument 
+        : [];
+      
+      const newInstrument = {
+        label: instrument,
+        value: instrument,
+      };
+
+      return {
+        ...prevData,
+        requiredInstrument: [...currentInstruments, newInstrument]
+      };
+    });
+    setDropdownOpen(false);
+  };
+
+  const handleRemoveInstrument = (instrumentToRemove) => {
+    setFormData((prevData) => {
+      const currentInstruments = Array.isArray(prevData.requiredInstrument)
+        ? prevData.requiredInstrument
+        : [];
+      
+      return {
+        ...prevData,
+        requiredInstrument: currentInstruments.filter(
+          instrument => instrument.value !== instrumentToRemove.value
+        )
+      };
+    });
+  };
+
+  const INSTRUMENTS = [
+    "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
+    "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
+    "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
+    "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
+    "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
+    "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
+    "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
+    "Moisture Analyzers – For determining the moisture content in products.",
+    "Conductivity Meter – For measuring the electrical conductivity in solutions.",
+    "Microbial Incubators – For cultivating and maintaining microbial cultures.",
+    "Autoclaves – For sterilizing lab equipment and samples.",
+    "Balances (Analytical and Microbalances) – For precise weighing of samples.",
+    "Karl Fischer Titrator – For measuring water content in samples.",
+    "Refractometer – For determining the refractive index of liquids.",
+    "Polarimeter – For measuring the optical rotation of a substance.",
+    "Melting Point Apparatus – For determining the melting point of substances.",
+    "Viscometer – For measuring the viscosity of liquid samples.",
+    "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
+    "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
+    "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
+    "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
+  ];
+
   const fetchData = async () => {
     if (!id) return;
     try {
@@ -260,8 +318,17 @@ const SampleWorkflowModal = ({ onClose }) => {
         ? response.data
         : response.data.data;
 
-      const testParamterResponse = responseData.testParameters?.[1] || null;
+      let instruments = responseData.requiredInstrument;
+      if (typeof instruments === 'string' && instruments.trim()) {
+        try {
+          instruments = JSON.parse(instruments);
+        } catch (error) {
+          console.error('Error parsing instruments:', error);
+          instruments = [];
+        }
+      }
 
+      const testParamterResponse = responseData.testParameters?.[1] || null;
       let fetchedData = [];
       if (testParamterResponse) {
         try {
@@ -273,11 +340,13 @@ const SampleWorkflowModal = ({ onClose }) => {
       }
 
       setTestParameters(fetchedData.length > 0 ? fetchedData : []);
-      setFormData((prevData) => ({
+      setFormData(prevData => ({
         ...prevData,
         ...responseData,
+        requiredInstrument: Array.isArray(instruments) ? instruments : [],
         testParameters: responseData.testParameters || [],
       }));
+
     } catch (error) {
       console.error("Error fetching data", error);
       toast.error("Failed to fetch data");
@@ -317,6 +386,7 @@ const SampleWorkflowModal = ({ onClose }) => {
 
   const handleSave = async () => {
     const formDataToSend = new FormData();
+    console.log(formDataToSend, formDataToSend);
 
     // Append all form data to FormData object
     for (const key in formData) {
@@ -353,15 +423,11 @@ const SampleWorkflowModal = ({ onClose }) => {
         updatedData = response.data; // Store response data for newly created item
       }
 
-      // Update formData with the latest data from the server response
       setFormData(updatedData);
       setIsModalOpen(false);
       navigate("/sampleWorkflow");
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error(
-        "Failed to upload file: " + (error.response?.data || error.message)
-      );
     }
   };
 
@@ -451,6 +517,7 @@ const SampleWorkflowModal = ({ onClose }) => {
   useEffect(() => {
     FetchUserRoles();
   }, []);
+  
 
   const renderFields = (tab) => {
     switch (tab) {
@@ -741,98 +808,63 @@ const SampleWorkflowModal = ({ onClose }) => {
               </CCol>
 
               <CCol md={12} className="mt-3 relative">
-                <label
-                  htmlFor="requiredInstrument"
-                  className="block text-gray-700 text-sm font-medium mb-2"
-                >
+                <CFormLabel htmlFor="requiredInstrument">
                   Select Required Instruments
-                </label>
-
+                </CFormLabel>
+                
                 <div
                   className="form-control flex items-center flex-wrap gap-2 p-3 border border-gray-300 rounded-md cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 ease-in-out"
-                  onClick={toggleDropdown} // Toggle dropdown on input click
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  {Array.isArray(formData.requiredInstrument) &&
-                  formData.requiredInstrument.length > 0 ? (
-                    formData?.requiredInstrument?.map((instrument, index) => (
+                  {Array.isArray(formData.requiredInstrument) && formData.requiredInstrument.length > 0 ? (
+                    formData.requiredInstrument.map((instrument, index) => (
                       <span
                         key={index}
                         className="bg-blue-100 text-blue-800 px-2 py-1 rounded flex items-center space-x-2"
                       >
-                        {instrument}
+                        <span>{instrument.label}</span>
                         <button
                           type="button"
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 hover:text-red-700 ml-2"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent closing dropdown when removing item
-                            setFormData((prevData) => ({
-                              ...prevData,
-                              requiredInstrument:
-                                prevData.requiredInstrument.filter(
-                                  (item) => item !== instrument
-                                ),
-                            }));
+                            e.stopPropagation();
+                            handleRemoveInstrument(instrument);
                           }}
                         >
-                          &times;
+                          ×
                         </button>
                       </span>
                     ))
                   ) : (
-                    <p className="text-gray-500">Select Instruments...</p> // Placeholder when nothing is selected
+                    <p className="text-gray-500">Select Instruments...</p>
                   )}
                 </div>
 
                 {dropdownOpen && (
-                  <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-10 transition-all duration-200 ease-in-out">
-                    {[
-                      "High-Performance Liquid Chromatography (HPLC) – For analyzing the composition of compounds.",
-                      "Gas Chromatography (GC) – For separating and analyzing volatile substances.",
-                      "Ultraviolet-Visible Spectrophotometer (UV-Vis) – For measuring the absorbance of light in the UV and visible spectra.",
-                      "Fourier Transform Infrared Spectroscopy (FTIR) – For identifying organic, polymeric, and in some cases, inorganic materials.",
-                      "Atomic Absorption Spectrometer (AAS) – For detecting metals in samples.",
-                      "Dissolution Testers – For assessing the rate of dissolution of tablets and capsules.",
-                      "Potentiometer – For measuring pH, ionic concentration, and redox potential.",
-                      "Moisture Analyzers – For determining the moisture content in products.",
-                      "Conductivity Meter – For measuring the electrical conductivity in solutions.",
-                      "Microbial Incubators – For cultivating and maintaining microbial cultures.",
-                      "Autoclaves – For sterilizing lab equipment and samples.",
-                      "Balances (Analytical and Microbalances) – For precise weighing of samples.",
-                      "Karl Fischer Titrator – For measuring water content in samples.",
-                      "Refractometer – For determining the refractive index of liquids.",
-                      "Polarimeter – For measuring the optical rotation of a substance.",
-                      "Melting Point Apparatus – For determining the melting point of substances.",
-                      "Viscometer – For measuring the viscosity of liquid samples.",
-                      "Thermal Analyzers (DSC/TGA) – For studying the thermal properties of materials.",
-                      "X-Ray Diffraction (XRD) – For identifying crystalline structures of materials.",
-                      "TOC Analyzer (Total Organic Carbon) – For detecting organic impurities in water and solutions.",
-                      "Particle Size Analyzer – For measuring the distribution of particle sizes in a sample.",
-                    ].map((instrument, index) => (
-                      <div
-                        key={index}
-                        className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition-colors duration-150"
-                        onClick={() => {
-                          if (
-                            !formData.requiredInstrument.includes(instrument)
-                          ) {
-                            setFormData((prevData) => ({
-                              ...prevData,
-                              requiredInstrument: [
-                                ...prevData.requiredInstrument,
-                                instrument,
-                              ],
-                            }));
-                          }
-                          setDropdownOpen(false);
-                        }}
-                      >
-                        {instrument}
-                      </div>
-                    ))}
+                  <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto z-10">
+                    {INSTRUMENTS
+                      .filter((instrument) => {
+                        const selectedInstruments = Array.isArray(formData.requiredInstrument)
+                          ? formData.requiredInstrument
+                          : [];
+                        return !selectedInstruments.some(
+                          (item) => item.value === instrument
+                        );
+                      })
+                      .map((instrument, index) => (
+                        <div
+                          key={index}
+                          className="px-4 py-2 hover:bg-blue-100 cursor-pointer transition-colors duration-150"
+                          onClick={() => handleInstrumentSelect(instrument)}
+                        >
+                          {instrument}
+                        </div>
+                      ))}
                   </div>
                 )}
               </CCol>
             </CRow>
+
             <CRow className="mb-3">
               <CCol md={6}>
                 <CFormInput
