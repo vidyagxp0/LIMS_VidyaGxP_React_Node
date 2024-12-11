@@ -52,6 +52,8 @@ import "../../components/Sidebar/Sidebar.css";
 function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
   const location = useLocation();
   const currentPath = location.pathname;
+  // console.log(currentPath,"currentPath");
+  
   const isActive = (path) => {
     return currentPath === path
       ? {
