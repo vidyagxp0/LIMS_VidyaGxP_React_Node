@@ -334,9 +334,9 @@ const ControlSample = () => {
       <ToastContainer />
       <LaunchQMS />
 
-      <div className="m-4 mt-3">
+      <div className="m-2 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold text-xl mb-3">Control Sample Management</h4>
+          <h4 className="font-bold text-xl mb-3 ">Control Sample Management</h4>
         </div>
         <div className="flex items-center justify-between mb-3">
           <div className="flex space-x-4">

@@ -24,6 +24,7 @@ import {
 } from "@coreui/react";
 import PDFDownload from "../PDFComponent/PDFDownload .jsx";
 import LaunchQMS from "../../components/ReusableButtons/LaunchQMS.jsx";
+import Table from "../../components/ATM components/Table/Table.jsx";
 
 const initialData = [
   {

@@ -331,11 +331,11 @@ const SamplePlanning = () => {
   ];
 
   return (
-    <div className="m-5 mt-3">
+    <div className="m-2 mt-3">
       <LaunchQMS />
 
       <div className="main-head">
-        <h2 className="fw-bold">Sample Planning & Analytics</h2>
+        <h2 className="font-bold text-xl mb-3">Sample Planning & Analytics</h2>
       </div>
 
       <div className="flex items-center justify-between mb-4">

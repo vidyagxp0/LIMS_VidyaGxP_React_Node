@@ -77,11 +77,11 @@ app.get("/documents/:filename", (req, res) => {
   res.sendFile(filePath);
 });
 
-const PORT = config.development.PORT || 9000;
+const PORT = config.development.PORT || 4001;
 app.listen(PORT, "0.0.0.0", async () => {
   try {
     await connectToDB();
-    console.log(`Server is running on ${config.development.URL}`);
+    console.log(`Server is running on ${PORT}`);
   } catch (e) {
     console.log("Error in database connection", e);
   }

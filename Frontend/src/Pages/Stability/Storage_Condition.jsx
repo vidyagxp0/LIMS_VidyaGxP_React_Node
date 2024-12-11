@@ -69,7 +69,7 @@ function Storage_Condition() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMStorageCondition`
+        `http://localhost:9000/get-all-lims/sMStorageCondition`
       );
       const fetchedData = response?.data[0]?.sMStorageCondition || [];
 
@@ -121,7 +121,7 @@ function Storage_Condition() {
     const { sno, checkbox, ...dataToSend } = updatedData;
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMStorageCondition/${updatedData.uniqueId}`,
         dataToSend
       );
       if (response.status === 200) {
@@ -160,7 +160,7 @@ function Storage_Condition() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`,
+        `http://localhost:9000/manage-lims/update/sMStorageCondition/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -252,7 +252,7 @@ function Storage_Condition() {
 
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sMStorageCondition/${item.uniqueId}`
+        `http://localhost:9000/delete-lims/sMStorageCondition/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -299,7 +299,7 @@ function Storage_Condition() {
   const handleAdd = async (newSampleType) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMStorageCondition`,
+        `http://localhost:9000/manage-lims/add/sMStorageCondition`,
         {
           ...newSampleType,
           addDate: new Date().toISOString().split("T")[0],
