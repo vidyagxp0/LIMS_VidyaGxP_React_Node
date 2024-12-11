@@ -43,7 +43,7 @@ const SamplePlanning = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sLSamplePA`
+        `http://localhost:9000/get-all-lims/sLSamplePA`
       );
       const fetchedData = response?.data[0]?.sLSamplePA || [];
       setData(fetchedData);
@@ -177,9 +177,7 @@ const SamplePlanning = () => {
   const handleDelete = (item) => {
     // console.log(item);
     axios
-      .delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sLSamplePA/${item.uniqueId}`
-      )
+      .delete(`http://localhost:9000/delete-lims/sLSamplePA/${item.uniqueId}`)
       .then((response) => {
         // console.log(response.data.message);
         toast.success("Record deleted successfully");
@@ -333,11 +331,11 @@ const SamplePlanning = () => {
   ];
 
   return (
-    <div className="m-5 mt-3">
+    <div className="m-2 mt-3">
       <LaunchQMS />
 
       <div className="main-head">
-        <h2 className="fw-bold">Sample Planning & Analytics</h2>
+        <h2 className="font-bold text-xl mb-3">Sample Planning & Analytics</h2>
       </div>
 
       <div className="flex items-center justify-between mb-4">

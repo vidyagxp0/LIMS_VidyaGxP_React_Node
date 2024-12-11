@@ -2,8 +2,8 @@
   "development": {
     "PORT": 4001,
     "dbName": "lims_vidyagxp",
-    "username": "farhan",
-    "password": "Farhan@121",
+    "username": "root",
+    "password": "root",
     "dialect": "mysql",
     "host": "localhost",
     "JWT_SECRET": "LIMSVidyagxp",

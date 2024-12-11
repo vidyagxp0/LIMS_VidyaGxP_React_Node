@@ -55,7 +55,7 @@ const AnalystQualification = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/analyst/get-analyst`
+        `http://localhost:9000/analyst/get-analyst`
       );
       // console.log("API Response:", response.data);
 
@@ -105,7 +105,7 @@ const AnalystQualification = () => {
 
     try {
       const response = await fetch(
-        `https://limsapi.vidyagxp.com/analyst/generate-report/${analystId}`
+        `http://localhost:9000/analyst/generate-report/${analystId}`
       );
       console.log("Response:", response);
 
@@ -302,7 +302,7 @@ const AnalystQualification = () => {
   const handleDelete = async (item) => {
     try {
       await axios.delete(
-        `https://limsapi.vidyagxp.com/analyst/delete-analyst/${item.id}`
+        `http://localhost:9000/analyst/delete-analyst/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
@@ -356,9 +356,9 @@ const AnalystQualification = () => {
         <ToastContainer />
       </div>
       <LaunchQMS />
-      <div className="m-5 mt-3">
+      <div className="m-2 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Analyst Qualification</h4>
+          <h4 className="font-bold text-xl mb-3">Analyst Qualification</h4>
         </div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">

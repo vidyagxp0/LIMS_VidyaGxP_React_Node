@@ -73,7 +73,7 @@ const ControlSample = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/controlSample/get-control-sample`
+        `http://localhost:9000/controlSample/get-control-sample`
       );
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
@@ -118,7 +118,7 @@ const ControlSample = () => {
 
     try {
       const response = await fetch(
-        `https://limsapi.vidyagxp.com/controlSample/generate-report/${ControlSampId}`
+        `http://localhost:9000/controlSample/generate-report/${ControlSampId}`
       );
       console.log("Response:", response);
 
@@ -230,7 +230,7 @@ const ControlSample = () => {
   const handleDeleteControl = async (item) => {
     try {
       await axios.delete(
-        `https://limsapi.vidyagxp.com/controlSample/delete-control-sample/${item.id}`
+        `http://localhost:9000/controlSample/delete-control-sample/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
@@ -334,9 +334,9 @@ const ControlSample = () => {
       <ToastContainer />
       <LaunchQMS />
 
-      <div className="m-5 mt-3">
+      <div className="m-2 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold ">Control Sample Management</h4>
+          <h4 className="font-bold text-xl mb-3 ">Control Sample Management</h4>
         </div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
