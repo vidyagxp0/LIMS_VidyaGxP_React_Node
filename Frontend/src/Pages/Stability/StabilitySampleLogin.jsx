@@ -77,7 +77,7 @@ function StabilitySampleLogin() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `https://limsapi.vidyagxp.com/get-all-lims/sMSampleLogin`
+        `https://lims-api.mydemosoftware.com/get-all-lims/sMSampleLogin`
       );
       const fetchedData = response?.data[0]?.sMSampleLogin || [];
 
@@ -139,7 +139,7 @@ function StabilitySampleLogin() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLogin/${viewModalData.uniqueId}`,
+        `https://lims-api.mydemosoftware.com/manage-lims/update/sMSampleLogin/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,
@@ -263,7 +263,7 @@ function StabilitySampleLogin() {
 
     try {
       const response = await axios.delete(
-        `https://limsapi.vidyagxp.com/delete-lims/sMSampleLogin/${item.uniqueId}`
+        `https://lims-api.mydemosoftware.com/delete-lims/sMSampleLogin/${item.uniqueId}`
       );
       if (response.status === 200) {
         const newData = data.filter((d) => d.uniqueId !== item.uniqueId);
@@ -281,7 +281,7 @@ function StabilitySampleLogin() {
   const handleAdd = async (newProduct) => {
     try {
       const response = await axios.post(
-        `https://limsapi.vidyagxp.com/manage-lims/add/sMSampleLogin`,
+        `https://lims-api.mydemosoftware.com/manage-lims/add/sMSampleLogin`,
         {
           ...newProduct,
           addDate: new Date().toISOString().split("T")[0],
@@ -478,7 +478,7 @@ function StabilitySampleLogin() {
     const { sno, checkbox, ...dataTosend } = updatedData;
     try {
       const response = await axios.put(
-        `https://limsapi.vidyagxp.com/manage-lims/update/sMSampleLogin/${updatedData.uniqueId}`,
+        `https://lims-api.mydemosoftware.com/manage-lims/update/sMSampleLogin/${updatedData.uniqueId}`,
         dataTosend
       );
       if (response.status === 200) {
