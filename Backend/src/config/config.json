@@ -1,6 +1,6 @@
 {
   "development": {
-    "PORT": 9000,
+    "PORT": 4001,
     "dbName": "lims_vidyagxp",
     "username": "farhan",
     "password": "Farhan@121",
@@ -8,7 +8,7 @@
     "host": "localhost",
     "JWT_SECRET": "LIMSVidyagxp",
     "JWT_ADMIN_SECRET": "LIMSVidyagxpAdmin",
-    "URL": "https://limsapi.vidyagxp.com"
+    "URL": "https://lims-api.mydemosoftware.com"
   },
   "production": {}
 }
