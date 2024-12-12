@@ -73,7 +73,7 @@ const ControlSample = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/controlSample/get-control-sample`
+        `https://lims-api.mydemosoftware.com/controlSample/get-control-sample`
       );
       const fetchData = response?.data.data || [];
       const updatedData = fetchData?.map((item, index) => ({
@@ -118,7 +118,7 @@ const ControlSample = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:9000/controlSample/generate-report/${ControlSampId}`
+        `https://lims-api.mydemosoftware.com/controlSample/generate-report/${ControlSampId}`
       );
       console.log("Response:", response);
 
@@ -185,7 +185,7 @@ const ControlSample = () => {
     { header: "Neutralizing Agent", accessor: "neutralizingAgent" },
     { header: "Destruction Date", accessor: "destructionDate" },
     { header: "Remarks", accessor: "remarks" },
-    { header: "Generate Audit Trail", accessor: "audit" },
+    // { header: "Generate Audit Trail", accessor: "audit" },
     { header: "Generate PDF", accessor: "report" },
     { header: "Status", accessor: "status" },
     {
@@ -230,7 +230,7 @@ const ControlSample = () => {
   const handleDeleteControl = async (item) => {
     try {
       await axios.delete(
-        `http://localhost:9000/controlSample/delete-control-sample/${item.id}`
+        `https://lims-api.mydemosoftware.com/controlSample/delete-control-sample/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
@@ -376,6 +376,7 @@ const ControlSample = () => {
           onPdfGenerate={handlePdfGenerate}
           // openEditModal={openEditModal}
           onEdit={handleEdit}
+          loading={loading}
         />
       </div>
       {isModalsOpen && (

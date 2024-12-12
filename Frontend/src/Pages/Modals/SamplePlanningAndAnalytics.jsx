@@ -86,7 +86,10 @@ const SamplePlanningAndAnalytics = ({ open, handleClose, addRow }) => {
     e.preventDefault();
 
     axios
-      .post(`http://localhost:9000/manage-lims/add/sLSamplePA`, formData)
+      .post(
+        `https://lims-api.mydemosoftware.com/manage-lims/add/sLSamplePA`,
+        formData
+      )
       .then((response) => {
         addRow(formData);
         handleClose();

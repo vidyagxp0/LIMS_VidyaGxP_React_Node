@@ -165,7 +165,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://localhost:9000/admin/get-user/${userId}`,
+          `https://lims-api.mydemosoftware.com/admin/get-user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -261,7 +261,7 @@ const AnalystQualificationModal = ({ onClose }) => {
     if (!id) return;
     try {
       const response = await axios.get(
-        `http://localhost:9000/analyst/get-analyst/${id}`
+        `https://lims-api.mydemosoftware.com/analyst/get-analyst/${id}`
       );
       // console.log(response.data);
 
@@ -287,7 +287,7 @@ const AnalystQualificationModal = ({ onClose }) => {
       await toast.promise(
         Promise.all([
           axios.put(
-            `http://localhost:9000/analyst/edit-analyst/${id}`,
+            `https://lims-api.mydemosoftware.com/analyst/edit-analyst/${id}`,
             formData
           ),
           delay(1300),
@@ -321,7 +321,7 @@ const AnalystQualificationModal = ({ onClose }) => {
         await toast.promise(
           Promise.all([
             axios.post(
-              `http://localhost:9000/analyst/create-analyst`,
+              `https://lims-api.mydemosoftware.com/analyst/create-analyst`,
               updatedFormData
             ),
             delay(1300), // Optional delay for smoother loading effect

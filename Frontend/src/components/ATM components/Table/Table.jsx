@@ -18,6 +18,7 @@ const Table = ({
   onDelete,
   openEditModal,
   onPdfGenerate,
+  loading
 }) => {
   const pageSize = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +29,7 @@ const Table = ({
   const currentData = data?.slice(startIndex, startIndex + pageSize);
   const attachmentInput = useRef([]);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState({});
+  // const [loading, setLoading] = useState({});
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -177,7 +178,7 @@ const Table = ({
                 <div className="h-4 w-4 border-t-2 border-b-2 border-gray-800 animate-spin rounded-full ml-2"></div>
               )}
             </div>
-          ) : column.accessor === "audit" ? ( // Yahan par audit trail ke liye FaFilePdf icon add kiya gaya hai
+          ) : column.accessor === "audit" ? (
             <div className="flex space-x-2">
               <FaFileAlt
                 size={20}

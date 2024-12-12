@@ -55,7 +55,7 @@ const AnalystQualification = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/analyst/get-analyst`
+        `https://lims-api.mydemosoftware.com/analyst/get-analyst`
       );
       // console.log("API Response:", response.data);
 
@@ -105,7 +105,7 @@ const AnalystQualification = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:9000/analyst/generate-report/${analystId}`
+        `https://lims-api.mydemosoftware.com/analyst/generate-report/${analystId}`
       );
       console.log("Response:", response);
 
@@ -302,7 +302,7 @@ const AnalystQualification = () => {
   const handleDelete = async (item) => {
     try {
       await axios.delete(
-        `http://localhost:9000/analyst/delete-analyst/${item.id}`
+        `https://lims-api.mydemosoftware.com/analyst/delete-analyst/${item.id}`
       );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
@@ -403,6 +403,7 @@ const AnalystQualification = () => {
           // openEditModal={openEditModal}
           onPdfGenerate={handlePdfGenerate}
           onEdit={handleEdit}
+          loading={loading}
         />
       </div>
 

@@ -41,7 +41,7 @@ function Login(props) {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/admin/user-login",
+        "https://lims-api.mydemosoftware.com/admin/user-login",
         {
           email,
           password: passwd,

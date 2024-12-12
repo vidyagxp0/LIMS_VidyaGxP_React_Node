@@ -112,7 +112,7 @@ function StorageChamber() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMStorageChamber/${viewModalData.uniqueId}`,
+        `https://lims-api.mydemosoftware.com/manage-lims/update/sMStorageChamber/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,

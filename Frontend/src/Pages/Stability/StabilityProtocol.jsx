@@ -117,7 +117,7 @@ function StabilityProtocol() {
       console.log(viewModalData);
 
       const response = await axios.put(
-        `http://localhost:9000/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`,
+        `https://lims-api.mydemosoftware.com/manage-lims/update/sMStabilityProtocol/${viewModalData.uniqueId}`,
         {
           ...dataToSend,
           status: newStatus,

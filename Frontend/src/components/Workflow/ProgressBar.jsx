@@ -61,7 +61,7 @@ const ProgressBar = (props) => {
       }
 
       const response = await axios.post(
-        "http://localhost:9000/e-signature",
+        "https://lims-api.mydemosoftware.com/e-signature",
         { email, password },
         {
           headers: {
@@ -72,7 +72,7 @@ const ProgressBar = (props) => {
 
       if (!response.data.error) {
         await axios.post(
-          `http://localhost:9000/${url}`,
+          `https://lims-api.mydemosoftware.com/${url}`,
           { sampleId, comment },
           {
             headers: {

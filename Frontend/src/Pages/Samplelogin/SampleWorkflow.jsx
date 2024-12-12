@@ -126,7 +126,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
     setLoading((prevLoading) => ({ ...prevLoading, [sampleId]: true }));
     try {
       const response = await fetch(
-        `http://localhost:9000/generate-report/${sampleId}`
+        `https://lims-api.mydemosoftware.com/generate-report/${sampleId}`
       );
       console.log("Response", response);
 
@@ -283,7 +283,9 @@ const SampleWorkFlow = ({ instrumentData }) => {
 
   const handleDelete = async (item) => {
     try {
-      await axios.delete(`http://localhost:9000/delete-Sample/${item.id}`);
+      await axios.delete(
+        `https://lims-api.mydemosoftware.com/delete-Sample/${item.id}`
+      );
       setData((prevData) =>
         prevData.filter((dataItem) => dataItem.id !== item.id)
       );
@@ -524,7 +526,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
   //   // setLoading(true);
   //   // try {
   //   //   const response = await axios.put(
-  //   //     `http://localhost:9000/edit-sample/${id}`
+  //   //     `https://lims-api.mydemosoftware.com/edit-sample/${id}`
   //   //   );
   //   //   const sampleData = response.data;
   //   //   console.log(sampleData);
@@ -599,7 +601,7 @@ const SampleWorkFlow = ({ instrumentData }) => {
           </div>
         </div>
       </div>
-      <div className="relative top-28 mx-2">
+      <div className="relative top-28 mx-2 overflow-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-lg">
           <thead>
             <tr className="bg-yellow-600 text-white text-left">
@@ -787,7 +789,23 @@ const SampleWorkFlow = ({ instrumentData }) => {
                 <td className="border px-4 py-2">{data.testParameter}</td>
                 <td className="border px-4 py-2">{data.testingFrequency}</td>
                 <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td className="border px-4 py-2">{data.requiredInstrument}</td>
+                <td className="border px-4 py-2" style={{ maxWidth: "400px" }}>
+                  {(() => {
+                    try {
+                      const instruments = JSON.parse(data.requiredInstrument);
+
+                      return instruments
+                        .map((instrument) => instrument.label)
+                        .join(", ");
+                    } catch (error) {
+                      return (
+                        <span className="text-red-500 italic">
+                          Invalid Data
+                        </span>
+                      );
+                    }
+                  })()}
+                </td>
                 <td className="border px-4 py-2">{data.testGrouping}</td>
                 <td className="border px-4 py-2">{data.lsl}</td>{" "}
                 <td className="border px-4 py-2">{data.usl}</td>{" "}
