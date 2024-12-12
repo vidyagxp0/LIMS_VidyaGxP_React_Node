@@ -797,8 +797,8 @@ function CoaTemplate() {
   return (
     <>
       <LaunchQMS />
-      <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">COA Template</h1>
+      <div className="p-2">
+        <h1 className="text-xl font-bold mb-3">COA Template</h1>
         <div className="grid grid-cols-5 gap-4 mb-4">
           <Card
             title="DROPPED"

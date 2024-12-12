@@ -470,7 +470,7 @@ const SpecificationSpec = () => {
       <ToastContainer/>
       <div className="m-2 mt-3 fixed top-20 w-[82%]">
         <div className="main-head mb-6">
-          <h4 className="font-bold text-xl">Specification</h4>
+          <h4 className="font-bold text-xl">Specification Management</h4>
         </div>
         <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0 ">
           <div className="flex flex-grow space-x-10">

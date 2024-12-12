@@ -38,9 +38,9 @@ function SampleAcceptance() {
 
   return (
     <>
-      <div className="m-5 mt-3">
+      <div className="m-2 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold"> Sample Acceptance</h4>
+          <h4 className="font-bold text-xl mb-3"> Sample Acceptance</h4>
         </div>
         <div className="mt-3 d-flex gap-4">
           <div className="chart-widgets w-100">

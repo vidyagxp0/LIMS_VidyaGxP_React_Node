@@ -189,11 +189,11 @@ function Sidebar({ sidebarClass, isSidebarVisible, toggleSidebarClass }) {
               Specification/STP
             </CNavItem>
           </Link>
-          <Link to="/specificationSpec">
+          <Link to="/specification-management">
             <CNavItem
               href="#"
-              style={{ ...isActive("/specificationSpec"), gap: "18px" }}
-              className={isActive("/specificationSpec")}
+              style={{ ...isActive("/specification-management"), gap: "18px" }}
+              className={isActive("/specification-management")}
             >
               <VscDebugBreakpointConditional />
 

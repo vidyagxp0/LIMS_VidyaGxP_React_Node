@@ -264,7 +264,7 @@ function App() {
             <Route path="/stCondition" element={<StorageCondition />} />
             <Route path="/control-sample" element={<ControlSample />} />
             <Route path="/SpecificationStp" element={<SpecificationStp />} />
-            <Route path="/specificationSpec" element={<SpecificationSpec />} />
+            <Route path="/specification-management" element={<SpecificationSpec />} />
 
             <Route path="/department" element={<Department />} />
             <Route path="/department/admin" element={<Admin />} />

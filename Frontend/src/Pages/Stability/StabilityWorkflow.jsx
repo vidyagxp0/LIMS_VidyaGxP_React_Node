@@ -742,7 +742,7 @@ const StabilityWorkFlow = () => {
                 <td className="border px-4 py-2">{data.testParameter}</td>
                 <td className="border px-4 py-2">{data.testingFrequency}</td>
                 <td className="border px-4 py-2">{data.testingLocation}</td>
-                <td style={{ minWidth: "400px" }} className="border px-4 py-2 ">
+                <td style={{ maxWidth: "400px" }} className="border px-4 py-2 ">
                   {(() => {
                     try {
                       const instruments = JSON.parse(data.requiredInstrument);

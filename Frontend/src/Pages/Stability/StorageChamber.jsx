@@ -442,9 +442,9 @@ function StorageChamber() {
   return (
     <>
       <LaunchQMS />
-      <div className="m-5 mt-3">
+      <div className="m-2 mt-3">
         <div className="main-head">
-          <h4 className="fw-bold">Storage Chamber</h4>
+          <h4 className="font-bold text-xl mb-3">Storage Chamber</h4>
         </div>
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
